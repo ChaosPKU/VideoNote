@@ -1,0 +1,59 @@
+{
+  "manifest_version": 2,
+  "name": "VideoNote",
+  "version": "0.0.1",
+  "description": "VideoNote by XinChao.",
+  "icons": {
+    "128": "icon128.png",
+    "48": "icon48.png",
+    "16": "icon16.png"
+  },
+  "permissions": [
+    "webRequest", "webRequestBlocking",
+    "<all_urls>",
+    "tabs",
+    "webNavigation",
+    "storage",
+    "contextMenus",
+    "desktopCapture"
+  ],
+  "content_scripts": [{
+    "matches": [
+      "http://*/*",
+      "https://*/*",
+      "ftp://*/*",
+      "file://*/*"
+    ],
+    "run_at": "document_start",
+    "js": [
+      "/profile/js/jquery-1.9.0.min.js",
+      "content.js"
+      ]
+  }],
+  "background": {
+    "scripts": [
+            "background.js"
+        ]
+  },
+  "browser_action": {
+    "default_icon": {
+      "38": "icon38.png",
+      "19": "icon19.png"
+    },
+    "default_title": "VideoNote", 
+    "default_popup": "profile/popup.html"
+  },
+  "incognito": "split",
+  "web_accessible_resources": [
+    "getFrameId",
+    "content/web/viewer.html",
+    "http:/*",
+    "https:/*",
+    "ftp:/*",
+    "file:/*",
+    "chrome-extension:/*",
+    "filesystem:/*",
+    "drive:*"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

@@ -1,0 +1,37 @@
+.container {
+      width: 970px !important;
+  }
+.demo-panel-title {
+      padding-top: 20px;
+      margin: 2px 0 20px;
+      font: bold 23px/40px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+.demo-panel-title small {
+      font-size: inherit;
+      font-weight: 400;
+      color: #798795;
+  }
+.visual .svg,
+.visual .nosvg{
+      height: 100px;
+      margin: 31px 0 27px;
+      vertical-align: bottom;
+  }
+.navbar-lg{
+  min-height: 72px;
+}
+#loop * {
+  -webkit-transition:2s cubic-bezier(.39,1.31,.28,1);
+  -moz-transition:2s cubic-bezier(.39,1.31,.28,1);
+  -ms-transition:2s cubic-bezier(.39,1.31,.28,1);
+  -o-transition:2s cubic-bezier(.39,1.31,.28,1);
+  transition:2s cubic-bezier(.39,1.31,.28,1);
+}
+#loop:hover #loop-sign {
+  stroke-dasharray: 0,216;
+  stroke-dashoffset: 230;
+  stroke-width:0;
+}
+#loop:hover #shade {
+  opacity:0;  
+}

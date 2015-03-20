@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>VideoNote</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="stylesheet" href="stylesheets/animate.css">
+        <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="stylesheets/flat-ui.css">
+        <link rel="stylesheet" href="stylesheets/individual.css">
+        <script src="javascripts/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:10px;">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header" style="text-align:center">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-8">
+                  <span class="sr-only">Toggle navigation</span>
+                </button>
+                <a class="navbar-brand" href="#">视频笔记</a>
+              </div>
+            </nav>
+
+            <div class="row demo-samples">
+              <div class="col-xs-4">
+                <div class="todo">
+                  <div class="todo-search">
+                    <input class="todo-search-field" type="search" value="" placeholder="Search" />
+                  </div>
+                  <ul>
+                    <li class="todo-done" data-target="#nav-div-1">
+                      <div class="todo-icon fui-user"></div>
+                      <div class="todo-content">
+                        <h4 class="todo-name">
+                          <strong>我的资料</strong>
+                        </h4>
+                        My Information
+                      </div>
+                    </li>
+                    <li data-target="#nav-div-2">
+                      <div class="todo-icon fui-bookmark"></div>
+                      <div class="todo-content">
+                        <h4 class="todo-name">
+                          <strong>我的笔记</strong>
+                        </h4>
+                        My Notes
+                      </div>
+                    </li>
+                    <li data-target="#nav-div-3">
+                      <div class="todo-icon fui-eye"></div>
+                      <div class="todo-content">
+                        <h4 class="todo-name">
+                          <strong>我的关注</strong>
+                        </h4>
+                        My concerns
+                      </div>
+                    </li>
+                    <li data-target="#nav-div-4">
+                      <div class="todo-icon fui-heart"></div>
+                      <div class="todo-content">
+                        <h4 class="todo-name">
+                          <strong>我的收藏</strong>
+                        </h4>
+                        My Favorites
+                      </div>
+                    </li>
+                  </ul>
+                </div><!-- /.todo -->
+              </div><!-- /.col-xs-4 -->
+
+              <div id="nav-div-1" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;margin-right:13px;">
+                  <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header" style="text-align:center">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-8">
+                        <span class="sr-only">Toggle navigation</span>
+                      </button>
+                      <a class="navbar-brand" href="#">我的资料</a>
+                    </div>
+                  </nav>
+              </div>
+              <div id="nav-div-2" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;display:none;margin-right:13px;">
+                  <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header" style="text-align:center">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-8">
+                        <span class="sr-only">Toggle navigation</span>
+                      </button>
+                      <a class="navbar-brand" href="#">我的笔记</a>
+                    </div>
+                  </nav>
+              </div>
+              <div id="nav-div-3" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;display:none;margin-right:13px;">
+                  <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header" style="text-align:center">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-8">
+                        <span class="sr-only">Toggle navigation</span>
+                      </button>
+                      <a class="navbar-brand" href="#">我的关注</a>
+                    </div>
+                  </nav>
+              </div>
+              <div id="nav-div-4" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;display:none;margin-right:13px;">
+                  <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header" style="text-align:center">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-8">
+                        <span class="sr-only">Toggle navigation</span>
+                      </button>
+                      <a class="navbar-brand" href="#">我的收藏</a>
+                    </div>
+                  </nav>
+              </div>
+            </div>
+
+                  <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                            <div class="tile">
+                              
+                          <div class="visual">
+                              <img src="http://designmodo.com/wp-content/themes/designmodov2.1/flat-ui/images/ico-4.png" width="100px" alt="image description" class="nosvg">
+                              <span class="svg">
+                                  <svg width="100px" height="100px" version="1.1" id="clock" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                                  <circle fill="#33495f" cx="50" cy="50" r="50"/>
+                                  <path fill="#FFFFFF" d="M50,10c22.093,0,40,17.909,40,40c0,22.091-17.906,40-40,40c-22.091,0-40-17.909-40-40C10,27.909,27.91,10,50,10z"/>
+                                  <path fill="#DAD9D9" d="M50,10.015c-11.806,0-22.413,5.119-29.733,13.254C27.352,16.896,36.723,13.015,47,13.015c22.085,0,39.986,17.902,39.986,39.985c0,10.277-3.881,19.646-10.254,26.729C84.871,72.41,89.988,61.805,89.988,50C89.988,27.917,72.086,10.015,50,10.015z"/>
+                                  <path fill="none" d="M45.972,42.544c3.918-2.287,8.928-0.93,11.189,3.03c2.262,3.963,0.92,9.027-2.998,11.314c-3.918,2.286-8.928,0.93-11.189-3.031C40.713,49.896,42.054,44.832,45.972,42.544z"/>
+                                  <path transform="rotate(315,50,50)"  id="hrs" fill="#33495f" d="M46,27c0-2.209,1.791-4,4-4l0,0c2.209,0,4,1.791,4,4v19c0,2.209-1.791,4-4,4l0,0c-2.209,0-4-1.791-4-4V27z"/>
+                                  <path transform="rotate(90,50,50)" id="min" fill="#33495f" d="M49.996,19.988C51.652,19.99,52.998,21.209,53,23v24c0,1.789-1.333,3.002-2.988,3c-1.658-0.002-3.01-1.209-3.012-3V23C46.999,21.21,48.34,19.986,49.996,19.988z"/>
+                                  <circle fill="#33495f" cx="50" cy="50" r="8"/>
+                                  <path transform="rotate(225,50,50)" id="sec" fill="#E44D41" d="M52,24c0-1.104-0.896-2-2-2l0,0c-1.104,0-2,0.896-2,2v26c0,1.104,0.896,2,2,2l0,0c1.104,0,2-0.896,2-2V24z"/>
+                                  </svg>
+                              </span>
+                          </div>
+
+                            <h3 class="tile-title">Time Saver</h3>
+                            <p>100% convertable to HTML/CSS layout.</p>
+                            <a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Get Pro</a>
+                          </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                          <div class="tile">
+                            
+                            <div class="visual">
+                                <img src="http://designmodo.com/wp-content/themes/designmodov2.1/flat-ui/images/ico-1.png" width="100px" alt="image description" class="nosvg">
+                                <span class="svg">
+                                    <svg width="100px" height="100px" id="loop" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                                    <g id="circle">
+                                    <path fill="#E74C3C" d="M50,0c27.613,0,50,22.386,50,50s-22.387,50-50,50C22.386,100,0,77.614,0,50S22.386,0,50,0z"/>
+                                    </g>
+                                    <path id="loop-sign" stroke-linejoin="round" fill="none" stroke="#F0C419" stroke-width="8" stroke-miterlimit="10" stroke-dashoffset="0" stroke-linecap="square" stroke-dasharray="216" d="M12.5,50.5c0,10,7,17,17,17c17,0,26-34,43-34c10,0,18,7,18,17s-8,17-18,17c-17,0-26-34-43-34C19.5,33.5,12.5,40.5,12.5,50.5z"/>
+                                    <path id="shade" opacity="0.15" enable-background="new    " d="M45.938,50.5l5.047,6.516c0,0-2.141,2.797-3.5,4.25c0,0-3.621-3.552-5.746-5.583C43.047,54.281,45.938,50.5,45.938,50.5z"/>
+                                    </svg>
+
+                                </span>
+                            </div>
+
+                            <h3 class="tile-title">High efficiency</h3>
+                            <p>Vector-based shapes and minimum of layer styles.</p>
+                            <a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Get Pro</a>
+                          </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                          <div class="tile">
+                            <div class="visual">
+                                <img src="http://designmodo.com/wp-content/themes/designmodov2.1/flat-ui/images/ico-6.png" width="100px" alt="image description" class="nosvg">
+                                <span class="svg">
+                                    <svg version="1.1" id="swatches" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                                    <g id="pen-1" transform="rotate(0,50,50)">
+                                    <path id="body-1" fill="#E54E42" d="M50,74.001V100h0.072c-0.023,0-0.049,0.002-0.072,0.002c-12.816-0.008-25.662-4.828-35.417-14.584C4.812,75.646-0.008,62.838,0,50c0.009-12.816,4.829-25.662,14.583-35.417l0,0L33,33c-4.682,4.683-6.996,10.849-7,17c-0.004,6.162,2.31,12.311,7,17C37.683,71.684,43.848,73.996,50,74.001z"/>
+                                    <path id="outer-1" fill-opacity="0.15" fill="#000000" enable-background="new    " d="M50,92C26.804,92,8,73.195,8,50c0-11.598,4.701-22.098,12.302-29.699l-5.719-5.718C7.868,21.299,0,33.438,0,50c0,27.062,21.625,50,50,50V92z"/>
+                                    <path id="inner-1" fill-opacity="0.15" fill="#FFFFFF" enable-background="new    " d="M32.928,67c-4.689-4.689-7.003-10.838-7-17c0.004-6.151,2.316-12.317,7-17l-5.627-5.627c-5.791,5.79-9.373,13.79-9.373,22.627c0,17.673,14.327,32,32,32v-7.999C43.776,73.996,37.612,71.684,32.928,67z"/>
+                                    <path id="wood-1" fill="#EFC22D" d="M63,87L50.014,74.009V74c-0.003,0-0.005,0.001-0.008,0.001L50.005,74L50,74.001c-3.309,0.011-6.009,5.826-6.009,13c0,7.181,2.709,13.001,6.022,13.001V99.98L63,87z"/>
+                                    <path id="stylus-1" fill="#2D3E4F" d="M58.758,82.757C57.672,83.843,57,85.343,57,87c0,1.656,0.672,3.156,1.757,4.242L63,87L58.758,82.757z"/>
+                                    </g>
+                                    <g id="pen-2" transform="rotate(0,50,50)">
+                                    <path id="body-2" fill="#29BB9C" d="M50,26.001V0.002h-0.072C49.951,0.002,49.976,0,50,0c12.816,0.008,25.662,4.828,35.417,14.584c9.771,9.771,14.592,22.58,14.584,35.417c-0.009,12.817-4.829,25.663-14.584,35.418l0,0L66.999,67.002c4.683-4.682,6.996-10.85,7-17c0.004-6.162-2.312-12.31-7-17C62.316,28.319,56.15,26.006,50,26.001z"/>
+                                    <path id="inner-2" fill-opacity="0.1" fill="#000000" enable-background="new    " d="M66.999,33.002c4.688,4.689,7.004,10.838,7,17c-0.004,6.15-2.317,12.318-7,17l5.627,5.627c5.791-5.789,9.373-13.789,9.373-22.627c0-17.672-14.326-32-32-32v7.999C56.15,26.006,62.316,28.319,66.999,33.002z"/>
+                                    <path id="outer-2" fill-opacity="0.15" fill="#FFFFFF" enable-background="new    " d="M50.001,8.001c23.195,0,41.999,18.805,41.999,42C92,61.6,87.299,72.1,79.698,79.7l5.72,5.718C92.133,78.702,100,66.563,100,50.001c0-27.062-21.624-50-49.999-50V8.001z"/>
+                                    <path id="wood-2" fill="#EFC22D" d="M37,13.002l12.986,12.991v0.009c0.003,0,0.006-0.001,0.008-0.001l0.001,0.001L50,26.001c3.309-0.011,6.008-5.826,6.008-13C56.008,5.821,53.299,0,49.986,0v0.021L37,13.002z"/>
+                                    <path id="stylus-2" fill="#2D3E4F" d="M41.242,17.245C42.328,16.159,43,14.659,43,13.002c0-1.656-0.672-3.156-1.757-4.242L37,13.002L41.242,17.245z"/>
+                                    </g>
+                                    </svg>
+                                </span>
+                            </div>
+                            <h3 class="tile-title">Color Swatches</h3>
+                            <p>Easy to add or change elements. </p>
+                            <a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Get Pro</a>
+                          </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                          <div class="tile">
+                            <img src="img/icons/svg/ribbon.svg" alt="ribbon" class="tile-hot-ribbon">
+                            <img src="img/icons/svg/chat.svg" alt="Chat" class="tile-image">
+                            <h3 class="tile-title">Free for Share</h3>
+                            <p>Your likes, shares and comments helps us.</p>
+                            <a class="btn btn-primary btn-large btn-block" href="http://designmodo.com/flat">Get Pro</a>
+                          </div>
+                        </div> <!-- /row -->
+                  </div> <!-- /row -->
+
+        </div>
+        <script src="javascripts/jquery-1.9.0.min.js"></script>
+        <script src="javascripts/jquery.form.js"></script>
+        <script src="javascripts/jquery.md5.js"></script>
+        <script src="javascripts/flat-ui.min.js"></script>
+        <script src="javascripts/jquery.svg.js"></script>
+        <script src="javascripts/jquery.svganim.js"></script>
+        <script src="javascripts/application.js"></script>
+        <script src="javascripts/video.js"></script>
+        <script src="javascripts/plugins.js"></script>
+        <script src="javascripts/individual.js"></script>
+    </body>
+</html>

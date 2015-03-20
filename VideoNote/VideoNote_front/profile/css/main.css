@@ -1,0 +1,326 @@
+.body {
+    background-color: #fff;
+}
+.container {
+    width: 95%;
+    min-width: 1180px;
+    height: auto;
+    float: center;
+    -webkit-margin-start:auto;
+    -webkit-margin-end:auto;
+}
+.leftframe {
+    width: 67%;
+    height: 100%;
+    float: left;
+    min-height: 500px;
+    min-width: 670px;
+}
+.bigframe{
+    width: 80%;
+    margin-left: 10%;
+}
+.rightframe {
+    width: 33%;
+    height: 100%;
+    float:left;
+    min-width: 350px;
+    min-height: 500px;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+.head .foot{
+    width: 100%;
+    height: 30%;
+    min-width: 670px;
+    min-height: 150px;
+}
+.video {
+    width: 100%;
+    height: 80%;
+    min-width: 670px;
+    min-height: 400px;
+}
+.navbar {
+    margin-bottom: 10px;
+}
+.nav-tabs a{
+    color: #fff;
+    background-color: rgb(53,73,93);
+}
+.nav-tabs>li{
+    width: 33%;
+    margin-right: 0.5%;
+}
+.nav-tabs>li>a:hover{
+    color: #fff;
+    background-color: rgb(41,187,156);
+}
+.nav-tabs>li>a, 
+.nav-tabs>li>a:hover, 
+.nav-tabs>li>a:focus{
+    height: 76px;
+    padding-top: 26px;
+    border-radius: 4px;
+    min-width: 120px;
+    text-align: center;
+}
+.nav-tabs>li.active>a, 
+.nav-tabs>li.active>a:hover, 
+.nav-tabs>li.active>a:focus{
+    height: 76px;
+    color: #fff;
+    background-color: rgb(41,187,156);
+    vertical-align: center;
+    text-align: center;
+    min-width: 120px;
+}
+.nav-tabs{
+    border: none;
+    font-size: 20px;
+}
+.nav-tabs > li{
+}
+.tab-content{
+    width:100%;
+    height: 567px;
+    color: #000;
+    background-color:#fafafa;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+    margin-top: 10px;
+    overflow-y:auto; 
+}
+.tab-content .notesGroup{
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.tab-content .replys{
+    width: 100%;
+    height: auto;
+    display: none;
+}
+.tab-content .replys .head {
+    margin-bottom: 6px;
+    width: 100%;
+    height: 45px;
+}
+.tab-content .replys .head button{
+    float: left;
+    margin-right: 20px;
+}
+.tab-content .note{
+    width: 100%;
+    min-height: 150px;
+    margin-bottom: 15px;
+    border: solid #ccc 1px;
+    background-color: #fff;
+    border-radius: 0.3em;
+    padding: 15px 15px 5px 15px;
+}
+.tab-content .notesGroup .note:hover{
+    background-color: #f7f5fa;
+    box-shadow: 3px 3px 10px #9edeff;
+}
+.tab-content .notesGroup .note{
+    cursor: pointer;
+}
+.tab-content .note .myrow{
+    width: 100%;
+    min-height:120px; 
+    position: relative;
+}
+.tab-content .note .toil{
+    width: 100%;
+    height:40px; 
+    font-size:14px;
+    text-align: right;
+    line-height: 30px;
+    border-top: solid #ccc 1px;
+    position: relative;
+}
+.tab-content .note .pic{
+    width:78.5px;
+    height:44.2px;
+    background-color: #aaa;
+    position: relative;
+}
+.tab-content .note .info{
+    width: 240px;
+    height:44.2px;
+    position: relative;
+    margin-top: -44.2px;
+    margin-left: 78.5px;
+}
+.tab-content .note .title{
+    width:100%;
+    height:20px;
+    font-size: 20px;
+    margin-left: 5px;
+    line-height: 20px;
+    position: relative;
+}
+.tab-content .note .detail{
+    width:100%;
+    height:24.2px;
+    font-size: 14px;
+    margin-left: 5px;
+    position: relative;
+    line-height: 17px;
+    padding-top: 8px;
+}
+.tab-content .note .detail .icon{
+    margin-right: 1px;
+}
+.tab-content .note .myrow .mycontent{
+    font-size: 15px;
+    color: #000;
+    display: block;
+    margin:10px 0px 10px 0px;
+    width: 100%;
+    position: relative;
+    text-indent: 30px;
+}
+.tab-content .replynote{
+    background-color:#fafafa;
+    border: none;
+    border-top: solid #ccc 1px;
+    border-radius: 0;
+}
+.tab-content .replynote .replytoil{
+    border-top: none;
+    border-bottom: solid #ccc 1px;
+}
+
+#replyModal .modal-dialog{
+    margin: auto;
+}
+#replyModal .modal-header{
+    padding: 15px 10px 5px 15px;
+}
+#replyModal .modal-title{
+    font-size: 16px;
+}
+#replyModal .modal-body{
+    padding: 10px 5px 0px 5px;
+}
+#replyModal .modal-footer{
+    border-top: 0px;
+    padding-top: 0px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* TimeLine */
+.notesGroup .timeline {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #fafafa;
+    border-color: #efefef #efefef #efefef -moz-use-text-color;
+    border-image: none;
+    border-width: 1px 1px 1px 0;
+    color: #999;
+    font-size: 14px;
+    padding: 0px;
+    position: relative;
+    width: 100%;
+}
+.notesGroup .timeline .notesBody{
+    margin-top: 0px;
+    padding: 15px 10px;
+    width: 100%;
+}
+.timeNotes{
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 80px;
+    cursor: pointer;
+}
+.timeNotes:hover{
+    background-color: #f7f5fa;
+    box-shadow: 3px 3px 10px #9edeff;
+}
+.timeNotes .capImg {
+    width:78.5px;
+    height:44.2px;
+    background-color: #aaa;
+    position: absolute;
+    margin: 17.4px 0 0 11px; 
+}
+.timeNotes .noFocused {
+    display: table;
+    position: absolute;
+}
+
+.timeNotes .noFocused .round {
+    background: url("../images/liucheng_2.png") no-repeat;
+}
+
+.timeNotes .focused .round {
+    background: url("../images/liucheng_1.png") no-repeat;
+}
+.timeNotes .round {
+    height: 24px;
+    margin: auto;
+    width: 24px;
+}
+.timeNotes .noFocused .round {
+    left: 94px;
+    position: absolute;
+    top: 28px;
+}
+.timeNotes .focused .line-through {
+    border-right: 3px solid #ddd;
+    bottom: -106px;
+    height: 80px;
+    left: 25px;
+    position: absolute;
+}
+
+.timeNotes .noFocused .line-through {
+    border-right: 3px solid #ddd;
+    bottom: -125px;
+    height: 70px;
+    left: 104.5px;
+    position: absolute;
+}
+
+
+.timeNotes .focused .line-through.last-selected {
+    border-right-color: #ddd;
+}
+
+.timeNotes  .focused .line-through {
+    border-right: 3px solid #64b93c;
+}
+
+.timeNotes .notesCard {
+    font-size: 14px;
+    min-height: 43px;
+    margin-left: 70px;
+    padding: 10px 0 10px 60px;
+    position: relative;
+}
+
+.timeNotes .notesCard .notesmsg {
+    color: #333;
+    font-size: 17px;
+}
+
+.timeNotes .notesCard  .createTime {
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.timeNotes .notesCard .videoTime {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+}

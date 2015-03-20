@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>	
+	<title>NoteDisplay</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="stylesheets/redactorstyle.css" >	
+	<link rel="stylesheet" href="stylesheets/redactor.css" >
+	<link rel="stylesheet" href="stylesheets/bootstrap.min.css" >
+	<link rel="stylesheet" href="stylesheets/noteDisplay.css" >	
+</head>
+<body>
+	<div id="notesDis">
+		<p id="page_information"></p>
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs">
+		  <li class="active"><a href="#newer" data-toggle="tab">最新笔记</a></li>
+		  <li><a href="#hotter" data-toggle="tab">最热笔记</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+		<!-- 最新 -->
+		  <div class="tab-pane fade in active" id="newer">
+		  	<ul class="media-list notesGroup">
+
+			</ul>
+		  </div>
+
+		<!-- 最热 -->
+		  <div class="tab-pane fade" id="hotter">
+	  		<ul class="media-list notesGroup">
+		  		
+			</ul>
+		  </div>
+		</div>
+	</div>
+	<div id="oneNoteDis">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<button type="button" class="btn btn-default navbar-btn pull-left oneBack" id="goBack"><span class="glyphicon glyphicon-circle-arrow-left"></span>&nbsp; 返回</button>
+  			<button type="button" class="btn btn-success navbar-btn pull-right oneReply" data-toggle="modal" data-target="#replyModal"><span class="glyphicon glyphicon-pencil"></span>&nbsp; 我要回复笔主</button>
+		</nav>
+		<div id="allWrap">
+
+		</div>
+	</div>
+	<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyTitle" aria-hidden="true" data-backdrop="false">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&minus;</button>
+	        <h4 class="modal-title" id="replyTitle">回复笔主</h4>
+	      </div>
+	      <div class="modal-body">
+	        <div id="page_1">
+				<textarea id="redactor_content_1" name="content" style="height: 200px;"><p>...</p></textarea>
+			</div>
+			<p id="target"></p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" id="closeReplyModal">关闭</button>
+	        <button type="button" class="btn btn-primary" id="replyToNoteSubmit"><span class="glyphicon glyphicon-cloud-upload"></span> 回复</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div>
+    <div class="modal fade" id="replyEdit" tabindex="-1" role="dialog" aria-labelledby="replyEditTitle" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&minus;</button>
+                    <h4 class="modal-title" id="replyEditTitle">编辑此条回复</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="page_2">
+                        <textarea id="redactor_content_2" name="content" style="height: 200px;"><p>...</p></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="replyEditSubmit">确认修改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade bs-example-modal-sm" id="replyConfirm" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">确定要删除该条回复？</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="replyDelConfirm">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" id="commentConfirm" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">确定要删除该条评论？</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="commentDelConfirm">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="editModalLabel">编辑此条笔记/问题</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="editNoteTitle" class="col-sm-3 control-label">标题:</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="editNoteTitle" placeholder="请做出修改~">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">类型:</label>
+                            <div class="col-sm-7">
+                                <label class="radio-inline">
+                                    <input type="radio" name="editNoteType" id="editIsNote" value="0" checked="">笔记
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="editNoteType" id="editIsQuestion" value="1">问题
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editNoteBody" class="col-sm-3 control-label">正文:</label>
+                        </div>
+                    </form>
+                    <div id="page_3">
+                        <textarea id="redactor_content_3" name="content" style="height: 200px;"><p>...</p></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="noteEditSubmit">保存修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	<script type="text/javascript" src="javascripts/jquery-1.7.min.js"></script>
+	<script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="javascripts/noteDisplay_new.js"></script>
+	<script type="text/javascript" src="javascripts/BS_API.js"></script>
+	<script type="text/javascript" src="javascripts/redactor.js"></script>
+</body>
+</html>
