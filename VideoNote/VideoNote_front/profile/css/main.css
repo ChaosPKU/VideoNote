@@ -119,7 +119,7 @@
     border: solid #ccc 1px;
     background-color: #fff;
     border-radius: 0.3em;
-    padding: 15px 15px 5px 15px;
+    padding: 15px 15px 0px 15px;
 }
 .tab-content .notesGroup .note:hover{
     background-color: #f7f5fa;
@@ -130,7 +130,7 @@
 }
 .tab-content .note .myrow{
     width: 100%;
-    min-height:120px; 
+    min-height:60px; 
     position: relative;
 }
 .tab-content .note .toil{
@@ -140,37 +140,38 @@
     text-align: right;
     line-height: 30px;
     border-top: solid #ccc 1px;
-    position: relative;
 }
 .tab-content .note .pic{
-    width:78.5px;
-    height:44.2px;
+    width:50px;
+    height:50px;
     background-color: #aaa;
     position: relative;
+    border-radius:10px;
 }
 .tab-content .note .info{
     width: 240px;
-    height:44.2px;
+    height:50px;
     position: relative;
-    margin-top: -44.2px;
-    margin-left: 78.5px;
+    margin-top: -50px;
+    margin-left: 55px;
 }
 .tab-content .note .title{
     width:100%;
     height:20px;
     font-size: 20px;
     margin-left: 5px;
+    margin-top: 3px;
     line-height: 20px;
     position: relative;
 }
 .tab-content .note .detail{
     width:100%;
-    height:24.2px;
+    height:30px;
     font-size: 14px;
     margin-left: 5px;
     position: relative;
     line-height: 17px;
-    padding-top: 8px;
+    padding-top: 10px;
 }
 .tab-content .note .detail .icon{
     margin-right: 1px;
@@ -184,15 +185,13 @@
     position: relative;
     text-indent: 30px;
 }
-.tab-content .replynote{
-    background-color:#fafafa;
+.tab-content .mynote{
     border: none;
     border-top: solid #ccc 1px;
     border-radius: 0;
 }
-.tab-content .replynote .replytoil{
+.tab-content .mynote .mytoil{
     border-top: none;
-    border-bottom: solid #ccc 1px;
 }
 
 #replyModal .modal-dialog{
@@ -245,7 +244,8 @@
 }
 .timeNotes:hover{
     background-color: #f7f5fa;
-    box-shadow: 3px 3px 10px #9edeff;
+    box-shadow: 2px 2px 5px #9edeff;
+    text-shadow: 3px 3px 10px #9edeff;
 }
 .timeNotes .capImg {
     width:78.5px;
@@ -323,4 +323,53 @@
     position: absolute;
     right: 20px;
     top: 12px;
+}
+.replyList{
+    height: auto;
+    width: 100%;
+}
+.replyList .reply{
+    width: 100%;
+    height: auto;
+    padding: 10px 5px 0px 15px;
+    margin: 10px 0px 0px 0px;
+    border-bottom: solid #ccc 1px;
+}
+.replyList .reply:hover{
+    cursor: pointer;
+    background-color: #f7f5fa;
+    text-shadow: 2px 2px 4px #9edeff;
+}
+.reply .myrow .pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+.reply .info .detail{
+    height: 40px;
+}
+.reply .info a.icon{
+    width: 100%;
+    float: left;
+}
+.reply .info a.name{
+    font-size: 18px;
+    margin: 2px 0px 5px;
+    color: #000;
+}
+.replyList .reply .toil{
+    font-size: 13px;
+}
+.replyList .secReplyList{
+    width: 100%;
+    padding-bottom: 10px;
+}
+.replyList .secReply{
+    padding: 10px 5px 10px 10px;
+    margin-left: 0px;
+    margin-right: 10px;
+    border-top: solid #fff 1px;
+}
+.replyList .secReply:hover{
+    background-color: rgb(236,236,235);
 }

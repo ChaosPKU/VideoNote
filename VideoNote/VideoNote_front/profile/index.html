@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/flat-ui.css">
-        <link rel="stylesheet" href="css/redactorstyle.css" > 
+        <link rel="stylesheet" href="css/redactorstyle.css" >
         <link rel="stylesheet" href="css/redactor.css" >
         <link rel="stylesheet" href="css/main.css">
         <script src="js/modernizr-2.6.2.min.js"></script>
@@ -108,12 +108,12 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                  <div role="tabpanel" class="tab-pane active" id="home">
+                  <div role="tabpanel" class="tab-pane active animated fadeIn" id="home">
                       <div class="notesGroup">
                         <div class="timeline">
                           <div class="notesBody">
                             <div class="timeNotes">
-                              <canvas id = 'myCanvas' class='capImg' width="78.5" height="44.2"></canvas>
+                                <img src class='capImg'/>
                               <div class="noFocused focused">
                                 <div class="round"></div>
                                 <div class="line-through"></div>
@@ -125,7 +125,7 @@
                               </div>
                             </div>
                             <div class="timeNotes">
-                              <img src class='capImg' crossorigin='anonymous'/>
+                              <img src class='capImg'/>
                               <div class="noFocused">
                                 <div class="round"></div>
                                 <div class="line-through"></div>
@@ -197,7 +197,7 @@
                             <span class="fui-exit"></span>
                           </button>
                         </div>
-                        <div class="note replynote">
+                        <div class="note mynote">
                           <div class="myrow">
                             <div class="pic"></div>
                             <div class="info">
@@ -206,24 +206,24 @@
                               </div>
                               <div class="detail">
                                 <a class="icon" href="/profile?want=1100012989" target="_blank">
-                                  <span class="fui-user"></span> 
+                                  <span class="fui-user"></span>
                                   单旭东
                                 </a>
                                 <a class="icon">
-                                  <span class="fui-calendar"></span> 
+                                  <span class="fui-calendar"></span>
                                   2015-3-10 15:45
                                 </a>
                                 <a class="icon">
-                                  <span class="fui-chat"></span> 
+                                  <span class="fui-chat"></span>
                                   2
                                 </a>
                               </div>
                             </div>
                             <div class='mycontent'>写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么</div>
                           </div>
-                          <div class="toil replytoil">
+                          <div class="toil mytoil" style='border-bottom: solid #ccc 1px;'>
                             <a href="#" class="noteEdit">
-                              <span class="fui-new"></span> 
+                              <span class="fui-new"></span>
                               <span>编辑</span>
                             </a>
                             <a href="#" class="notePraise">
@@ -239,8 +239,172 @@
                               <span> 收藏(0)</span>
                             </a>
                           </div>
-                          <div class="replyTitle"></div>
-                          <div class="replyList"></div>
+                          <div class="replyList">
+                              <div class="reply">
+                                <div class="myrow">
+                                  <div class="pic"></div>
+                                  <div class="info">
+                                    <div class="detail">
+                                      <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                        单旭东
+                                      </a>
+                                      <a class="icon">
+                                        2015-3-10 15:45
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class='mycontent'>写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么</div>
+                                </div>
+                                <div class="toil mytoil">
+                                  <a href="#" class="noteEdit">
+                                    <span class="fui-new"></span>
+                                    <span> 编辑</span>
+                                  </a>
+                                  <a href="#" class="noteDelete">
+                                    <span class="fui-trash"></span>
+                                    <span> 删除</span>
+                                  </a>
+                                  <a href="#" class="notePraise">
+                                    <span class="fui-heart"></span>
+                                    <span> 赞(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComments">
+                                    <span class="fui-document"></span>
+                                    <span> 展开评论(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComment">
+                                    <span class="fui-chat"></span>
+                                    <span> 评论</span>
+                                  </a>
+                                </div>
+                                <div class="secReplyList">
+                                  <div class="secReply">
+                                    <div class="myrow">
+                                      <div class="pic"></div>
+                                      <div class="info">
+                                        <div class="detail">
+                                          <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                            单旭东
+                                          </a>
+                                          <a class="icon">
+                                            2015-3-10 15:45
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div class='mycontent'><a class="at">@单旭东: </a>写点什么写点什么写点什么</div>
+                                    </div>
+                                  </div>
+                                  <div class="secReply">
+                                    <div class="myrow">
+                                      <div class="pic"></div>
+                                      <div class="info">
+                                        <div class="detail">
+                                          <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                            单旭东
+                                          </a>
+                                          <a class="icon">
+                                            2015-3-10 15:45
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div class='mycontent'><a class="at">@单旭东: </a>写点什么写点什么写点什么</div>
+                                    </div>
+                                  </div>
+                                  <div class="secReply">
+                                    <div class="myrow">
+                                      <div class="pic"></div>
+                                      <div class="info">
+                                        <div class="detail">
+                                          <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                            单旭东
+                                          </a>
+                                          <a class="icon">
+                                            2015-3-10 15:45
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div class='mycontent'><a class="at">@单旭东: </a>写点什么写点什么写点什么</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="reply">
+                                <div class="myrow">
+                                  <div class="pic"></div>
+                                  <div class="info">
+                                    <div class="detail">
+                                      <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                        单旭东
+                                      </a>
+                                      <a class="icon">
+                                        2015-3-10 15:45
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class='mycontent'>写点什么写点什么</div>
+                                </div>
+                                <div class="toil mytoil">
+                                  <a href="#" class="noteEdit">
+                                    <span class="fui-new"></span>
+                                    <span> 编辑</span>
+                                  </a>
+                                  <a href="#" class="noteDelete">
+                                    <span class="fui-trash"></span>
+                                    <span> 删除</span>
+                                  </a>
+                                  <a href="#" class="notePraise">
+                                    <span class="fui-heart"></span>
+                                    <span> 赞(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComments">
+                                    <span class="fui-document"></span>
+                                    <span> 展开评论(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComment">
+                                    <span class="fui-chat"></span>
+                                    <span> 评论</span>
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="reply">
+                                <div class="myrow">
+                                  <div class="pic"></div>
+                                  <div class="info">
+                                    <div class="detail">
+                                      <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                        单旭东
+                                      </a>
+                                      <a class="icon">
+                                        2015-3-10 15:45
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class='mycontent'>写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么</div>
+                                </div>
+                                <div class="toil mytoil">
+                                  <a href="#" class="noteEdit">
+                                    <span class="fui-new"></span>
+                                    <span> 编辑</span>
+                                  </a>
+                                  <a href="#" class="noteDelete">
+                                    <span class="fui-trash"></span>
+                                    <span> 删除</span>
+                                  </a>
+                                  <a href="#" class="notePraise">
+                                    <span class="fui-heart"></span>
+                                    <span> 赞(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComments">
+                                    <span class="fui-document"></span>
+                                    <span> 展开评论(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComment">
+                                    <span class="fui-chat"></span>
+                                    <span> 评论</span>
+                                  </a>
+                                </div>
+                              </div>
+                          </div>
                         </div>
                       </div>
                         <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyTitle" aria-hidden="true" data-backdrop="static">
@@ -264,9 +428,307 @@
                           </div><!-- /.modal-dialog -->
                         </div>
                   </div>
-                  <div role="tabpanel" class="tab-pane" id="others">其他笔记其他笔记
+                  <div role="tabpanel" class="tab-pane animated fadeIn" id="others">
+                      <div class="notesGroup">
+                        <div class="timeline">
+                          <div class="notesBody">
+                            <div class="timeNotes">
+                                <img src class='capImg'/>
+                              <div class="noFocused focused">
+                                <div class="round"></div>
+                                <div class="line-through"></div>
+                              </div>
+                              <div class="notesCard ">
+                              <div class="notesmsg">其他笔记#1</div>
+                              <div class="createTime"> 2015-3-10 15:45 </div>
+                              <div class="videoTime">08:49</div>
+                              </div>
+                            </div>
+                            <div class="timeNotes">
+                              <img src class='capImg'/>
+                              <div class="noFocused">
+                                <div class="round"></div>
+                                <div class="line-through"></div>
+                              </div>
+                              <div class="notesCard ">
+                              <div class="notesmsg">其他笔记#2</div>
+                              <div class="createTime"> 2015-3-10 15:45 </div>
+                              <div class="videoTime">08:49</div>
+                              </div>
+                            </div>
+                            <div class="timeNotes">
+                              <img src class='capImg' />
+                              <div class="noFocused">
+                                <div class="round"></div>
+                                <div class="line-through"></div>
+                              </div>
+                              <div class="notesCard ">
+                              <div class="notesmsg">其他笔记#3</div>
+                              <div class="createTime"> 2015-3-10 15:45 </div>
+                              <div class="videoTime">08:49</div>
+                              </div>
+                            </div>
+                            <div class="timeNotes">
+                              <img src class='capImg' />
+                              <div class="noFocused">
+                                <div class="round"></div>
+                                <div class="line-through"></div>
+                              </div>
+                              <div class="notesCard ">
+                              <div class="notesmsg">其他笔记#4</div>
+                              <div class="createTime"> 2015-3-10 15:45 </div>
+                              <div class="videoTime">08:49</div>
+                              </div>
+                            </div>
+                            <div class="timeNotes">
+                              <img src class='capImg' />
+                              <div class="noFocused">
+                                <div class="round"></div>
+                                <div class="line-through"></div>
+                              </div>
+                              <div class="notesCard ">
+                              <div class="notesmsg">其他笔记#5</div>
+                              <div class="createTime"> 2015-3-10 15:45 </div>
+                              <div class="videoTime">08:49</div>
+                              </div>
+                            </div>
+                            <div class="timeNotes">
+                              <img src class='capImg' />
+                              <div class="noFocused">
+                                <div class="round"></div>
+                              </div>
+                              <div class="notesCard ">
+                              <div class="notesmsg">其他笔记#6</div>
+                              <div class="createTime"> 2015-3-10 15:45 </div>
+                              <div class="videoTime">08:49</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="replys">
+                        <div class="head">
+                          <button  class="btn btn-info" data-toggle='modal' data-target='#replyModal'>
+                            <span class="fui-new"></span>
+                            回复笔主</button>
+                          <button  class="btn btn-danger">
+                            返回
+                            <span class="fui-exit"></span>
+                          </button>
+                        </div>
+                        <div class="note mynote">
+                          <div class="myrow">
+                            <div class="pic"></div>
+                            <div class="info">
+                              <div class="title">
+                                我的笔记
+                              </div>
+                              <div class="detail">
+                                <a class="icon" href="/profile?want=1100012989" target="_blank">
+                                  <span class="fui-user"></span>
+                                  单旭东
+                                </a>
+                                <a class="icon">
+                                  <span class="fui-calendar"></span>
+                                  2015-3-10 15:45
+                                </a>
+                                <a class="icon">
+                                  <span class="fui-chat"></span>
+                                  2
+                                </a>
+                              </div>
+                            </div>
+                            <div class='mycontent'>写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么</div>
+                          </div>
+                          <div class="toil mytoil" style='border-bottom: solid #ccc 1px;'>
+                            <a href="#" class="noteEdit">
+                              <span class="fui-new"></span>
+                              <span>编辑</span>
+                            </a>
+                            <a href="#" class="notePraise">
+                              <span class="fui-heart"></span>
+                              <span> 赞(0)</span>
+                            </a>
+                            <a href="#" class="noteConcern">
+                              <span class="fui-eye"></span>
+                              <span> +关注(0)</span>
+                            </a>
+                            <a href="#" class="noteCollect">
+                              <span class="fui-star"></span>
+                              <span> 收藏(0)</span>
+                            </a>
+                          </div>
+                          <div class="replyList">
+                              <div class="reply">
+                                <div class="myrow">
+                                  <div class="pic"></div>
+                                  <div class="info">
+                                    <div class="detail">
+                                      <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                        单旭东
+                                      </a>
+                                      <a class="icon">
+                                        2015-3-10 15:45
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class='mycontent'>写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么</div>
+                                </div>
+                                <div class="toil mytoil">
+                                  <a href="#" class="noteEdit">
+                                    <span class="fui-new"></span>
+                                    <span> 编辑</span>
+                                  </a>
+                                  <a href="#" class="noteDelete">
+                                    <span class="fui-trash"></span>
+                                    <span> 删除</span>
+                                  </a>
+                                  <a href="#" class="notePraise">
+                                    <span class="fui-heart"></span>
+                                    <span> 赞(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComments">
+                                    <span class="fui-document"></span>
+                                    <span> 展开评论(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComment">
+                                    <span class="fui-chat"></span>
+                                    <span> 评论</span>
+                                  </a>
+                                </div>
+                                <div class="secReplyList">
+                                  <div class="secReply">
+                                    <div class="myrow">
+                                      <div class="pic"></div>
+                                      <div class="info">
+                                        <div class="detail">
+                                          <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                            单旭东
+                                          </a>
+                                          <a class="icon">
+                                            2015-3-10 15:45
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div class='mycontent'><a class="at">@单旭东: </a>写点什么写点什么写点什么</div>
+                                    </div>
+                                  </div>
+                                  <div class="secReply">
+                                    <div class="myrow">
+                                      <div class="pic"></div>
+                                      <div class="info">
+                                        <div class="detail">
+                                          <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                            单旭东
+                                          </a>
+                                          <a class="icon">
+                                            2015-3-10 15:45
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div class='mycontent'><a class="at">@单旭东: </a>写点什么写点什么写点什么</div>
+                                    </div>
+                                  </div>
+                                  <div class="secReply">
+                                    <div class="myrow">
+                                      <div class="pic"></div>
+                                      <div class="info">
+                                        <div class="detail">
+                                          <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                            单旭东
+                                          </a>
+                                          <a class="icon">
+                                            2015-3-10 15:45
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div class='mycontent'><a class="at">@单旭东: </a>写点什么写点什么写点什么</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="reply">
+                                <div class="myrow">
+                                  <div class="pic"></div>
+                                  <div class="info">
+                                    <div class="detail">
+                                      <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                        单旭东
+                                      </a>
+                                      <a class="icon">
+                                        2015-3-10 15:45
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class='mycontent'>写点什么写点什么</div>
+                                </div>
+                                <div class="toil mytoil">
+                                  <a href="#" class="noteEdit">
+                                    <span class="fui-new"></span>
+                                    <span> 编辑</span>
+                                  </a>
+                                  <a href="#" class="noteDelete">
+                                    <span class="fui-trash"></span>
+                                    <span> 删除</span>
+                                  </a>
+                                  <a href="#" class="notePraise">
+                                    <span class="fui-heart"></span>
+                                    <span> 赞(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComments">
+                                    <span class="fui-document"></span>
+                                    <span> 展开评论(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComment">
+                                    <span class="fui-chat"></span>
+                                    <span> 评论</span>
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="reply">
+                                <div class="myrow">
+                                  <div class="pic"></div>
+                                  <div class="info">
+                                    <div class="detail">
+                                      <a class="icon name" href="/profile?want=1100012989" target="_blank">
+                                        单旭东
+                                      </a>
+                                      <a class="icon">
+                                        2015-3-10 15:45
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class='mycontent'>写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么写点什么</div>
+                                </div>
+                                <div class="toil mytoil">
+                                  <a href="#" class="noteEdit">
+                                    <span class="fui-new"></span>
+                                    <span> 编辑</span>
+                                  </a>
+                                  <a href="#" class="noteDelete">
+                                    <span class="fui-trash"></span>
+                                    <span> 删除</span>
+                                  </a>
+                                  <a href="#" class="notePraise">
+                                    <span class="fui-heart"></span>
+                                    <span> 赞(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComments">
+                                    <span class="fui-document"></span>
+                                    <span> 展开评论(0)</span>
+                                  </a>
+                                  <a href="#" class="noteComment">
+                                    <span class="fui-chat"></span>
+                                    <span> 评论</span>
+                                  </a>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
                   </div>
-                  <div role="tabpanel" class="tab-pane" id="analysis">视频分析视频分析</div>
+                  <div role="tabpanel" class="tab-pane animated fadeIn" id="analysis">视频分析视频分析</div>
                 </div>
               </div>
             </div>
