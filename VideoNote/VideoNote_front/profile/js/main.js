@@ -73,22 +73,43 @@ function basic_bars(container, horizontal) {
 
 $(document).ready( function() {
 	//UI部分
-	//开关笔记栏
+	//开关笔记栏 设置动画
 	$("#bookmark").click(function(){
-		$(".rightframe").toggle();
 		if($(".leftframe").hasClass("bigframe"))
 		{
-			$(".leftframe").removeClass("bigframe");
-			$("#form2 .input-group").width('450');
+			//$(".leftframe").removeClass("bigframe");
+			$('.leftframe').animate({width: "67%",marginLeft: "0"},500,function(){
+				$(".rightframe").toggle();
+				$(".rightframe").addClass('animated');
+				$(".rightframe").removeClass('fadeOutRight');
+				$(".rightframe").addClass('fadeInRight');
+				$(this).removeClass("bigframe");
+				$("#form2 .input-group").width('530');
+			})
 		}
 		else {
-			$(".leftframe").addClass("bigframe");
-			$("#form2 .input-group").width('600')
+			$(".rightframe").addClass('animated');
+			$(".rightframe").removeClass('fadeInRight');
+			$(".rightframe").addClass('fadeOutRight');
+			setTimeout(function(){
+				$(".rightframe").toggle();
+				$('.leftframe').animate({width: "80%",marginLeft: "10%"},500,function(){
+					$(this).addClass("bigframe");
+					$("#form2 .input-group").width('680');
+				})
+			},500);
 		}
+	})
+	//切换显示tab时scroll归0,重置笔记页面
+	$('.nav-tabs > li').click(function(){
+		$('.tab-content')[0].scrollTop = 0;
+		$('.tab-content .notesGroup').css('display','block');
+		$('.tab-content .replys').css('display','none');
 	})
 	//切换笔记显示页面和编辑/回复页面
 	$('.tab-content .notesBody .timeNotes').click(function(){
 		$('.tab-content .notesGroup').css('display','none');
+		$('.tab-content')[0].scrollTop = 0;
 		$('.tab-content .replys').css('display','block');
 	})
 	$('.replys .head .btn-danger').click(function(){
@@ -112,6 +133,15 @@ $(document).ready( function() {
 	  	$('#replyModal').find(".modal-dialog").css("margin-top",function(){
 	  		return $(window).height()/4;
 	  	});
+	});
+	//鼠标悬停或离去时显示/隐藏第二级回复的底端菜单
+	$('.secReply').each(function(){
+		$(this)[0].addEventListener('mouseover',function(){
+			$($(this)[0].children[1]).css({'display':'block'})
+		});
+		$(this)[0].addEventListener('mouseleave',function(){
+			$($(this)[0].children[1]).css({'display':'none'})
+		})
 	});
 
 	//功能性部分
@@ -157,7 +187,12 @@ $(document).ready( function() {
 	})
 	//根据输入的视频源设置视频
 	$("#form2").submit(function(){
-		$(this).ajaxSubmit(options);
+		var src = $("#navbarInput-02").val();
+		var len = src.length;
+		if(src.substr(len - 3,len) == 'ebm')
+			setVideo(null,src);
+		else if(src.substr(len - 3,len) == 'mp4')
+			setVideo(src,null);
 	})
 	//视频截图部分
     $("#newnote").click(function(){
@@ -169,6 +204,9 @@ $(document).ready( function() {
         });
     })
     //画表格部分
-    //var container = document.getElementById("container");
-    //basic_bars(container,false);
+    var container = document.getElementById("formContainer");
+    $($('.nav-tabs > li')[2]).click(function(){
+    	$('container').css({'display':'block'});
+    	basic_bars(container,false);
+    })
 });
