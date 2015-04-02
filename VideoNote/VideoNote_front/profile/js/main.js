@@ -14,6 +14,8 @@ function setVideo(mp4,webm){
         $("#navbarInput-02").val($('video')[0].currentSrc);
         $("video")[0].currentTime = localStorage.time;
         $('.tab-content').height($('video').height() + $('.foot').height() +35);
+        localStorage.setItem('video_url',$('video')[0].currentSrc);
+        localStorage.setItem('video_total_time',$('video')[0].duration);
     })
     $('video')[0].addEventListener('timeupdate',function(){
         localStorage.time = $("video")[0].currentTime;
@@ -218,5 +220,27 @@ $(document).ready( function() {
     $($('.nav-tabs > li')[2]).click(function(){
     	$('container').css({'display':'block'});
     	basic_bars(container,false);
+    })
+
+    //***********  与服务器交互部分  ***********//
+    //暂时设定video_name与url相同
+    //设定10s为一个时间段 slot
+    $("#noteSubmit").click(function(){
+        var note = {};
+        note.title = $("#noteTitle").val();
+        note.body = $('#redactor_content_2').getCode();
+        var smallAbstract = $(note.body).text();
+        if(smallAbstract.length > 80){
+            smallAbstract = smallAbstract.substring(0,80);
+            smallAbstract = smallAbstract + "...";
+        }
+        note.abstract = smallAbstract;
+        var user_id = localStorage.id;
+        var video_url = localStorage.video_url;
+        var video_name = localStorage.video_url;  //暂时设为与url相同
+        var video_time = localStorage.time;
+        var video_total_time = localStorage.video_total_time;
+        var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
+        submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note);
     })
 });

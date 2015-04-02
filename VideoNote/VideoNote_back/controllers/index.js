@@ -312,7 +312,6 @@ exports.submitNote = function(req,res){
                         allSlots[indexToSave].notes.push({
                             noteIndex: note_index,
                             title: NOTE.note.title,
-                            type: NOTE.note.type,
                             fromUserID: NOTE.userID,
                             time: easyTime(now),
                             _time: Number(now.getTime()),

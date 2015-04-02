@@ -45,7 +45,6 @@ var VideoSchema = new Schema({
         notes: [{
             noteIndex: {type: Number},
             title: {type: String},
-            type: {type: Number},
             fromUserID: {type: String},
             time: {type: String},   //方便前端显示
             _time: {type: Number},
