@@ -1,16 +1,6 @@
 //the routes only
 var controller = require('../controllers/index.js');
 module.exports = function(app){
-	app.get('/',controller.index); //大白纸
-	app.get('/noteRecord',controller.noteRecord);	//跳转去笔记记录页面
-	app.get('/noteDisplayTRY',controller.noteDisplayTRY);	//笔记展示静态页面模型
-	app.get('/noteDisplay',controller.noteDisplay);		//跳转去笔记展示页面
-	app.get('/getNotesOnAPage',controller.getNotesOnAPage);		//拿一页pdf上的所有笔记
-	app.get('/profile',controller.profile);	//跳转去个人信息展示页面
-	app.get('/profileTRY',controller.profileTRY);	//个人信息展示静态页面模型
-	app.get('/getProfiles',controller.getProfiles);	//得到某人的个人信息
-	app.get('/getMyBriefProfile',controller.getMyBriefProfile);	//得到我简短的信息
-
 	app.post('/register',controller.register);	//注册
 	app.post('/login',controller.login);	//登录
 	app.post('/imageUpload',controller.imageUpload);	//图片上传
@@ -28,4 +18,8 @@ module.exports = function(app){
 	app.post('/updateProfiles',controller.updateProfiles);	//修改个人信息
     app.post('/deleteNote',controller.deleteNote);	//个人主页中删除笔记
     app.post('/editNote',controller.editNote);	//个人主页中编辑笔记
+
+    app.get('/getProfiles',controller.getProfiles);	//得到个人信息
+    app.get('/getMyBriefProfile',controller.getMyBriefProfile);	//得到个人简短的信息
+    app.get('/getNotesOnASlot',controller.getNotesOnASlot);		//拿一个video上的所有笔记
 };

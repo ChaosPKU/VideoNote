@@ -80,12 +80,13 @@ $(document).ready( function() {
 			//$(".leftframe").removeClass("bigframe");
 			$('.leftframe').animate({width: "67%",marginLeft: "0"},500,function(){
 				$(".rightframe").toggle();
+                $('.tab-content')[0].scrollTop = 0;
 				$(".rightframe").addClass('animated');
 				$(".rightframe").removeClass('fadeOutRight');
 				$(".rightframe").addClass('fadeInRight');
 				$(this).removeClass("bigframe");
-				$("#form2 .input-group").width('530');
 			})
+            $("#form2 .input-group").animate({width:"530px"},500,function(){})
 		}
 		else {
 			$(".rightframe").addClass('animated');
@@ -95,8 +96,8 @@ $(document).ready( function() {
 				$(".rightframe").toggle();
 				$('.leftframe').animate({width: "80%",marginLeft: "10%"},500,function(){
 					$(this).addClass("bigframe");
-					$("#form2 .input-group").width('680');
 				})
+                $("#form2 .input-group").animate({width:"680px"},500,function(){})
 			},500);
 		}
 	})
@@ -116,12 +117,6 @@ $(document).ready( function() {
 		$('.tab-content .notesGroup').css('display','block');
 		$('.tab-content .replys').css('display','none');
 	})
-	$('.replys .head .btn-info').click(function(){
-		$('#redactor_content_1').redactor({
-			imageUpload: '/imageUpload',
-			fileUpload: '/fileUpload'
-		});
-	})
 
 	//设置右侧frame高度使两端对齐
 	$(window).resize(function(){
@@ -129,9 +124,9 @@ $(document).ready( function() {
 	})
 
 	//modal部分
-	$('#replyModal').on('show.bs.modal', function (e) {
-	  	$('#replyModal').find(".modal-dialog").css("margin-top",function(){
-	  		return $(window).height()/4;
+	$('#replyModal_1').on('show.bs.modal', function (e) {
+	  	$('#replyModal_1').find(".modal-dialog").css("margin-top",function(){
+	  		return $(window).height()/8;
 	  	});
 	});
 	//鼠标悬停或离去时显示/隐藏第二级回复的底端菜单
@@ -143,6 +138,21 @@ $(document).ready( function() {
 			$($(this)[0].children[1]).css({'display':'none'})
 		})
 	});
+
+    //redactor初始化
+    $('.replys .head .btn-info').click(function(){
+        $('#redactor_content_1').redactor({
+            imageUpload: serverIP + '/imageUpload',
+            fileUpload: serverIP + '/fileUpload'
+        });
+    })
+
+    $('#newnote').click(function(){
+        $('#redactor_content_2').redactor({
+            imageUpload: serverIP + '/imageUpload',
+            fileUpload: serverIP + '/fileUpload'
+        });
+    })
 
 	//功能性部分
 	//已有播放记录，则根据记录设置播放

@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-mongoose.connect('mongodb://localhost/coursehelper' , function(err){
+mongoose.connect('mongodb://localhost/videonote' , function(err){
   if(err){
     console.log(err);
   }
   else{
-    console.log('connect to coursehelper mongodb succeed!');
+    console.log('connect to videonote mongodb succeed!');
   }
 });
 //连接数据库
@@ -15,66 +15,62 @@ var UserSchema = new Schema({
     salt: {type: String}, //↓
     hash: {type: String}, //这两个共同存密码
     nickname: {type: String},
-    role: {type: Number}, //0学生 1老师
     head: {type: String , default:"/img/icon128.png"}, //存头像的path
     mobilephone: {type: String},
     email: {type: String},
     myNotes: [{             //我的笔记
-        PDFUrl: {type: String}, //PDF的url
-        pageIndex: {type: Number},  //PDF的某一页
-        noteIndex: {type: Number}   //某一页上的某一个
+        VideoUrl: {type: String}, //video的url
+        VideoTime: {type: Date} //note所在的时间
     }],
     myConcerns: [{              //我的关注
-        PDFUrl: {type: String}, 
-        pageIndex: {type: Number},  
-        noteIndex: {type: Number}   
+        VideoUrl: {type: String}, //video的url
+        VideoTime: {type: Date} //note所在的时间
     }],
     myCollects: [{              //我的收藏
-        PDFUrl: {type: String}, 
-        pageIndex: {type: Number},  
-        noteIndex: {type: Number}
+        VideoUrl: {type: String}, //video的url
+        VideoTime: {type: Date} //note所在的时间
     }]
 });
 var UserModel = mongoose.model("User" , UserSchema);
 exports.UserModel = UserModel;
 
-//PDF model
-var PDFSchema = new Schema({
+//Video model
+var VideoSchema = new Schema({
     URL: {type: String , unique: true},
-    pdfName: {type: String},
-    pages: [{
-        pageIndex: {type: Number},
-        relatedUsers: [], //存userID,与本页操作相关的userID
+    VideoName: {type: String},
+    TotalTime: {type: Date},
+    slots: [{
+        slotIndex: {type: Number},
+        relatedUsers: [], //存userID,与本时间段操作相关的userID
         notes: [{
             noteIndex: {type: Number},
-            title: {type: String},  
+            title: {type: String},
             type: {type: Number},
-            fromUserID: {type: String}, 
-            time: {type: String},   //方便前端显示    
+            fromUserID: {type: String},
+            time: {type: String},   //方便前端显示
             _time: {type: Number},
-            relatedRange: {type: String},   //相关区域
-            abstract: {type: String},   
-            body: {type: String},     
+            abstract: {type: String},
+            body: {type: String},
             praises: [String],  //这三个数组里存的是执行相关动作的用户的ID
             concerns: [String], //↑
             collects: [String], //↑
             replys:[{
                 replyIndex: {type: Number},
-                fromUserID: {type: String}, 
-                time: {type: String},   
+                fromUserID: {type: String},
+                time: {type: String},
                 _time: {type: Number},
-                body: {type: String},   
+                body: {type: String},
                 praises: [String],
                 comments: [{
-                    fromUserID: {type: String}, 
+                    fromUserID: {type: String},
                     toUserID: {type: String},
-                    time: {type: String},   
+                    time: {type: String},
                     _time: {type: Number},
-                    body: {type: String}    
-                }]  
+                    body: {type: String}
+                }]
             }]
-        }]  
+        }]
     }]
 });
-var PDFModel = mongoose.model("PDF" , PDFSchema);
-exports.PDFModel = PDFModel;
+var VideoModel = mongoose.model("Video" , VideoSchema);
+exports.VideoModel = VideoModel;

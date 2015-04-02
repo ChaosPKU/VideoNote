@@ -401,3 +401,31 @@
       border-radius: 22px;
       margin-left: 10px;
 }
+.form-row{
+    width: 100%;
+    height: 40px;
+    font-size: 20px;
+    margin: 10px 0px;
+    padding: 0px 25px;
+    line-height: 40px;
+}
+.form-row .control-label{
+    float: left;
+    height: 40px;
+    width: 100px;
+    line-height: 40px;
+}
+.form-row .control-content{
+    float: left;
+    height: 40px;
+    line-height: 40px;
+}
+.form-row .control-content >p{
+    height: 40px;
+    line-height: 40px;
+}
+.form-row .control-content >input{
+    height: 40px;
+    line-height: 40px;
+    width: 400px;
+}

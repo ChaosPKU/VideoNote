@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'my secret'}));
 
-app.use(app.router);	
+app.use(app.router);
 
 var userModel = models.userModel;
 

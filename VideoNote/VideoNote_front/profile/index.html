@@ -54,7 +54,7 @@
                             </div>
                         </form>
                         <ul class="nav navbar-nav navbar-right">
-                            <li id="newnote" title='新的笔记'><a style="cursor:pointer"><span class="visible-sm visible-xs">NewNote<span class="fui-new"></span></span><span class="visible-md visible-lg"><span class="fui-new"></span></span></a></li>
+                            <li id="newnote" title='新的笔记' data-toggle="modal" data-target="#replyModal_2"><a style="cursor:pointer"><span class="visible-sm visible-xs">NewNote<span class="fui-new"></span></span><span class="visible-md visible-lg"><span class="fui-new"></span></span></a></li>
                             <li id="bookmark" title='开/关笔记页面'><a style="cursor:pointer"><span class="visible-sm visible-xs">PlayNotes<span class="fui-bookmark"></span></span><span class="visible-md visible-lg"><span class="fui-bookmark"></span></span></a></li>
                             <!--
                             <li><input type="checkbox" checked data-toggle="switch" id="custom-switch-01" data-on-text="笔记" data-off-text="视频" data-on-color="success" data-off-color="primary"/></li>
@@ -191,7 +191,7 @@
 
                     <div class="replys">
                         <div class="head">
-                            <button  class="btn btn-info" data-toggle='modal' data-target='#replyModal'>
+                            <button  class="btn btn-info" data-toggle='modal' data-target='#replyModal_1'>
                                 <span class="fui-new"></span>
                                 回复笔主</button>
                             <button  class="btn btn-danger">
@@ -529,7 +529,7 @@
 
                     <div class="replys">
                         <div class="head">
-                            <button  class="btn btn-info" data-toggle='modal' data-target='#replyModal'>
+                            <button  class="btn btn-info" data-toggle='modal' data-target='#replyModal_1'>
                                 <span class="fui-new"></span>
                                 回复笔主</button>
                             <button  class="btn btn-danger">
@@ -789,12 +789,12 @@
                 <div role="tabpanel" class="tab-pane animated fadeIn" id="analysis">
                   <div id="formContainer" style="width:96%;height:300px;margin:2% auto"></div>
                 </div>
-                <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyTitle" aria-hidden="true" data-backdrop="static">
+                <div class="modal fade" id="replyModal_1" tabindex="-1" role="dialog" aria-labelledby="replyTitle" aria-hidden="true" data-backdrop="static">
                         <div class="modal-dialog">
-                            <div class="modal-content">
+                            <div class="modal-content" style="width: 650px;margin-left: -25px">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&minus;</button>
-                                    <h4 class="modal-title" id="replyTitle">Modal title</h4>
+                                    <h4 class="modal-title" id="replyTitle">回复笔主</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div id="page_1">
@@ -808,7 +808,34 @@
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
-                    </div>
+                </div>
+                <div class="modal fade" id="replyModal_2" tabindex="-1" role="dialog" aria-labelledby="replyTitle" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width: 650px;margin-left: -25px" >
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                <form id="redactor_newnote_form">
+                                    <h5 class="modal-title" id="replyTitle">新的笔记</h5>
+                                    <div class="form-row form-group">
+                                        <div class="control-label">标题</div>
+                                        <div class="control-content">
+                                            <input type="text" id="noteTitle" placeholder="标题" class="form-control">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-body">
+                                <div id="page_2">
+                                    <textarea id="redactor_content_2" name="content" style="height: 230px;"><p>回复什么...</p></textarea>
+                                </div>
+                                <p id="target"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary btn-block" id="noteSubmit"><span class="glyphicon glyphicon-cloud-upload"></span> 发布</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div>
             </div>
         </div>
     </div>
@@ -823,6 +850,7 @@
 <script src="js/flotr2.min.js"></script>
 <script src="js/jquery-migrate-1.2.1.js"></script>
 <script src="js/main.js"></script>
+<script src="js/server.js"></script>
 <script src="js/redactor.js"></script>
 </body>
 </html>
