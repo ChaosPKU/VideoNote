@@ -20,15 +20,15 @@ var UserSchema = new Schema({
     email: {type: String},
     myNotes: [{             //我的笔记
         VideoUrl: {type: String}, //video的url
-        VideoTime: {type: Date} //note所在的时间
+        VideoTime: {type: String} //note所在的时间
     }],
     myConcerns: [{              //我的关注
         VideoUrl: {type: String}, //video的url
-        VideoTime: {type: Date} //note所在的时间
+        VideoTime: {type: String} //note所在的时间
     }],
     myCollects: [{              //我的收藏
         VideoUrl: {type: String}, //video的url
-        VideoTime: {type: Date} //note所在的时间
+        VideoTime: {type: String} //note所在的时间
     }]
 });
 var UserModel = mongoose.model("User" , UserSchema);
@@ -46,6 +46,7 @@ var VideoSchema = new Schema({
             noteIndex: {type: Number},
             title: {type: String},
             fromUserID: {type: String},
+            videoTime: {type: String},
             time: {type: String},   //方便前端显示
             _time: {type: Number},
             abstract: {type: String},

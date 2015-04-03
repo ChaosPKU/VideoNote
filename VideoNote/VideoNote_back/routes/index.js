@@ -18,8 +18,8 @@ module.exports = function(app){
 	app.post('/updateProfiles',controller.updateProfiles);	//修改个人信息
     app.post('/deleteNote',controller.deleteNote);	//个人主页中删除笔记
     app.post('/editNote',controller.editNote);	//个人主页中编辑笔记
+    app.post('/getNotesOnASlot',controller.getNotesOnASlot);		//拿一个video上的所有笔记
 
     app.get('/getProfiles',controller.getProfiles);	//得到个人信息
     app.get('/getMyBriefProfile',controller.getMyBriefProfile);	//得到个人简短的信息
-    app.get('/getNotesOnASlot',controller.getNotesOnASlot);		//拿一个video上的所有笔记
 };

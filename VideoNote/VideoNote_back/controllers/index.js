@@ -199,7 +199,6 @@ exports.submitNote = function(req,res){
     }
     //用decode存URL
     NOTE.URL = decodeURI(req.body.URL);
-    //console.log(NOTE.URL);
     if(!NOTE.URL){
         res.send({
             status:'error',
@@ -313,6 +312,7 @@ exports.submitNote = function(req,res){
                             noteIndex: note_index,
                             title: NOTE.note.title,
                             fromUserID: NOTE.userID,
+                            videoTime: NOTE.VideoTime,
                             time: easyTime(now),
                             _time: Number(now.getTime()),
                             //relatedRange: NOTE.note.relatedRange,   //相关区域
@@ -1703,8 +1703,8 @@ exports.getProfiles = function(req,res){
 //得到一页的笔记
 exports.getNotesOnASlot = function(req,res){
     //都改用decode来作为数据库中存储的url，与submit也保持一致。
-    var video_url = decodeURI(req.query.video_url);
-    var video_slot = parseInt(req.query.video_slot) ;
+    var video_url = decodeURI(req.body.video_url);
+    var video_slot = parseInt(req.body.video_slot) ;
     videoModel.findOne({URL: video_url}, function (err, video){
         //console.log(video);
         if(err){
@@ -1739,7 +1739,7 @@ exports.getNotesOnASlot = function(req,res){
                 var slots = video.slots;
                 var targetIndex = 0 ;
                 for(targetIndex = 0 ; targetIndex < slots.length ; targetIndex++){
-                    if(slots[targetIndex].pageIndex == video_slot){
+                    if(slots[targetIndex].slotIndex == video_slot){
                         break;
                     }
                 }
@@ -1754,7 +1754,7 @@ exports.getNotesOnASlot = function(req,res){
                         else{
                             res.send({
                                 status: 'success',
-                                msg: 'ok',
+                                msg: 'notes on slot ' + video_slot + ' get successfully',
                                 result: {'users': users, 'notes': slots[targetIndex].notes}
                             });
                         }

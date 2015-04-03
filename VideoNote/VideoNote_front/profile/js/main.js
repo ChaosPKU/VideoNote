@@ -1,4 +1,34 @@
 var isNewVideo = 0;
+//秒数转标准时间格式
+function formatTime(second) {
+    return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
+}
+//显示笔记栏的笔记
+function displayNotesFunc(result){
+    console.log(result);
+    var str = '';
+    var notes = result.notes;
+    var len = notes.length;
+    for(var i = 0;i < len; ++ i){
+        str += "<div class='timeNotes'> <img src class='capImg'/> <div class='noFocused ";
+        str += "focused";
+        str += "'> <div class='round'></div> ";
+        if(i < len - 1)
+            str += "<div class='line-through'></div>";
+        str += " </div> <div class='notesCard '> <div class='notesmsg'>";
+        str += notes[i].title;
+        str += "</div> <div class='createTime'> ";
+        str += notes[i].time;
+        str += "</div> <div class='videoTime'>";
+        str +=  formatTime(notes[i].videoTime);
+        str += "</div> </div> </div>";
+    }
+    $($('.notesBody')[0]).html(str);
+}
+//更新笔记栏
+function updateNotesFrame(video_url, slot_index,user_id){
+    getNotesOnASlot(video_url,slot_index,displayNotesFunc,user_id);
+}
 function setVideo(mp4,webm){
 	var str = '';
 	if(webm){
@@ -16,6 +46,7 @@ function setVideo(mp4,webm){
         $('.tab-content').height($('video').height() + $('.foot').height() +35);
         localStorage.setItem('video_url',$('video')[0].currentSrc);
         localStorage.setItem('video_total_time',$('video')[0].duration);
+        updateNotesFrame($('video')[0].currentSrc, 0, localStorage.id);
     })
     $('video')[0].addEventListener('timeupdate',function(){
         localStorage.time = $("video")[0].currentTime;
@@ -241,6 +272,6 @@ $(document).ready( function() {
         var video_time = localStorage.time;
         var video_total_time = localStorage.video_total_time;
         var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
-        submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note);
+        submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note,updateNotesFrame);
     })
 });
