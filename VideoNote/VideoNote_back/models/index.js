@@ -38,7 +38,7 @@ exports.UserModel = UserModel;
 var VideoSchema = new Schema({
     URL: {type: String , unique: true},
     VideoName: {type: String},
-    TotalTime: {type: Date},
+    TotalTime: {type: String},
     slots: [{
         slotIndex: {type: Number},
         relatedUsers: [], //存userID,与本时间段操作相关的userID

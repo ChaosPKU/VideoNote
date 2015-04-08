@@ -1,16 +1,20 @@
 var isNewVideo = 0;
+var MyNotesResult;
+var OtherNotesResult;
 //秒数转标准时间格式
 function formatTime(second) {
     return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
 }
 //显示笔记栏的笔记
 function displayNotesFunc(result){
-    console.log(result);
+    MyNotesResult = result;
     var str = '';
     var notes = result.notes;
     var len = notes.length;
     for(var i = 0;i < len; ++ i){
-        str += "<div class='timeNotes'> <img src class='capImg'/> <div class='noFocused ";
+        str += "<div class='timeNotes' data-seq=";
+        str += i;
+        str += "> <img src class='capImg'/> <div class='noFocused ";
         str += "focused";
         str += "'> <div class='round'></div> ";
         if(i < len - 1)
@@ -24,10 +28,18 @@ function displayNotesFunc(result){
         str += "</div> </div> </div>";
     }
     $($('.notesBody')[0]).html(str);
+    $('.tab-content .notesBody .timeNotes').click(function(){
+        $('.tab-content .notesGroup').css('display','none');
+        $('.tab-content')[0].scrollTop = 0;
+        var seq = $(this).data('seq');
+        console.log(MyNotesResult);
+        $('.tab-content .replys').css('display','block');
+    })
 }
 //更新笔记栏
 function updateNotesFrame(video_url, slot_index,user_id){
-    getNotesOnASlot(video_url,slot_index,displayNotesFunc,user_id);
+    var video_total_time = localStorage.video_total_time;
+    getNotesOnASlot(video_url,slot_index,video_total_time,displayNotesFunc,user_id);
 }
 function setVideo(mp4,webm){
 	var str = '';
@@ -140,7 +152,7 @@ $(document).ready( function() {
 		$('.tab-content .notesGroup').css('display','block');
 		$('.tab-content .replys').css('display','none');
 	})
-	//切换笔记显示页面和编辑/回复页面
+	//切换笔记显示页面和编辑/回复页面   待删
 	$('.tab-content .notesBody .timeNotes').click(function(){
 		$('.tab-content .notesGroup').css('display','none');
 		$('.tab-content')[0].scrollTop = 0;

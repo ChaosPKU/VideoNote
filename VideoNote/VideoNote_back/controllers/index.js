@@ -1705,6 +1705,7 @@ exports.getNotesOnASlot = function(req,res){
     //都改用decode来作为数据库中存储的url，与submit也保持一致。
     var video_url = decodeURI(req.body.video_url);
     var video_slot = parseInt(req.body.video_slot) ;
+    var totalTime = parseInt(req.body.total_time) ;
     videoModel.findOne({URL: video_url}, function (err, video){
         //console.log(video);
         if(err){
@@ -1718,7 +1719,9 @@ exports.getNotesOnASlot = function(req,res){
                 var video_name = video_url.substring(video_url.lastIndexOf("\/")+1);
                 video = new videoModel({
                     URL:video_url,
-                    videoName:video_name
+                    VideoName:video_name,
+                    TotalTime: totalTime,
+                    slots: []
                 });
                 video.save(function(err){
                     if(err){
@@ -1728,7 +1731,7 @@ exports.getNotesOnASlot = function(req,res){
                         });
                     }else{
                         res.send({
-                            status:'success',
+                            status:'new',
                             msg:'video save successfully.',
                             result: video
                         });
