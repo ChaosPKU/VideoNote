@@ -1,6 +1,7 @@
 var isNewVideo = 0;
 var MyNotesResult;
 var OtherNotesResult;
+var noteSeq;
 //秒数转标准时间格式
 function formatTime(second) {
     return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
@@ -32,7 +33,50 @@ function displayNotesFunc(result){
         $('.tab-content .notesGroup').css('display','none');
         $('.tab-content')[0].scrollTop = 0;
         var seq = $(this).data('seq');
-        console.log(MyNotesResult);
+        noteSeq = seq;
+        //console.log(MyNotesResult);
+        str = '';
+        str += "<a class='icon' href='/profile?want=1100012989' target='_blank'><span class='fui-user'></span> ";
+        str += MyNotesResult.notes[seq].fromUserID;
+        str += " </a><a class='icon'><span class='fui-calendar'></span> ";
+        str += MyNotesResult.notes[seq].time;
+        str += " </a><a class='icon'><span class='fui-chat'></span> ";
+        str += MyNotesResult.notes[seq].replys.length;
+        str += " </a>";
+        $($(".tab-pane .note .detail")[0]).html(str);
+        $($(".tab-pane .note .mycontent")[0]).html(MyNotesResult.notes[seq].body);
+        str = '';
+        str += "<a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a><a href='#' class='notePraise'><span class='fui-heart'></span><span> 赞(";
+        str += MyNotesResult.notes[seq].praises.length;
+        str += ") </span></a><a href='#' class='noteConcern'><span class='fui-eye'></span><span> +关注(";
+        str += MyNotesResult.notes[seq].concerns.length;
+        str += ") </span></a><a href='#' class='noteCollect'><span class='fui-star'></span><span> 收藏(";
+        str += MyNotesResult.notes[seq].collects.length;
+        str += ") </span></a>";
+        $($(".tab-pane .note .mytoil")[0]).html(str);
+        str = '';
+        var replys = MyNotesResult.notes[seq].replys;
+        str += "<button class='btn btn-inverse' type='button'>回复<span class='btn-default'><b>";
+        str += replys.length;
+        str += "</b></span></button>";
+        for(var i = 0; i < replys.length; ++ i){
+            str += "<div class='reply'>";
+            str += "<div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000'>";
+            str += replys[i].fromUserID;
+            str += "</a></div><a class='icon'>";
+            str += replys[i].time;
+            str += "</a></div></div><div class='mycontent'>";
+            str += replys[i].body;
+            str += "</div> </div>";
+            str += "<div class='toil mytoil'><a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a><a href='#' class='noteDelete'><span class='fui-trash'></span><span> 删除 </span></a><a href='#' class='notePraise'><span class='fui-heart'></span> <span> 赞(";
+            str += replys[i].praises.length;
+            str += ") </span></a><a href='#' class='noteComments'><span class='fui-document'></span><span> 展开评论(";
+            str += replys[i].comments.length;
+            str += ") </span></a><a href='#' class='noteComment'><span class='fui-chat'></span><span> 评论 </span></a></div>";
+            str += "<div class='secReplyList'>";
+            str += "</div></div>";
+        }
+        $($(".tab-pane .note .replyList")[0]).html(str);
         $('.tab-content .replys').css('display','block');
     })
 }
@@ -40,6 +84,34 @@ function displayNotesFunc(result){
 function updateNotesFrame(video_url, slot_index,user_id){
     var video_total_time = localStorage.video_total_time;
     getNotesOnASlot(video_url,slot_index,video_total_time,displayNotesFunc,user_id);
+}
+//更新笔记回复区域
+function updateReplysFrame(note){
+    $($(".tab-pane .note .replyList")[0]).html("");
+    MyNotesResult.notes[noteSeq] = note;
+    $($($(".tab-pane .myrow .detail")[0]).children()[2]).html("<span class='fui-chat'></span> " + note.replys.length + " ");
+    var str = '';
+    str += "<button class='btn btn-inverse' type='button'>回复<span class='btn-default'><b>";
+    str += note.replys.length;
+    str += "</b></span></button>";
+    for(var i = 0; i < note.replys.length; ++ i){
+        str += "<div class='reply'>";
+        str += "<div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000'>";
+        str += note.replys[i].fromUserID;
+        str += "</a></div><a class='icon'>";
+        str += note.replys[i].time;
+        str += "</a></div></div><div class='mycontent'>";
+        str += note.replys[i].body;
+        str += "</div> </div>";
+        str += "<div class='toil mytoil'><a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a><a href='#' class='noteDelete'><span class='fui-trash'></span><span> 删除 </span></a><a href='#' class='notePraise'><span class='fui-heart'></span> <span> 赞(";
+        str += note.replys[i].praises.length;
+        str += ") </span></a><a href='#' class='noteComments'><span class='fui-document'></span><span> 展开评论(";
+        str += note.replys[i].comments.length;
+        str += ") </span></a><a href='#' class='noteComment'><span class='fui-chat'></span><span> 评论 </span></a></div>";
+        str += "<div class='secReplyList'>";
+        str += "</div></div>";
+    }
+    $($(".tab-pane .note .replyList")[0]).html(str);
 }
 function setVideo(mp4,webm){
 	var str = '';
@@ -190,6 +262,21 @@ $(document).ready( function() {
             imageUpload: serverIP + '/imageUpload',
             fileUpload: serverIP + '/fileUpload'
         });
+        $("#replySubmit").click(function(){
+            var note = {};
+            note.body = $('#redactor_content_1').getCode();
+            var smallAbstract = $(note.body).text();
+            if(smallAbstract.length > 80){
+                smallAbstract = smallAbstract.substring(0,80);
+                smallAbstract = smallAbstract + "...";
+            }
+            note.abstract = smallAbstract;
+            var user_id = localStorage.id;
+            var video_url = localStorage.video_url;
+            var slot_index = parseInt(parseInt(MyNotesResult.notes[noteSeq].videoTime) / 10);   //设定10s为一个时间段
+            var noteIndex = noteSeq;
+            replyToNote(user_id, video_url, slot_index, noteIndex, note, updateReplysFrame);
+        })
     })
 
     $('#newnote').click(function(){

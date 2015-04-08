@@ -60,6 +60,7 @@ var VideoSchema = new Schema({
                 time: {type: String},
                 _time: {type: Number},
                 body: {type: String},
+                abstract: {type: String},
                 praises: [String],
                 comments: [{
                     fromUserID: {type: String},

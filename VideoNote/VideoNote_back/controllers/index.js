@@ -375,7 +375,7 @@ exports.replyToNote = function(req,res){
         });
         return;
     }
-    reply.URL = req.body.URL;
+    reply.URL = decodeURI(req.body.URL);
     if(!reply.URL){
         res.send({
             status:'error',
@@ -460,7 +460,8 @@ exports.replyToNote = function(req,res){
                             fromUserID: reply.userID,
                             time: easyTime(now),
                             _time: Number(now.getTime()),
-                            body: reply.body,
+                            body: reply.body.body,
+                            abstract: reply.body.abstract,
                             praises: [],
                             comments: []
                         });
@@ -540,7 +541,7 @@ exports.commentToReply = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: comment.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(comment.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',
@@ -655,7 +656,7 @@ exports.operateNote = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: operation.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(operation.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',
@@ -710,7 +711,7 @@ exports.operateNote = function(req,res){
                         }
 
                         if(targetUserArray){//如果这个array不是null，记user里的记录
-                            var noteStruct = {	PDFUrl: operation.URL,
+                            var noteStruct = {	VideoUrl: operation.URL,
                                 slotIndex: Number(operation.slotIndex),
                                 noteIndex: Number(operation.noteIndex)
                             };
@@ -815,7 +816,7 @@ exports.praiseOrNotReply = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: operation.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(operation.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',
@@ -947,7 +948,7 @@ exports.editReply = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: reply.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(reply.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',
@@ -1059,7 +1060,7 @@ exports.deleteReply = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: reply.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(reply.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',
@@ -1170,7 +1171,7 @@ exports.deleteComment = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: comment.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(comment.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',
