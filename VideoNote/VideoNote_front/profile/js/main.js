@@ -1,10 +1,124 @@
 var isNewVideo = 0;
 var MyNotesResult;
 var OtherNotesResult;
-var noteSeq;
+var noteSeq;   //note index
 //秒数转标准时间格式
 function formatTime(second) {
     return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
+}
+//根据ID获取user
+function getUserFromID(id,result){
+    var user = null;
+    result.users.forEach(function(e){
+        if(e.userID == id) {
+            user = e;
+        }
+    })
+    return user;
+}
+//新加评论后更新UI
+function addComment(comment,noteIndex,replyIndex){
+    MyNotesResult.notes[noteIndex].replys[replyIndex].comments.push(comment);
+    updateReplysFrame(MyNotesResult.notes[noteIndex]);
+}
+//注册事件
+function addListenerForOperation(){
+    $(".noteComments").click(function(){
+        var node = $(this).parent().parent().children()[3];
+        if($(node).css("display") == "none"){
+            $(node).animate({},500,function(){
+                $(node).css({"display":"block"});
+            })
+        }
+        else{
+            $(node).animate({},500,function(){
+                $(node).css({"display":"none"});
+            })
+        }
+    })
+
+    $(".noteComment").click(function(){
+        var name = $($(this).parents()[1]).children().find(".name > a").html();
+        $($(this).parents()[1]).children().find("textarea").attr({"placeholder":"@" + name});
+        $($($(this).parents()[1]).children()[2]).css({"display":"block"});
+        $(".commentSubmit").click(function(){
+            var comment = $($(this).parent().children()[0]).val();
+            var replyseq = $($(this).parent().parent()).data("replyseq");
+            var user_id = localStorage.id;
+            var video_url = localStorage.video_url;
+            var video_time = localStorage.time;
+            var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
+            var to = $($(this).parents()[1]).children().find(".name > a").data("id");
+            commentToReply(user_id,video_url,slot_index,noteSeq,replyseq,to,comment,$($($(this).parents()[1]).children()[2]),addComment);
+        })
+    })
+    $(".toil > a").click(function(){
+        var user_id = localStorage.id;
+        var video_url = localStorage.video_url;
+        var video_time = localStorage.time;
+        var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
+        var operation = 0;
+        var upordown = 0;
+        if($($($(this).parents()[1])[0]).hasClass("note")){  //是对note的操作
+            operation = 0;
+            upordown = 0;
+            if($(this).hasClass("notePraise")){
+                operation = 1;
+            }
+            else if($(this).hasClass("noteConcern")){
+                operation = 2;
+            }
+            else if($(this).hasClass("noteCollect")){
+                operation = 3;
+            }
+            if($($(this)[0].children[1]).html().split("(")[1].split(")")[0] != "0") {
+                upordown = 1;
+            }
+            else {
+                upordown = 0;
+            }
+            if(operation == 0){
+                //需要补充
+            }
+            else {
+                operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,this);
+            }
+        }
+        else if($($($(this).parents()[1])[0]).hasClass("reply")){  //是对reply的操作
+            operation = 0;   //noteEdit
+            upordown = 0;
+            if($(this).hasClass("notePraise")){
+                operation = 1;
+                if($($(this)[0].children[1]).html().split("(")[1].split(")")[0] != "0") {
+                    upordown = 1;
+                }
+                else {
+                    upordown = 0;
+                }
+                var replyIndex = $($($(this)[0]).parents()[1]).data("replyseq");
+                operateReply(user_id,video_url,slot_index,noteSeq,replyIndex,upordown,this);
+            }
+            else if($(this).hasClass("noteComments")){
+                operation = 2;
+            }
+            else if($(this).hasClass("noteComment")){
+                operation = 3;
+            }
+            else if($(this).hasClass("noteDelete")){
+                operation = 4;
+            }
+            if(operation == 0){
+                //需要补充
+            }
+            else if(operation == 1){
+                operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,this);
+            }
+        }
+        else if($($($(this).parents()[1])[0]).hasClass("secReply")){  //是对secReply的操作
+
+        }
+        else console.log("operation error!");
+    })
 }
 //显示笔记栏的笔记
 function displayNotesFunc(result){
@@ -36,8 +150,12 @@ function displayNotesFunc(result){
         noteSeq = seq;
         //console.log(MyNotesResult);
         str = '';
-        str += "<a class='icon' href='/profile?want=1100012989' target='_blank'><span class='fui-user'></span> ";
+        str += "<a class='icon' href='/profile?want=1100012989' target='_blank'><span class='fui-user' ";
+        str += "data-id = ";
         str += MyNotesResult.notes[seq].fromUserID;
+        str += " ></span> ";
+        var user = getUserFromID(MyNotesResult.notes[seq].fromUserID,MyNotesResult);
+        str += user.nickname;
         str += " </a><a class='icon'><span class='fui-calendar'></span> ";
         str += MyNotesResult.notes[seq].time;
         str += " </a><a class='icon'><span class='fui-chat'></span> ";
@@ -60,9 +178,15 @@ function displayNotesFunc(result){
         str += replys.length;
         str += "</b></span></button>";
         for(var i = 0; i < replys.length; ++ i){
-            str += "<div class='reply'>";
-            str += "<div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000'>";
+            str += "<div class='reply' data-replyseq = ";
+            str += i;
+            str += ">";
+            str += "<div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000' ";
+            str += "data-id = ";
             str += replys[i].fromUserID;
+            str += " >";
+            user =  getUserFromID(replys[i].fromUserID,MyNotesResult);
+            str += user.nickname;
             str += "</a></div><a class='icon'>";
             str += replys[i].time;
             str += "</a></div></div><div class='mycontent'>";
@@ -73,11 +197,27 @@ function displayNotesFunc(result){
             str += ") </span></a><a href='#' class='noteComments'><span class='fui-document'></span><span> 展开评论(";
             str += replys[i].comments.length;
             str += ") </span></a><a href='#' class='noteComment'><span class='fui-chat'></span><span> 评论 </span></a></div>";
+            str += "<div class='commentBox'> <textarea class='form-control pull-left commentArea' rows='3' placeholder='@'></textarea> <button class='btn btn-success commentSubmit'>提交</button> </div>"
             str += "<div class='secReplyList'>";
+            for(var j = 0;j < replys[i].comments.length; ++ j) {
+                str += "<div class='secReply'><div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  target='_blank' style='font-size:20px;color:#000'>";
+                str += getUserFromID(replys[i].comments[j].fromUserID, MyNotesResult).nickname;
+                str += "</a></div><a class='icon'>";
+                str += replys[i].comments[j].time;
+                str += "</a></div></div><div class='mycontent'><a class='at'>@";
+                str += getUserFromID(replys[i].comments[j].toUserID, MyNotesResult).nickname;
+                str += ": </a>";
+                str += replys[i].comments[j].body;
+                str += "</div></div><div class='toil sectoil'><a href='#' class='noteEdit'><span class='fui-trash'></span>";
+                str += "<span>删除</span></a><a href='#' class='notePraise'><span class='fui-chat'></span><span> 评论</span>";
+                str += "</a></div><div class='commentBox'><textarea class='form-control pull-left commentArea' rows='3' placeholder='@'></textarea>";
+                str += "<button class='btn btn-success commentSubmit'>提交</button></div></div>";
+            }
             str += "</div></div>";
         }
         $($(".tab-pane .note .replyList")[0]).html(str);
         $('.tab-content .replys').css('display','block');
+        addListenerForOperation();
     })
 }
 //更新笔记栏
@@ -95,9 +235,15 @@ function updateReplysFrame(note){
     str += note.replys.length;
     str += "</b></span></button>";
     for(var i = 0; i < note.replys.length; ++ i){
-        str += "<div class='reply'>";
-        str += "<div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000'>";
+        str += "<div class='reply' data-replyseq = ";
+        str += i;
+        str += ">";
+        str += "<div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000' ";
+        str += "data-id = ";
         str += note.replys[i].fromUserID;
+        str += " >";
+        var user =  getUserFromID(note.replys[i].fromUserID,MyNotesResult);
+        str += user.nickname;
         str += "</a></div><a class='icon'>";
         str += note.replys[i].time;
         str += "</a></div></div><div class='mycontent'>";
@@ -108,10 +254,26 @@ function updateReplysFrame(note){
         str += ") </span></a><a href='#' class='noteComments'><span class='fui-document'></span><span> 展开评论(";
         str += note.replys[i].comments.length;
         str += ") </span></a><a href='#' class='noteComment'><span class='fui-chat'></span><span> 评论 </span></a></div>";
+        str += "<div class='commentBox'> <textarea class='form-control pull-left commentArea' rows='3' placeholder='@'></textarea> <button class='btn btn-success commentSubmit'>提交</button> </div>"
         str += "<div class='secReplyList'>";
+        for(var j = 0;j < note.replys[i].comments.length; ++ j) {
+            str += "<div class='secReply'><div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  target='_blank' style='font-size:20px;color:#000'>";
+            str += getUserFromID(note.replys[i].comments[j].fromUserID, MyNotesResult).nickname;
+            str += "</a></div><a class='icon'>";
+            str += note.replys[i].comments[j].time;
+            str += "</a></div></div><div class='mycontent'><a class='at'>@";
+            str += getUserFromID(note.replys[i].comments[j].toUserID, MyNotesResult).nickname;
+            str += ": </a>";
+            str += note.replys[i].comments[j].body;
+            str += "</div></div><div class='toil sectoil'><a href='#' class='noteEdit'><span class='fui-trash'></span>";
+            str += "<span>删除</span></a><a href='#' class='notePraise'><span class='fui-chat'></span><span> 评论</span>";
+            str += "</a></div><div class='commentBox'><textarea class='form-control pull-left commentArea' rows='3' placeholder='@'></textarea>";
+            str += "<button class='btn btn-success commentSubmit'>提交</button></div></div>";
+        }
         str += "</div></div>";
     }
     $($(".tab-pane .note .replyList")[0]).html(str);
+    addListenerForOperation();
 }
 function setVideo(mp4,webm){
 	var str = '';
@@ -262,21 +424,6 @@ $(document).ready( function() {
             imageUpload: serverIP + '/imageUpload',
             fileUpload: serverIP + '/fileUpload'
         });
-        $("#replySubmit").click(function(){
-            var note = {};
-            note.body = $('#redactor_content_1').getCode();
-            var smallAbstract = $(note.body).text();
-            if(smallAbstract.length > 80){
-                smallAbstract = smallAbstract.substring(0,80);
-                smallAbstract = smallAbstract + "...";
-            }
-            note.abstract = smallAbstract;
-            var user_id = localStorage.id;
-            var video_url = localStorage.video_url;
-            var slot_index = parseInt(parseInt(MyNotesResult.notes[noteSeq].videoTime) / 10);   //设定10s为一个时间段
-            var noteIndex = noteSeq;
-            replyToNote(user_id, video_url, slot_index, noteIndex, note, updateReplysFrame);
-        })
     })
 
     $('#newnote').click(function(){
@@ -373,4 +520,20 @@ $(document).ready( function() {
         var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
         submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note,updateNotesFrame);
     })
+    $("#replySubmit").click(function(){
+        var note = {};
+        note.body = $('#redactor_content_1').getCode();
+        var smallAbstract = $(note.body).text();
+        if(smallAbstract.length > 80){
+            smallAbstract = smallAbstract.substring(0,80);
+            smallAbstract = smallAbstract + "...";
+        }
+        note.abstract = smallAbstract;
+        var user_id = localStorage.id;
+        var video_url = localStorage.video_url;
+        var slot_index = parseInt(parseInt(MyNotesResult.notes[noteSeq].videoTime) / 10);   //设定10s为一个时间段
+        var noteIndex = noteSeq;
+        replyToNote(user_id, video_url, slot_index, noteIndex, note, updateReplysFrame);
+    })
+
 });

@@ -20,15 +20,18 @@ var UserSchema = new Schema({
     email: {type: String},
     myNotes: [{             //我的笔记
         VideoUrl: {type: String}, //video的url
-        VideoTime: {type: String} //note所在的时间
+        slotIndex: {type: Number},
+        noteIndex: {type: Number}
     }],
     myConcerns: [{              //我的关注
         VideoUrl: {type: String}, //video的url
-        VideoTime: {type: String} //note所在的时间
+        slotIndex: {type: Number},
+        noteIndex: {type: Number}
     }],
     myCollects: [{              //我的收藏
         VideoUrl: {type: String}, //video的url
-        VideoTime: {type: String} //note所在的时间
+        slotIndex: {type: Number},
+        noteIndex: {type: Number}
     }]
 });
 var UserModel = mongoose.model("User" , UserSchema);

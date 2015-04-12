@@ -18,6 +18,7 @@ function inArray(name, array){
     }
     return -1;
 }
+
 //返回特定object在相同结构object数组里的index；若没有，返回-1
 function objectIndexInArray(name, array){
     for(var i = 0 ; i < array.length ; i++){
@@ -41,6 +42,58 @@ function timePadZero(number){
 //自定义的Date转string
 function easyTime(date){
     return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+timePadZero(date.getHours())+':'+ timePadZero(date.getMinutes());
+}
+//async的eachSeries，为数组中的信息进行异步有序查询并将查询后得到的新数组返回而打造的吊炸天的函数
+function arrayQuerySave(queryArray, welldone){
+    var saveArray = [];
+    async.eachSeries(queryArray, function (item,callback){
+        videoModel.findOne({URL: item.VideoUrl}, function (err, video){
+            if(err){
+                res.send({
+                    status: 'error',
+                    msg: 'video find error'
+                });
+            }
+            else{
+                var allSlots = video.slots;
+                var targetSlotIndex = -1 ;
+                for(targetSlotIndex = 0 ; targetSlotIndex < allSlots.length ; targetSlotIndex++){
+                    if(item.slotIndex == allSlots[targetSlotIndex].slotIndex){
+                        break;
+                    }
+                }
+
+                var notesASlot = allSlots[targetSlotIndex].notes ;
+                var targetNoteIndex = -1 ;
+                for(targetNoteIndex = 0 ; targetNoteIndex < notesASlot.length ; targetNoteIndex++){
+                    if(item.noteIndex == notesASlot[targetNoteIndex].noteIndex){
+                        break;
+                    }
+                }
+                var targetNote = notesASlot[targetNoteIndex] ;
+
+                userModel.findOne({userID: targetNote.fromUserID},function (err,targetUser){
+                    saveArray.push({
+                        URL: item.VideoUrl,
+                        name: video.videoName,
+                        slotIndex: item.slotIndex,
+                        noteIndex: item.noteIndex,
+                        title: targetNote.title,
+                        type: (targetNote.type==0)?"笔记":"问题",
+                        from: targetUser.nickname,
+                        time: targetNote.time,
+                        relatedRangeContent: targetNote.relatedRangeContent,
+                        abstract: targetNote.abstract,
+                        body: targetNote.body
+                    });
+                    callback();
+                });
+            }
+        });
+    }, function (err){
+        console.log(err);
+        welldone(null,saveArray);
+    });
 }
 //用户注册
 exports.register = function(req,res){
@@ -338,7 +391,8 @@ exports.submitNote = function(req,res){
                                 //维护我的笔记数组
                                 user.myNotes.push({
                                     VideoUrl: NOTE.URL,
-                                    VideoTime: NOTE.VideoTime
+                                    slotIndex: NOTE.slotIndex,
+                                    noteIndex: note_index
                                 });
                                 user.save(function (err){
                                     if(err){
@@ -698,7 +752,7 @@ exports.operateNote = function(req,res){
                             targetUserArray = user.myCollects ;
                         }
 
-                        var index = indexInArray(operation.userID,targetOperation) ;//video里的记录
+                        var index = inArray(operation.userID,targetOperation) ;//video里的记录
                         if(operation.upordown == 0){//加
                             if(index < 0){
                                 targetOperation.push(operation.userID);
@@ -750,7 +804,8 @@ exports.operateNote = function(req,res){
                                         res.send({
                                             status: 'success',
                                             msg: '操作成功',
-                                            result: targetOperation
+                                            result: targetOperation,
+                                            which:operation.which
                                         });
                                     }
                                 });
@@ -858,7 +913,7 @@ exports.praiseOrNotReply = function(req,res){
                         var targetReply = replysANote[targetReplyIndex];
                         var targetOperation = targetReply.praises ;
 
-                        var index = indexInArray(operation.userID,targetOperation) ;
+                        var index = inArray(operation.userID,targetOperation) ;
                         if(operation.upordown == 0){//加
                             if(index < 0){
                                 targetOperation.push(operation.userID);
@@ -1405,7 +1460,7 @@ exports.deleteNote = function(req,res){
                                 }
                                 else{
                                     //删除相关用户 还要有关注它的和收藏它的
-                                    var indexToDel = objectIndexInArray({PDFUrl:noteToDel.URL,
+                                    var indexToDel = objectIndexInArray({VideoUrl:noteToDel.URL,
                                         slotIndex:noteToDel.slotIndex,
                                         noteIndex:noteToDel.noteIndex},user.myNotes);
                                     //console.log(indexToDel);
@@ -1425,7 +1480,7 @@ exports.deleteNote = function(req,res){
                                                                     msg: 'user find error'
                                                                 });
                                                             }else{
-                                                                var indexToDel = objectIndexInArray({PDFUrl:noteToDel.URL,
+                                                                var indexToDel = objectIndexInArray({VideoUrl:noteToDel.URL,
                                                                     slotIndex:noteToDel.slotIndex,
                                                                     noteIndex:noteToDel.noteIndex},user.myConcerns);
                                                                 console.log("concern"+indexToDel);
@@ -1460,7 +1515,7 @@ exports.deleteNote = function(req,res){
                                                                     msg: 'user find error'
                                                                 });
                                                             }else{
-                                                                var indexToDel = objectIndexInArray({PDFUrl:noteToDel.URL,
+                                                                var indexToDel = objectIndexInArray({VideoUrl:noteToDel.URL,
                                                                     slotIndex:noteToDel.slotIndex,
                                                                     noteIndex:noteToDel.noteIndex},user.myCollects);
                                                                 user.myCollects.splice(indexToDel,1);
