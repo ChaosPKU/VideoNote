@@ -1,6 +1,7 @@
 var isNewVideo = 0;
 var MyNotesResult;
 var OtherNotesResult;
+var slot_length = 10;    //10s为一个slot
 var noteSeq;   //note index
 //秒数转标准时间格式
 function formatTime(second) {
@@ -21,7 +22,7 @@ function addComment(comment,noteIndex,replyIndex){
     MyNotesResult.notes[noteIndex].replys[replyIndex].comments.push(comment);
     updateReplysFrame(MyNotesResult.notes[noteIndex]);
 }
-//注册事件
+//注册评论、展开评论、赞等事件
 function addListenerForOperation(){
     $(".noteComments").click(function(){
         var node = $(this).parent().parent().children()[3];
@@ -47,7 +48,7 @@ function addListenerForOperation(){
             var user_id = localStorage.id;
             var video_url = localStorage.video_url;
             var video_time = localStorage.time;
-            var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
+            var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
             var to = $($(this).parents()[1]).children().find(".name > a").data("id");
             commentToReply(user_id,video_url,slot_index,noteSeq,replyseq,to,comment,$($($(this).parents()[1]).children()[2]),addComment);
         })
@@ -56,7 +57,7 @@ function addListenerForOperation(){
         var user_id = localStorage.id;
         var video_url = localStorage.video_url;
         var video_time = localStorage.time;
-        var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
+        var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
         var operation = 0;
         var upordown = 0;
         if($($($(this).parents()[1])[0]).hasClass("note")){  //是对note的操作
@@ -120,17 +121,23 @@ function addListenerForOperation(){
         else console.log("operation error!");
     })
 }
+//按笔记所在视频时间排序
+function NoteCMP(a,b)
+{
+    return parseFloat(a.videoTime) - parseFloat(b.videoTime);
+}
 //显示笔记栏的笔记
 function displayNotesFunc(result){
     MyNotesResult = result;
     var str = '';
     var notes = result.notes;
+    notes.sort(NoteCMP);
     var len = notes.length;
     for(var i = 0;i < len; ++ i){
         str += "<div class='timeNotes' data-seq=";
         str += i;
         str += "> <img src class='capImg'/> <div class='noFocused ";
-        str += "focused";
+        //str += "focused";
         str += "'> <div class='round'></div> ";
         if(i < len - 1)
             str += "<div class='line-through'></div>";
@@ -292,10 +299,30 @@ function setVideo(mp4,webm){
         $('.tab-content').height($('video').height() + $('.foot').height() +35);
         localStorage.setItem('video_url',$('video')[0].currentSrc);
         localStorage.setItem('video_total_time',$('video')[0].duration);
+        localStorage.setItem('slot_index',0);
         updateNotesFrame($('video')[0].currentSrc, 0, localStorage.id);
     })
     $('video')[0].addEventListener('timeupdate',function(){
         localStorage.time = $("video")[0].currentTime;
+        var video_url = localStorage.video_url;
+        var slot_index = localStorage.slot_index;
+        var user_id = localStorage.id;
+        if(parseInt(localStorage.time / slot_length) != slot_index) {
+            slot_index = parseInt(localStorage.time / slot_length);
+            localStorage.setItem('slot_index',slot_index);
+            updateNotesFrame(video_url, slot_index, user_id);
+        }
+        else{
+            for(var i = 0;i < MyNotesResult.notes.length; ++ i){
+                var node = $($("#home .timeNotes")[i]).children()[1];
+                if($(node).hasClass("focused"))
+                    $(node).removeClass("focused");
+                var duration = MyNotesResult.notes[i].videoTime - localStorage.time;
+                if(duration > -1 && duration < 1){
+                    $(node).addClass("focused");
+                }
+            }
+        }
     })
 }
 
@@ -517,7 +544,7 @@ $(document).ready( function() {
         var video_name = localStorage.video_url;  //暂时设为与url相同
         var video_time = localStorage.time;
         var video_total_time = localStorage.video_total_time;
-        var slot_index = parseInt(parseInt(video_time)/10);   //设定10s为一个时间段
+        var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
         submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note,updateNotesFrame);
     })
     $("#replySubmit").click(function(){
@@ -531,7 +558,7 @@ $(document).ready( function() {
         note.abstract = smallAbstract;
         var user_id = localStorage.id;
         var video_url = localStorage.video_url;
-        var slot_index = parseInt(parseInt(MyNotesResult.notes[noteSeq].videoTime) / 10);   //设定10s为一个时间段
+        var slot_index = parseInt(parseInt(MyNotesResult.notes[noteSeq].videoTime) / slot_length);   //设定10s为一个时间段
         var noteIndex = noteSeq;
         replyToNote(user_id, video_url, slot_index, noteIndex, note, updateReplysFrame);
     })

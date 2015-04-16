@@ -626,6 +626,7 @@ exports.commentToReply = function(req,res){
 
                         var replysANote = notesASlot[targetNoteIndex].replys ;
                         var targetReplyIndex = -1 ;
+                        console.log(replysANote);
                         for(targetReplyIndex = 0 ; targetReplyIndex < replysANote.length ; targetReplyIndex++){
                             if(comment.replyIndex == replysANote[targetReplyIndex].replyIndex){
                                 break;
