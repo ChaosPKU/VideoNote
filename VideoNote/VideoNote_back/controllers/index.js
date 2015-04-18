@@ -959,8 +959,7 @@ exports.praiseOrNotReply = function(req,res){
 }
 //编辑回复
 exports.editReply = function(req,res){
-    var reply = req.body.replyToDel;
-    console.log(reply);
+    var reply = req.body.replyToEdit;
     if(!req.body.userID){
         res.send({
             status:'error',
@@ -1072,7 +1071,6 @@ exports.editReply = function(req,res){
 //删除回复
 exports.deleteReply = function(req,res){
     var reply = req.body.replyToDel;
-    console.log(reply);
     if(!req.body.userID){
         res.send({
             status:'error',
