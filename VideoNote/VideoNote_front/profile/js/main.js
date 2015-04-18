@@ -1,8 +1,9 @@
 var isNewVideo = 0;
-var MyNotesResult;
+var MyNotesResult = null;
 var OtherNotesResult;
 var slot_length = 10;    //10s为一个slot
 var noteSeq;   //note index
+var noteSubmitTime;
 //秒数转标准时间格式
 function formatTime(second) {
     return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
@@ -24,6 +25,13 @@ function addComment(comment,noteIndex,replyIndex){
 }
 //注册评论、展开评论、赞等事件
 function addListenerForOperation(){
+    $(".noteEdit").click(function(){
+        $("#redactor_content_3").redactor({
+            imageUpload: serverIP + '/imageUpload',
+            fileUpload: serverIP + '/fileUpload'
+        })
+        $("#editModal").modal();
+    })
     $(".noteComments").click(function(){
         var node = $(this).parent().parent().children()[3];
         if($(node).css("display") == "none"){
@@ -72,16 +80,16 @@ function addListenerForOperation(){
             else if($(this).hasClass("noteCollect")){
                 operation = 3;
             }
-            if($($(this)[0].children[1]).html().split("(")[1].split(")")[0] != "0") {
-                upordown = 1;
-            }
-            else {
-                upordown = 0;
-            }
             if(operation == 0){
                 //需要补充
             }
             else {
+                if($($(this)[0].children[1]).html().split("(")[1].split(")")[0] != "0") {
+                    upordown = 1;
+                }
+                else {
+                    upordown = 0;
+                }
                 operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,this);
             }
         }
@@ -136,7 +144,9 @@ function displayNotesFunc(result){
     for(var i = 0;i < len; ++ i){
         str += "<div class='timeNotes' data-seq=";
         str += i;
-        str += "> <img src class='capImg'/> <div class='noFocused ";
+        str += "> <img src = ";
+        str += serverIP + notes[i].screenshot;
+        str += " class='capImg'/> <div class='noFocused ";
         //str += "focused";
         str += "'> <div class='round'></div> ";
         if(i < len - 1)
@@ -156,6 +166,10 @@ function displayNotesFunc(result){
         var seq = $(this).data('seq');
         noteSeq = seq;
         //console.log(MyNotesResult);
+        str = '';
+        str += "<button class='btn btn-info mybtn' type='button'>笔记</button>";
+        str += MyNotesResult.notes[seq].title;
+        $($(".tab-pane .note .title")[0]).html(str);
         str = '';
         str += "<a class='icon' href='/profile?want=1100012989' target='_blank'><span class='fui-user' ";
         str += "data-id = ";
@@ -312,7 +326,7 @@ function setVideo(mp4,webm){
             localStorage.setItem('slot_index',slot_index);
             updateNotesFrame(video_url, slot_index, user_id);
         }
-        else{
+        else if(MyNotesResult){
             for(var i = 0;i < MyNotesResult.notes.length; ++ i){
                 var node = $($("#home .timeNotes")[i]).children()[1];
                 if($(node).hasClass("focused"))
@@ -454,6 +468,16 @@ $(document).ready( function() {
     })
 
     $('#newnote').click(function(){
+        //截图部分
+        chrome.tabs.captureVisibleTab(null, {
+            format: 'jpeg',
+            quality: 10
+        }, function(dataUrl){
+            noteSubmitTime = new Date().getTime();
+            uploadScreenShot(dataUrl , noteSubmitTime);
+        });
+
+
         $('#redactor_content_2').redactor({
             imageUpload: serverIP + '/imageUpload',
             fileUpload: serverIP + '/fileUpload'
@@ -510,15 +534,7 @@ $(document).ready( function() {
 		else if(src.substr(len - 3,len) == 'mp4')
 			setVideo(src,null);
 	})
-	//视频截图部分
-    $("#newnote").click(function(){
-        chrome.tabs.captureVisibleTab(null, {
-            format: 'png',
-            quality: 100
-        }, function(dataUrl){
-            $('.timeNotes > img:first').attr({'src':dataUrl});
-        });
-    })
+
     //画表格部分
     var container = document.getElementById("formContainer");
     $($('.nav-tabs > li')[2]).click(function(){
@@ -545,7 +561,7 @@ $(document).ready( function() {
         var video_time = localStorage.time;
         var video_total_time = localStorage.video_total_time;
         var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
-        submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note,updateNotesFrame);
+        submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note,noteSubmitTime,updateNotesFrame);
     })
     $("#replySubmit").click(function(){
         var note = {};

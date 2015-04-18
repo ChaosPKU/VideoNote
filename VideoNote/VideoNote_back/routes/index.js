@@ -14,6 +14,7 @@ module.exports = function(app){
     app.post('/deleteReply',controller.deleteReply);	//删除回复
     app.post('/deleteComment',controller.deleteComment);	//删除评论
 	app.post('/uploadHead',controller.uploadHead);	//上传头像
+    app.post('/uploadScreenShot',controller.uploadScreenShot);	//上传视频截图
 	app.post('/saveHead',controller.saveHead);	//保存头像
 	app.post('/updateProfiles',controller.updateProfiles);	//修改个人信息
     app.post('/deleteNote',controller.deleteNote);	//个人主页中删除笔记

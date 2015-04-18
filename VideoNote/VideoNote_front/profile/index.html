@@ -501,7 +501,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content" style="width: 650px;margin-left: -25px">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&minus;</button>
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                                     <h4 class="modal-title" id="replyTitle">回复笔主</h4>
                                 </div>
                                 <div class="modal-body">
@@ -521,18 +521,18 @@
                     <div class="modal-dialog">
                         <div class="modal-content" style="width: 650px;margin-left: -25px" >
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h5 class="modal-title" id="replyTitle">新的笔记</h5>
+                            </div>
+                            <div class="modal-body">
                                 <form id="redactor_newnote_form">
-                                    <h5 class="modal-title" id="replyTitle">新的笔记</h5>
                                     <div class="form-row form-group">
-                                        <div class="control-label">标题</div>
+                                        <div class="control-label">标题:</div>
                                         <div class="control-content">
                                             <input type="text" id="noteTitle" placeholder="标题" class="form-control">
                                         </div>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="modal-body">
                                 <div id="page_2">
                                     <textarea id="redactor_content_2" name="content" style="height: 230px;"><p>回复什么...</p></textarea>
                                 </div>
@@ -543,6 +543,33 @@
                             </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
+                </div>
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width: 650px;margin-left: -25px">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h5 class="modal-title" id="editModalLabel">编辑此条笔记/问题</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form id="edit_modal_form">
+                                    <div class="form-row form-group">
+                                        <label for="editNoteTitle" class="control-label">标题:</label>
+                                        <div class="control-content">
+                                            <input type="text" class="form-control" id="editNoteTitle" placeholder="请做出修改~">
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="page_3">
+                                    <textarea id="redactor_content_3" name="content" style="height: 200px;"><p>...</p></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" id="saveEdit">保存修改</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

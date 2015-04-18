@@ -52,6 +52,7 @@ var VideoSchema = new Schema({
             videoTime: {type: String},
             time: {type: String},   //方便前端显示
             _time: {type: Number},
+            screenshot: {type: String , default:"/usersUploads/screenshot/default.jpeg"}, //存头像的path
             abstract: {type: String},
             body: {type: String},
             praises: [String],  //这三个数组里存的是执行相关动作的用户的ID

@@ -291,6 +291,14 @@ exports.submitNote = function(req,res){
         });
         return;
     }
+    NOTE.SubmitTime = req.body.SubmitTime;
+    if(!NOTE.SubmitTime || NOTE.SubmitTime<0){
+        res.send({
+            status:'error',
+            msg:'video note submit time error! please check and submit the note again.'
+        });
+        return;
+    }
     NOTE.note = req.body.note;
     if(!NOTE.note){
         res.send({
@@ -360,7 +368,7 @@ exports.submitNote = function(req,res){
                         }
                         note_index ++;
 
-                        var now = new Date();
+                        var now = new Date(parseInt(NOTE.SubmitTime));
                         allSlots[indexToSave].notes.push({
                             noteIndex: note_index,
                             title: NOTE.note.title,
@@ -368,6 +376,7 @@ exports.submitNote = function(req,res){
                             videoTime: NOTE.VideoTime,
                             time: easyTime(now),
                             _time: Number(now.getTime()),
+                            screenshot: '/usersUploads/screenshot/'+ now.getTime() + "_.jpeg",
                             //relatedRange: NOTE.note.relatedRange,   //相关区域
                             //relatedRangeContent: NOTE.note.relatedRangeContent,
                             abstract: NOTE.note.abstract,
@@ -1305,7 +1314,7 @@ exports.uploadHead = function(req,res){
         });
         res.send(heads_path + fileName);
     });
-    form.parse(req);
+    //form.parse(req);
 }
 //保存头像
 exports.saveHead = function(req,res){
@@ -1352,6 +1361,19 @@ exports.saveHead = function(req,res){
             });
         }
     });
+}
+//上传视频截图
+exports.uploadScreenShot = function(req,res){
+    var imgData = req.body.imgData;
+    var regex = /^data:.+\/(.+);base64,(.*)$/;
+    var matches = imgData.match(regex);
+    var ext = matches[1];
+    var data = matches[2];
+    var buffer = new Buffer(data, 'base64');
+    var fileName = req.body.name + '_.' + ext;
+    var pathName = './public/usersUploads/screenshot/' + fileName;
+    fs.writeFileSync(pathName, buffer);
+    res.send({'path':pathName});
 }
 //修改个人信息
 exports.updateProfiles = function(req,res){
