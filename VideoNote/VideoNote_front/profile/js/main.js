@@ -20,7 +20,6 @@ function getUserFromID(id,result){
 }
 //注册评论、展开评论、赞等事件
 function addListenerForOperation(){
-
     $(".toil > a").click(function(){
         var user_id = localStorage.id;
         var video_url = localStorage.video_url;
@@ -100,6 +99,15 @@ function addListenerForOperation(){
                         $(node).css({"display":"none"});
                     })
                 }
+                //鼠标悬停或离去时显示/隐藏第二级回复的底端菜单
+                $('.secReply').each(function(){
+                    $(this)[0].addEventListener('mouseover',function(){
+                        $($(this)[0].children[1]).css({'display':'block'})
+                    });
+                    $(this)[0].addEventListener('mouseleave',function(){
+                        $($(this)[0].children[1]).css({'display':'none'})
+                    })
+                });
             }
             else if($(this).hasClass("noteComment")){
                 operation = 3;
@@ -152,7 +160,30 @@ function addListenerForOperation(){
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("secReply")){  //是对secReply的操作
-
+            if($(this).hasClass("noteDelete")){
+                var note = {};
+                note.URL = localStorage.video_url;
+                note.slotIndex = parseInt(MyNotesResult.notes[noteSeq].videoTime / slot_length);
+                note.noteIndex = MyNotesResult.notes[noteSeq].noteIndex;
+                note.replyIndex = $($(this).parents()[3]).data('replyseq');
+                note.commentIndex = $($(this).parents()[1]).data('commentseq');
+                commentToDelete(localStorage.id,note,updateNotesFrame);
+            }
+            else if($(this).hasClass("noteComment")){
+                var name = $($(this).parents()[1]).children().find(".name > a").html();
+                $($(this).parents()[1]).children().find("textarea").attr({"placeholder":"@" + name});
+                $($($(this).parents()[1]).children()[2]).css({"display":"block"});
+                $(".commentSubmit").click(function(){
+                    var comment = $($(this).parent().children()[0]).val();
+                    var replyseq = $($(this).parents()[3]).data("replyseq");
+                    var user_id = localStorage.id;
+                    var video_url = localStorage.video_url;
+                    var video_time = localStorage.time;
+                    var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
+                    var to = $($(this).parents()[1]).children().find(".name > a").data("id");
+                    commentToReply(user_id,video_url,slot_index,noteSeq,replyseq,to,comment,$($($(this).parents()[1]).children()[2]),updateNotesFrame);
+                })
+            }
         }
         else console.log("operation error!");
     })
@@ -212,7 +243,9 @@ function updateReplysFrame(note){
     $($(".tab-pane .note .title")[0]).html(str);
     $($(".tab-pane .note .replyList")[0]).html("");
     var str = '';
-    str += "<a class='icon' href='/profile?want=1100012989' target='_blank'><span class='fui-user' ";
+    str += "<a class='icon' href='../profile/individual.html?want=";
+    str += note.fromUserID;
+    str += "' target='_blank'><span class='fui-user' ";
     str += "data-id = ";
     str += note.fromUserID;
     str += " ></span> ";
@@ -261,7 +294,11 @@ function updateReplysFrame(note){
         str += "<div class='commentBox'> <textarea class='form-control pull-left commentArea' rows='3' placeholder='@'></textarea> <button class='btn btn-success commentSubmit'>提交</button> </div>"
         str += "<div class='secReplyList'>";
         for(var j = 0;j < note.replys[i].comments.length; ++ j) {
-            str += "<div class='secReply'><div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  target='_blank' style='font-size:20px;color:#000'>";
+            str += "<div class='secReply' data-commentSeq = '";
+            str += j;
+            str += "'><div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  target='_blank' style='font-size:20px;color:#000' data-id = '";
+            str += note.replys[i].comments[j].fromUserID;
+            str += "'>";
             str += getUserFromID(note.replys[i].comments[j].fromUserID, MyNotesResult).nickname;
             str += "</a></div><a class='icon'>";
             str += note.replys[i].comments[j].time;
@@ -269,8 +306,8 @@ function updateReplysFrame(note){
             str += getUserFromID(note.replys[i].comments[j].toUserID, MyNotesResult).nickname;
             str += ": </a>";
             str += note.replys[i].comments[j].body;
-            str += "</div></div><div class='toil sectoil'><a href='#' class='noteEdit'><span class='fui-trash'></span>";
-            str += "<span>删除</span></a><a href='#' class='notePraise'><span class='fui-chat'></span><span> 评论</span>";
+            str += "</div></div><div class='toil sectoil'><a href='#' class='noteDelete'><span class='fui-trash'></span>";
+            str += "<span> 删除 </span></a><a href='#' class='noteComment'><span class='fui-chat'></span><span> 评论 </span>";
             str += "</a></div><div class='commentBox'><textarea class='form-control pull-left commentArea' rows='3' placeholder='@'></textarea>";
             str += "<button class='btn btn-success commentSubmit'>提交</button></div></div>";
         }
@@ -431,15 +468,6 @@ $(document).ready( function() {
 	  	$('#replyModal_1').find(".modal-dialog").css("margin-top",function(){
 	  		return $(window).height()/8;
 	  	});
-	});
-	//鼠标悬停或离去时显示/隐藏第二级回复的底端菜单
-	$('.secReply').each(function(){
-		$(this)[0].addEventListener('mouseover',function(){
-			$($(this)[0].children[1]).css({'display':'block'})
-		});
-		$(this)[0].addEventListener('mouseleave',function(){
-			$($(this)[0].children[1]).css({'display':'none'})
-		})
 	});
 
     //redactor初始化
