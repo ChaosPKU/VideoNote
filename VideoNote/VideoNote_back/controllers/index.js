@@ -1614,7 +1614,7 @@ exports.editNote = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: noteToEdit.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(noteToEdit.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',

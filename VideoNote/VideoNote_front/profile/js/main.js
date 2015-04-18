@@ -25,42 +25,7 @@ function addComment(comment,noteIndex,replyIndex){
 }
 //注册评论、展开评论、赞等事件
 function addListenerForOperation(){
-    $(".noteEdit").click(function(){
-        $("#redactor_content_3").redactor({
-            imageUpload: serverIP + '/imageUpload',
-            fileUpload: serverIP + '/fileUpload'
-        })
-        $("#editModal").modal();
-    })
-    $(".noteComments").click(function(){
-        var node = $(this).parent().parent().children()[3];
-        if($(node).css("display") == "none"){
-            $(node).animate({},500,function(){
-                $(node).css({"display":"block"});
-            })
-        }
-        else{
-            $(node).animate({},500,function(){
-                $(node).css({"display":"none"});
-            })
-        }
-    })
 
-    $(".noteComment").click(function(){
-        var name = $($(this).parents()[1]).children().find(".name > a").html();
-        $($(this).parents()[1]).children().find("textarea").attr({"placeholder":"@" + name});
-        $($($(this).parents()[1]).children()[2]).css({"display":"block"});
-        $(".commentSubmit").click(function(){
-            var comment = $($(this).parent().children()[0]).val();
-            var replyseq = $($(this).parent().parent()).data("replyseq");
-            var user_id = localStorage.id;
-            var video_url = localStorage.video_url;
-            var video_time = localStorage.time;
-            var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
-            var to = $($(this).parents()[1]).children().find(".name > a").data("id");
-            commentToReply(user_id,video_url,slot_index,noteSeq,replyseq,to,comment,$($($(this).parents()[1]).children()[2]),addComment);
-        })
-    })
     $(".toil > a").click(function(){
         var user_id = localStorage.id;
         var video_url = localStorage.video_url;
@@ -80,8 +45,28 @@ function addListenerForOperation(){
             else if($(this).hasClass("noteCollect")){
                 operation = 3;
             }
-            if(operation == 0){
-                //需要补充
+            if(operation == 0){  //noteEdit
+                var array = $($(this).parents()[1]).find(".title").html().split('>');
+                var title = array[array.length - 1];
+                var content = $($($(this).parents()[1]).children()[0]).find(".mycontent").html();
+                $("#editNoteTitle").val(title);
+                $("#editModal").modal();
+                $("#redactor_content_3").setCode(content);
+                $("#saveEdit").click(function(){
+                    var note = {};
+                    note.title = $('#editNoteTitle').val();
+                    note.body = $("#redactor_content_3").getCode();
+                    note.URL = localStorage.video_url;
+                    note.slotIndex = parseInt(MyNotesResult.notes[noteSeq].videoTime / slot_length);
+                    note.noteIndex = MyNotesResult.notes[noteSeq].noteIndex;
+                    var smallAbstract = $(note.body).text();
+                    if(smallAbstract.length > 80){
+                        smallAbstract = smallAbstract.substring(0,80);
+                        smallAbstract = smallAbstract + "...";
+                    }
+                    note.abstract = smallAbstract;
+                    editNote(localStorage.id,note,updateNotesFrame);
+                })
             }
             else {
                 if($($(this)[0].children[1]).html().split("(")[1].split(")")[0] != "0") {
@@ -109,15 +94,44 @@ function addListenerForOperation(){
             }
             else if($(this).hasClass("noteComments")){
                 operation = 2;
+                var node = $(this).parent().parent().children()[3];
+                if($(node).css("display") == "none"){
+                    $(node).animate({},500,function(){
+                        $(node).css({"display":"block"});
+                    })
+                }
+                else{
+                    $(node).animate({},500,function(){
+                        $(node).css({"display":"none"});
+                    })
+                }
             }
             else if($(this).hasClass("noteComment")){
                 operation = 3;
+                var name = $($(this).parents()[1]).children().find(".name > a").html();
+                $($(this).parents()[1]).children().find("textarea").attr({"placeholder":"@" + name});
+                $($($(this).parents()[1]).children()[2]).css({"display":"block"});
+                $(".commentSubmit").click(function(){
+                    var comment = $($(this).parent().children()[0]).val();
+                    var replyseq = $($(this).parent().parent()).data("replyseq");
+                    var user_id = localStorage.id;
+                    var video_url = localStorage.video_url;
+                    var video_time = localStorage.time;
+                    var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
+                    var to = $($(this).parents()[1]).children().find(".name > a").data("id");
+                    commentToReply(user_id,video_url,slot_index,noteSeq,replyseq,to,comment,$($($(this).parents()[1]).children()[2]),addComment);
+                })
             }
             else if($(this).hasClass("noteDelete")){
                 operation = 4;
             }
-            if(operation == 0){
+            if(operation == 0){  //noteEdit
                 //需要补充
+                $("#redactor_content_3").redactor({
+                    imageUpload: serverIP + '/imageUpload',
+                    fileUpload: serverIP + '/fileUpload'
+                })
+                $("#editModal").modal();
             }
             else if(operation == 1){
                 operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,this);
@@ -482,6 +496,10 @@ $(document).ready( function() {
             imageUpload: serverIP + '/imageUpload',
             fileUpload: serverIP + '/fileUpload'
         });
+    })
+    $("#redactor_content_3").redactor({
+        imageUpload: serverIP + '/imageUpload',
+        fileUpload: serverIP + '/fileUpload'
     })
 
 	//功能性部分
