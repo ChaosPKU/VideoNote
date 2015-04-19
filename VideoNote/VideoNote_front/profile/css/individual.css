@@ -11,6 +11,14 @@
       font-weight: 400;
       color: #798795;
   }
+.well{
+    height:390px;
+    width:632px;
+    padding:0px;
+    float:right;
+    margin-right:13px;
+    display: none;
+}
 .visual .svg,
 .visual .nosvg{
       height: 100px;
@@ -34,4 +42,152 @@
 }
 #loop:hover #shade {
   opacity:0;  
+}
+
+.MyPanel{
+    width: 100%;
+    height: 310px;
+    overflow-y: auto;
+    margin-top: -30px;
+    padding: 15px 0;
+}
+.MyPanel .headarea {
+    float: left;
+    width: 180px;
+    height: 100%;
+    border-right: solid 2px #ddd;
+}
+.MyPanel .headarea img{
+    width: 128px;
+    height:128px;
+    margin: 25px;
+}
+.MyPanel .headarea button{
+    margin-left: 45px;
+}
+.MyPanel .infoarea{
+    width: 420px;
+    float: left;
+    height: 100%;
+}
+.MyPanel .infoarea .form-group{
+    margin: 0 0 7px 0;
+}
+.MyPanel .infoarea label{
+    font-size: 16px;
+}
+.MyPanel .notesGroup{
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 ;
+    border-color: #efefef #efefef #efefef -moz-use-text-color;
+    border-image: none;
+    border-width: 1px 1px 1px 0;
+    color: #999;
+    font-size: 14px;
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+    padding: 15px 20px;
+}
+.timeNotes{
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 80px;
+    cursor: pointer;
+    background: #fff;
+}
+.timeNotes:hover{
+    background-color: #f7f5fa;
+    box-shadow: 2px 2px 5px #9edeff;
+    text-shadow: 3px 3px 10px #9edeff;
+}
+.timeNotes .capImg {
+    width:78.5px;
+    height:44.2px;
+    background-color: #aaa;
+    position: absolute;
+    margin: 17.4px 0 0 11px;
+}
+.timeNotes .noFocused {
+    display: table;
+    position: absolute;
+}
+
+.timeNotes .noFocused .round {
+    background: url("../images/liucheng_2.png") no-repeat;
+}
+
+.timeNotes .focused .round {
+    background: url("../images/liucheng_1.png") no-repeat;
+}
+.timeNotes .round {
+    height: 24px;
+    margin: auto;
+    width: 24px;
+}
+.timeNotes .noFocused .round {
+    left: 94px;
+    position: absolute;
+    top: 28px;
+}
+.timeNotes .focused .line-through {
+    border-right: 3px solid #ddd;
+    bottom: -106px;
+    height: 80px;
+    left: 25px;
+    position: absolute;
+}
+
+.timeNotes .noFocused .line-through {
+    border-right: 3px solid #ddd;
+    bottom: -125px;
+    height: 70px;
+    left: 104.5px;
+    position: absolute;
+}
+
+
+.timeNotes .focused .line-through.last-selected {
+    border-right-color: #ddd;
+}
+
+.timeNotes  .focused .line-through {
+    border-right: 3px solid #64b93c;
+}
+
+.timeNotes .notesCard {
+    font-size: 14px;
+    min-height: 43px;
+    margin-left: 70px;
+    padding: 10px 0 10px 60px;
+    position: relative;
+}
+
+.timeNotes .notesCard .notesmsg {
+    color: #333;
+    font-size: 17px;
+}
+
+.timeNotes .notesCard  .fromUser {
+    font-size: 13px;
+    margin-top: 2px;
+    float: left;
+}
+
+.timeNotes .notesCard  .createTime {
+    font-size: 13px;
+    margin-top: 2px;
+    float: left;
+    margin-left: 15px;
+}
+
+.timeNotes .notesCard .videoTime {
+    position: absolute;
+    right: 20px;
+    top: 12px;
 }

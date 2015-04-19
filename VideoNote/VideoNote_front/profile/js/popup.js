@@ -94,16 +94,22 @@ window.onload = function(){
         $("#logout").click(function () {
             if (delete localStorage.logged) {
                 delete localStorage.id;
-                delete localStorage.token;
                 delete localStorage.nickname;
                 delete localStorage.head;
-                alert("注销成功！请重新登录~");
+                delete localStorage.mp4;
+                delete localStorage.role;
+                delete localStorage.slot_index;
+                delete localStorage.time;
+                delete localStorage.video_total_time;
+                delete localStorage.vido_url;
+                delete localStorage.webm;
+                console.log("注销成功！请重新登录~");
                 //window.location.reload();
                 $("#after").css("display", "none");
                 $("#before").css("display", "block");
             }
             else {
-                alert("注销失败，请再次注销！")
+                console.log("注销失败，请再次注销！")
             }
             return false;
         });
@@ -224,7 +230,7 @@ window.onload = function(){
 			return false;
 		}
 		else{
-			alert("注册信息有误!");
+			console.log("注册信息有误!");
 			return false;	
 		}
 		

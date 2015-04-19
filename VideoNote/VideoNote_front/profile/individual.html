@@ -30,7 +30,7 @@
               <div class="col-xs-4">
                 <div class="todo">
                   <div class="todo-search">
-                    <input class="todo-search-field" type="search" value="" placeholder="Search" />
+                    <input class="todo-search-field" type="search" value="" placeholder="Google Search" />
                   </div>
                   <ul>
                     <li class="todo-done" data-target="#nav-div-1">
@@ -73,7 +73,7 @@
                 </div><!-- /.todo -->
               </div><!-- /.col-xs-4 -->
 
-              <div id="nav-div-1" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;margin-right:13px;">
+              <div id="nav-div-1" class="col-xs-8 well" style="display:block">
                   <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header" style="text-align:center">
@@ -83,8 +83,55 @@
                       <a class="navbar-brand" href="#">我的资料</a>
                     </div>
                   </nav>
+                  <div class="MyPanel">
+                      <div class="headarea">
+                          <img src="./images/icon128.png" class="img-rounded" id="head_icon">
+                          <button class = "btn btn-info"/>更换头像</button>
+                      </div>
+                      <div class="infoarea">
+                          <div id="userProfile">
+                              <form class="form-horizontal" role="form">
+                                  <div class="form-group" style="margin-top:-10px">
+                                      <label for="user_id" class="col-sm-3 control-label">ID:</label>
+                                      <div class="col-sm-7">
+                                          <p class="form-control-static" id="user_id">1100012997</p>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <label class="col-sm-3 control-label">身份:</label>
+                                      <div class="col-sm-7">
+                                          <p class="form-control-static">学生</p>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="nickname" class="col-sm-3 control-label">昵称:</label>
+                                      <div class="col-sm-7">
+                                          <input type="text" class="form-control" id="nickname" value="辛超">
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="cellphone" class="col-sm-3 control-label">手机号:</label>
+                                      <div class="col-sm-7">
+                                          <input type="tel" class="form-control" id="cellphone" value="18810335615">
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="email" class="col-sm-3 control-label">E-mail:</label>
+                                      <div class="col-sm-7">
+                                          <input type="email" class="form-control" id="email" value="xinchaoxt@gmail.com">
+                                      </div>
+                                  </div>
+                                  <div class="form-group" style="margin-top: 15px">
+                                      <div class="col-sm-offset-4 col-sm-8">
+                                          <button type="button" class="btn btn-primary">提交修改</button>
+                                      </div>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
               </div>
-              <div id="nav-div-2" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;display:none;margin-right:13px;">
+              <div id="nav-div-2" class="col-xs-8 well">
                   <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header" style="text-align:center">
@@ -94,8 +141,66 @@
                       <a class="navbar-brand" href="#">我的笔记</a>
                     </div>
                   </nav>
+                  <div class="MyPanel">
+                      <div class="notesGroup">
+                          <div class="timeNotes">
+                              <img src class='capImg'/>
+                              <div class="noFocused focused">
+                                  <div class="round"></div>
+                              </div>
+                              <div class="notesCard ">
+                                  <div class="notesmsg">其他笔记#1</div>
+                                  <div class="fromUser">
+                                      <span class="fui-user"></span>
+                                      辛超
+                                  </div>
+                                  <div class="createTime">
+                                      <span class="fui-calendar"></span>
+                                      2015-3-10 15:45
+                                  </div>
+                                  <div class="videoTime">08:49</div>
+                              </div>
+                          </div>
+                          <div class="timeNotes">
+                              <img src class='capImg'/>
+                              <div class="noFocused focused">
+                                  <div class="round"></div>
+                              </div>
+                              <div class="notesCard ">
+                                  <div class="notesmsg">其他笔记#1</div>
+                                  <div class="fromUser">
+                                      <span class="fui-user"></span>
+                                      辛超
+                                  </div>
+                                  <div class="createTime">
+                                      <span class="fui-calendar"></span>
+                                      2015-3-10 15:45
+                                  </div>
+                                  <div class="videoTime">08:49</div>
+                              </div>
+                          </div>
+                          <div class="timeNotes">
+                              <img src class='capImg'/>
+                              <div class="noFocused focused">
+                                  <div class="round"></div>
+                              </div>
+                              <div class="notesCard ">
+                                  <div class="notesmsg">其他笔记#1</div>
+                                  <div class="fromUser">
+                                      <span class="fui-user"></span>
+                                      辛超
+                                  </div>
+                                  <div class="createTime">
+                                      <span class="fui-calendar"></span>
+                                      2015-3-10 15:45
+                                  </div>
+                                  <div class="videoTime">08:49</div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-              <div id="nav-div-3" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;display:none;margin-right:13px;">
+              <div id="nav-div-3" class="col-xs-8 well">
                   <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header" style="text-align:center">
@@ -105,8 +210,12 @@
                       <a class="navbar-brand" href="#">我的关注</a>
                     </div>
                   </nav>
+                  <div class="MyPanel">
+                      <div class="notesGroup">
+                      </div>
+                  </div>
               </div>
-              <div id="nav-div-4" class="col-xs-8 well" style="height:390px;width:632px;padding:0px;float:right;display:none;margin-right:13px;">
+              <div id="nav-div-4" class="col-xs-8 well">
                   <nav class="navbar navbar-inverse navbar-lg navbar-embossed" role="navigation" style="margin-top:0px;border-radius: 4px;height:72px">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header" style="text-align:center">
@@ -116,6 +225,10 @@
                       <a class="navbar-brand" href="#">我的收藏</a>
                     </div>
                   </nav>
+                  <div class="MyPanel">
+                      <div class="notesGroup">
+                      </div>
+                  </div>
               </div>
             </div>
 
@@ -218,6 +331,7 @@
         <script src="js/application.js"></script>
         <script src="js/video.js"></script>
         <script src="js/plugins.js"></script>
+        <script src="js/server.js"></script>
         <script src="js/individual.js"></script>
     </body>
 </html>

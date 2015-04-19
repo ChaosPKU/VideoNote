@@ -1,4 +1,108 @@
-jQuery(document).ready(function() {
+function request(paras) {
+    var url = location.href;
+    var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+    var paraObj = {}
+    for (i = 0; j = paraString[i]; i++){
+        paraObj[ j.substring(0,j.indexOf("=")).toLowerCase() ] = j.substring(j.indexOf("=") + 1, j.length);
+    }
+    var returnValue = paraObj[paras.toLowerCase()];
+    if( typeof( returnValue ) == "undefined" ) {
+        return "";
+    } else {
+        return returnValue;
+    }
+}
+function formatTime(second) {
+    return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
+}
+function updateProfileUI(response){
+    console.log(response);
+    $("#user_id").html(response.baseInfo.userID);
+    $("#nickname").val(response.baseInfo.nickname);
+    $("#cellphone").val(response.baseInfo.mobilephone);
+    $("#email").val(response.baseInfo.email);
+    var str = '';
+    for(var i = 0;i < response.notes.length; ++ i){
+        str += "<div class='timeNotes' data-slotIndex='";
+        str += response.notes[i].slotIndex;
+        str += "' data-noteIndex='";
+        str += response.notes[i].noteIndex;
+        str += "' data-URL = '";
+        str += response.notes[i].URL;
+        str += "' data-videoTime = '";
+        str += response.notes[i].videoTime;
+        str += "' ><img src = ";
+        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.notes[i]._time + "_.jpeg";
+        str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
+        str += response.notes[i].title;
+        str += "</div><div class='fromUser'><span class='fui-user'></span>";
+        str += response.notes[i].from;
+        str += "</div><div class='createTime'><span class='fui-calendar'></span>";
+        str += response.notes[i].time;
+        str += "</div><div class='videoTime'>";
+        str += formatTime(response.notes[i].videoTime);
+        str += "</div></div></div>";
+    }
+    $("#nav-div-2 .notesGroup").html(str);
+    str = '';
+    for(var i = 0;i < response.concerns.length; ++ i){
+        str += "<div class='timeNotes' data-slotIndex='";
+        str += response.concerns[i].slotIndex;
+        str += "' data-noteIndex='";
+        str += response.concerns[i].noteIndex;
+        str += "' data-URL = '";
+        str += response.concerns[i].URL;
+        str += "' data-videoTime = '";
+        str += response.concerns[i].videoTime;
+        str += "' ><img src = ";
+        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.concerns[i]._time + "_.jpeg";
+        str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
+        str += response.concerns[i].title;
+        str += "</div><div class='fromUser'><span class='fui-user'></span>";
+        str += response.concerns[i].from;
+        str += "</div><div class='createTime'><span class='fui-calendar'></span>";
+        str += response.concerns[i].time;
+        str += "</div><div class='videoTime'>";
+        str += formatTime(response.concerns[i].videoTime);
+        str += "</div></div></div>";
+    }
+    $("#nav-div-3 .notesGroup").html(str);
+    str = '';
+    for(var i = 0;i < response.collects.length; ++ i){
+        str += "<div class='timeNotes' data-slotIndex='";
+        str += response.collects[i].slotIndex;
+        str += "' data-noteIndex='";
+        str += response.collects[i].noteIndex;
+        str += "' data-URL = '";
+        str += response.collects[i].URL;
+        str += "' data-videoTime = '";
+        str += response.collects[i].videoTime;
+        str += "' ><img src = ";
+        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.collects[i]._time + "_.jpeg";
+        str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
+        str += response.collects[i].title;
+        str += "</div><div class='fromUser'><span class='fui-user'></span>";
+        str += response.collects[i].from;
+        str += "</div><div class='createTime'><span class='fui-calendar'></span>";
+        str += response.collects[i].time;
+        str += "</div><div class='videoTime'>";
+        str += formatTime(response.collects[i].videoTime);
+        str += "</div></div></div>";
+    }
+    $("#nav-div-4 .notesGroup").html(str);
+
+    $(".timeNotes").click(function(){
+        var content = $(this).data();
+        chrome.tabs.create({url: "./profile/index.html"}, function (tab) {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {operation:"setNote",contents:content}, function(result) {
+                    console.log(result);
+                });
+            })
+        });
+    })
+}
+$(document).ready(function() {
     //SWTICH SVG TO PNG
     if (!$("html").hasClass("svg")) {
         $("span.svg").remove();
@@ -154,6 +258,17 @@ jQuery(document).ready(function() {
         var nf1 = jQuery('#inner-2', jQuerysvg).attr('fill');
         var nf2 = jQuery('#inner-1', jQuerysvg).attr('fill');
     }
+
+    //服务器部分
+    getProfiles(request("want"),updateProfileUI);
+    $("button[type=button]").click(function(){
+        var user_id = $("#user_id").html();
+        if(user_id == localStorage.id) {
+            updateProfiles(user_id,$("#nickname").val(),$("#cellphone").val(),$("#email").val());
+        }
+        else
+            alert("抱歉，你不能修改此人的基本信息！");
+    })
 });
 $(".todo > ul > li").click(function(){
     $(this.dataset.target).toggle();

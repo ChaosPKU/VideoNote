@@ -51,14 +51,14 @@ function doReg(account,password,nickname,role,mobile,email){
 					var wid = w.id ;
 					chrome.tabs.getSelected(wid,function(t){
 						chrome.tabs.update(t.id,{url:t.url},function(){
-							alert("注册成功，已直接登录！可以正常使用了！");
+							console.log("注册成功，已直接登录！可以正常使用了！");
 							window.close();
 						});
 					});
 				});
 			}
 			else {
-				alert(response.msg);
+				console.log(response.msg);
 			}
 		},
 		error:function(response){
@@ -94,14 +94,14 @@ function doLogin(account,password){
 					var wid = w.id ;
 					chrome.tabs.getSelected(wid,function(t){
 						chrome.tabs.update(t.id,{url:t.url},function(){
-							alert("登录成功！可以正常使用了！");
+							console.log("登录成功！可以正常使用了！");
 							window.close();
 						});
 					});
 				});
 			}
 			else {
-				alert(response.msg);
+				console.log(response.msg);
 			}
 		},
 		error:function(response){
@@ -130,7 +130,7 @@ function getMyBriefProfile(account){
 				$("#headicon").attr("src",ServerIP+localStorage.head);
 			}
 			else {
-				alert(response.msg);
+				console.log(response.msg);
 			}
 		},
 		error:function(response){

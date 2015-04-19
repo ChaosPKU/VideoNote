@@ -196,7 +196,7 @@ function NoteCMP(a,b)
 //显示笔记栏的笔记
 function displayNotesFunc(result){
     MyNotesResult = result;
-    updateReplysFrame(MyNotesResult.notes[noteSeq]);
+    updateReplysFrame(noteSeq);
     var str = '';
     var notes = result.notes;
     notes.sort(NoteCMP);
@@ -226,7 +226,7 @@ function displayNotesFunc(result){
         var seq = $(this).data('seq');
         noteSeq = seq;
         //console.log(MyNotesResult);
-        updateReplysFrame(MyNotesResult.notes[noteSeq]);
+        updateReplysFrame(noteSeq);
         $('.tab-content .replys').css('display','block');
     })
 }
@@ -236,7 +236,14 @@ function updateNotesFrame(video_url, slot_index,user_id){
     getNotesOnASlot(video_url,slot_index,video_total_time,displayNotesFunc,user_id);
 }
 //更新笔记回复区域
-function updateReplysFrame(note){
+function updateReplysFrame(noteSeq){
+    var note = null;
+    for(var i = 0;i < MyNotesResult.notes.length; ++ i){
+        if(MyNotesResult.notes[i].noteIndex == noteSeq)
+            note = MyNotesResult.notes[i];
+    }
+    if(!note)
+        return;
     str = '';
     str += "<button class='btn btn-info mybtn' type='button'>笔记</button>";
     str += note.title;
@@ -316,7 +323,7 @@ function updateReplysFrame(note){
     $($(".tab-pane .note .replyList")[0]).html(str);
     addListenerForOperation();
 }
-function setVideo(mp4,webm){
+function setVideo(mp4,webm,slotIndex){
 	var str = '';
 	if(webm){
 		str += '<source src="' + webm + '" type="video/webm">';
@@ -333,8 +340,8 @@ function setVideo(mp4,webm){
         $('.tab-content').height($('video').height() + $('.foot').height() +35);
         localStorage.setItem('video_url',$('video')[0].currentSrc);
         localStorage.setItem('video_total_time',$('video')[0].duration);
-        localStorage.setItem('slot_index',0);
-        updateNotesFrame($('video')[0].currentSrc, 0, localStorage.id);
+        localStorage.setItem('slot_index',slotIndex);
+        updateNotesFrame($('video')[0].currentSrc, slotIndex, localStorage.id);
     })
     $('video')[0].addEventListener('timeupdate',function(){
         localStorage.time = $("video")[0].currentTime;
@@ -509,7 +516,7 @@ $(document).ready( function() {
 		setTimeout(function(){
 			if(!isNewVideo)
 			{
-				setVideo(localStorage.mp4,localStorage.webm);
+				setVideo(localStorage.mp4,localStorage.webm,0);
 			}
 			else isNewVideo = 0;
 		}, 500);
@@ -522,7 +529,7 @@ $(document).ready( function() {
 			isNewVideo = 1;
 			localStorage.setItem('time',0);
 			if(message.contents.site == 'coursea')
-				setVideo(message.contents.mp4,message.contents.webm);
+				setVideo(message.contents.mp4,message.contents.webm,0);
 			else if(message.contents.site == 'edx')
 			{
 				$("video").html(message.contents.source);
@@ -531,7 +538,20 @@ $(document).ready( function() {
 			}
 			sendResponse("success");
 		}
-		else sendResponse("failure");
+        else if(message.operation == "setNote"){
+            isNewVideo = 1;
+            localStorage.setItem('time',message.contents.videotime);
+            var str = message.contents.url;
+            if(str.substr(str.length - 4,4) == 'webm'){
+                setVideo(null,str,message.contents.slotindex);
+            }
+            else if(str.substr(str.length - 3,3) == 'mp4'){
+                setVideo(str,null,message.contents.slotindex);
+            }
+            sendResponse("success");
+        }
+		else
+            sendResponse("failure");
 	});
 	var options = {
 		beforeSubmit:  function(){},
@@ -549,9 +569,9 @@ $(document).ready( function() {
 		var src = $("#navbarInput-02").val();
 		var len = src.length;
 		if(src.substr(len - 3,len) == 'ebm')
-			setVideo(null,src);
+			setVideo(null,src,0);
 		else if(src.substr(len - 3,len) == 'mp4')
-			setVideo(src,null);
+			setVideo(src,null,0);
 	})
 
     //画表格部分

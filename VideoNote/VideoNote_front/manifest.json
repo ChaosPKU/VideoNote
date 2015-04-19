@@ -15,6 +15,7 @@
     "webNavigation",
     "storage",
     "contextMenus",
+    "streamsPrivate",
     "desktopCapture"
   ],
   "content_scripts": [{

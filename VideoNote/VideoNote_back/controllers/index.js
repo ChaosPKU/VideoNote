@@ -47,7 +47,7 @@ function easyTime(date){
 function arrayQuerySave(queryArray, welldone){
     var saveArray = [];
     async.eachSeries(queryArray, function (item,callback){
-        videoModel.findOne({URL: item.VideoUrl}, function (err, video){
+        videoModel.findOne({URL: decodeURI(item.VideoUrl)}, function (err, video){
             if(err){
                 res.send({
                     status: 'error',
@@ -82,6 +82,8 @@ function arrayQuerySave(queryArray, welldone){
                         type: (targetNote.type==0)?"笔记":"问题",
                         from: targetUser.nickname,
                         time: targetNote.time,
+                        _time: targetNote._time,
+                        videoTime :targetNote.videoTime,
                         relatedRangeContent: targetNote.relatedRangeContent,
                         abstract: targetNote.abstract,
                         body: targetNote.body
@@ -1742,11 +1744,11 @@ exports.getProfiles = function(req,res){
                 var baseInfo = {
                     userID: user.userID,
                     nickname: user.nickname,
-                    role: (user.role==0)?"学生":"教师", //0学生 1老师
                     head: user.head, //存头像的path
                     mobilephone: user.mobilephone,
                     email: user.email
                 };
+                //console.log(user);
                 //利用async的parallel完成并行
                 async.parallel({
                         note: function(callback){
