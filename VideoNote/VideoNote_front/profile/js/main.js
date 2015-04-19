@@ -52,7 +52,7 @@ function addListenerForOperation(){
                     note.body = $("#redactor_content_3").getCode();
                     note.URL = localStorage.video_url;
                     note.slotIndex = parseInt(MyNotesResult.notes[noteSeq].videoTime / slot_length);
-                    note.noteIndex = MyNotesResult.notes[noteSeq].noteIndex;
+                    note.noteIndex = noteSeq;
                     var smallAbstract = $(note.body).text();
                     if(smallAbstract.length > 80){
                         smallAbstract = smallAbstract.substring(0,80);
@@ -69,7 +69,7 @@ function addListenerForOperation(){
                 else {
                     upordown = 0;
                 }
-                operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,this);
+                operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,updateNotesFrame);
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("reply")){  //是对reply的操作
@@ -84,7 +84,7 @@ function addListenerForOperation(){
                     upordown = 0;
                 }
                 var replyIndex = $($($(this)[0]).parents()[1]).data("replyseq");
-                operateReply(user_id,video_url,slot_index,noteSeq,replyIndex,upordown,this);
+                operateReply(user_id,video_url,slot_index,noteSeq,replyIndex,upordown,updateNotesFrame);
             }
             else if($(this).hasClass("noteComments")){
                 operation = 2;
@@ -130,7 +130,7 @@ function addListenerForOperation(){
                 var note = {};
                 note.URL = localStorage.video_url;
                 note.slotIndex = parseInt(MyNotesResult.notes[noteSeq].videoTime / slot_length);
-                note.noteIndex = MyNotesResult.notes[noteSeq].noteIndex;
+                note.noteIndex = noteSeq;
                 note.replyIndex = $($(this).parents()[1]).data('replyseq');
                 replyToDelete(localStorage.id,note,updateNotesFrame);
             }
@@ -144,7 +144,7 @@ function addListenerForOperation(){
                     note.body = $("#redactor_content_4").getCode();
                     note.URL = localStorage.video_url;
                     note.slotIndex = parseInt(MyNotesResult.notes[noteSeq].videoTime / slot_length);
-                    note.noteIndex = MyNotesResult.notes[noteSeq].noteIndex;
+                    note.noteIndex = noteSeq;
                     note.replyIndex = replyIndex;
                     var smallAbstract = $(note.body).text();
                     if(smallAbstract.length > 80){
@@ -156,7 +156,7 @@ function addListenerForOperation(){
                 })
             }
             else if(operation == 1){
-                operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,this);
+                operateNote(user_id,video_url,slot_index,noteSeq,operation - 1,upordown,updateNotesFrame);
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("secReply")){  //是对secReply的操作
@@ -164,7 +164,7 @@ function addListenerForOperation(){
                 var note = {};
                 note.URL = localStorage.video_url;
                 note.slotIndex = parseInt(MyNotesResult.notes[noteSeq].videoTime / slot_length);
-                note.noteIndex = MyNotesResult.notes[noteSeq].noteIndex;
+                note.noteIndex = noteSeq;
                 note.replyIndex = $($(this).parents()[3]).data('replyseq');
                 note.commentIndex = $($(this).parents()[1]).data('commentseq');
                 commentToDelete(localStorage.id,note,updateNotesFrame);
@@ -239,8 +239,10 @@ function updateNotesFrame(video_url, slot_index,user_id){
 function updateReplysFrame(noteSeq){
     var note = null;
     for(var i = 0;i < MyNotesResult.notes.length; ++ i){
-        if(MyNotesResult.notes[i].noteIndex == noteSeq)
+        if(MyNotesResult.notes[i].noteIndex == noteSeq) {
             note = MyNotesResult.notes[i];
+            break;
+        }
     }
     if(!note)
         return;
@@ -359,7 +361,7 @@ function setVideo(mp4,webm,slotIndex){
                 if($(node).hasClass("focused"))
                     $(node).removeClass("focused");
                 var duration = MyNotesResult.notes[i].videoTime - localStorage.time;
-                if(duration > -1 && duration < 1){
+                if(duration > -0.5 && duration < 0.5){
                     $(node).addClass("focused");
                 }
             }
