@@ -356,7 +356,8 @@ exports.submitNote = function(req,res){
                             }) - 1;
                         }
                         //添加user到当前video slot关联的users中
-                        if(!inArray(NOTE.userID, allSlots[indexToSave].relatedUsers)){
+                        //console.log(NOTE.userID,allSlots[indexToSave].relatedUsers);
+                        if(inArray(NOTE.userID, allSlots[indexToSave].relatedUsers < 0)){
                             allSlots[indexToSave].relatedUsers.push(NOTE.userID);
                         }
 
@@ -496,7 +497,7 @@ exports.replyToNote = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(!inArray(reply.userID, allSlots[targetSlotIndex].relatedUsers)){
+                        if(inArray(reply.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
                             allSlots[targetSlotIndex].relatedUsers.push(reply.userID);
                         }
 
@@ -623,7 +624,7 @@ exports.commentToReply = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(!inArray(comment.userID, allSlots[targetSlotIndex].relatedUsers)){
+                        if(inArray(comment.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
                             allSlots[targetSlotIndex].relatedUsers.push(comment.userID);
                         }
 
@@ -677,6 +678,7 @@ exports.commentToReply = function(req,res){
 }
 //操作笔记
 exports.operateNote = function(req,res){
+    console.log(req.body);
     var operation = req.body;
     if(!operation.userID){
         res.send({
@@ -738,11 +740,12 @@ exports.operateNote = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(!inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers)){
+                        if(inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
                             allSlots[targetSlotIndex].relatedUsers.push(operation.userID);
                         }
 
                         var notesASlot = allSlots[targetSlotIndex].notes ;
+                        //console.log(notesASlot);
                         var targetNoteIndex = -1 ;
                         for(targetNoteIndex = 0 ; targetNoteIndex < notesASlot.length ; targetNoteIndex++){
                             if(operation.noteIndex == notesASlot[targetNoteIndex].noteIndex){
@@ -750,6 +753,7 @@ exports.operateNote = function(req,res){
                             }
                         }
                         var targetNote = notesASlot[targetNoteIndex] ;
+                        //console.log(targetNote);
                         var targetOperation = null ;//什么操作
                         var targetUserArray = null;//用户里的记录
                         if(operation.which == 0){
@@ -763,9 +767,8 @@ exports.operateNote = function(req,res){
                             targetOperation = targetNote.collects ;
                             targetUserArray = user.myCollects ;
                         }
-
                         var index = inArray(operation.userID,targetOperation) ;//video里的记录
-                        if(operation.upordown == 0){//加
+                        if(operation.upordown == 0 || index == -1){//加
                             if(index < 0){
                                 targetOperation.push(operation.userID);
                             }
@@ -783,10 +786,8 @@ exports.operateNote = function(req,res){
                             };
                             var userArrayIndex = objectIndexInArray(noteStruct,targetUserArray) ;
                             //console.log(userArrayIndex);
-                            if(operation.upordown == 0){//加
-                                if(userArrayIndex < 0){
+                            if(operation.upordown == 0 || userArrayIndex < 0){//加
                                     targetUserArray.push(noteStruct);
-                                }
                             }
                             else{//减
                                 if(userArrayIndex >= 0){
@@ -891,6 +892,7 @@ exports.praiseOrNotReply = function(req,res){
                         });
                     }
                     else{
+                        console.log(video);
                         var allSlots = video.slots;
                         //console.log(allSlots.length);
                         var targetSlotIndex = -1 ;
@@ -900,7 +902,7 @@ exports.praiseOrNotReply = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(!inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers)){
+                        if(inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
                             allSlots[targetSlotIndex].relatedUsers.push(operation.userID);
                         }
 
@@ -926,7 +928,7 @@ exports.praiseOrNotReply = function(req,res){
                         var targetOperation = targetReply.praises ;
 
                         var index = inArray(operation.userID,targetOperation) ;
-                        if(operation.upordown == 0){//加
+                        if(operation.upordown == 0 || index == -1){//加
                             if(index < 0){
                                 targetOperation.push(operation.userID);
                             }
@@ -936,7 +938,7 @@ exports.praiseOrNotReply = function(req,res){
                                 targetOperation.splice(index,1);
                             }
                         }
-
+                        console.log(video);
                         video.save(function (err){
                             if(err){
                                 console.log(err);
