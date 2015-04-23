@@ -1,7 +1,7 @@
 var isNewVideo = 0;
 var MyNotesResult = null;
 var OtherNotesResult = null;
-var CurrentResult = MyNotesResult;
+var CurrentResult = null;
 var slot_length = 10;    //10s为一个slot
 var noteSeq = 0;   //note index
 var noteSubmitTime;
@@ -41,6 +41,7 @@ function addListenerForOperation(){
                 operation = 3;
             }
             if(operation == 0){  //noteEdit
+                console.log(CurrentResult);
                 var array = $($(this).parents()[1]).find(".title").html().split('>');
                 var title = array[array.length - 1];
                 var content = $($($(this).parents()[1]).children()[0]).find(".mycontent").html();
@@ -112,9 +113,20 @@ function addListenerForOperation(){
             }
             else if($(this).hasClass("noteComment")){
                 operation = 3;
+                var node = $(this).parent().parent().children()[2];
+                if($(node).css("display") == "none"){
+                    $(node).animate({},500,function(){
+                        $(node).css({"display":"block"});
+                    })
+                }
+                else{
+                    $(node).animate({},500,function(){
+                        $(node).css({"display":"none"});
+                    })
+                }
                 var name = $($(this).parents()[1]).children().find(".name > a").html();
                 $($(this).parents()[1]).children().find("textarea").attr({"placeholder":"@" + name});
-                $($($(this).parents()[1]).children()[2]).css({"display":"block"});
+                //$($($(this).parents()[1]).children()[2]).css({"display":"block"});
                 $(".commentSubmit").click(function(){
                     var comment = $($(this).parent().children()[0]).val();
                     var replyseq = $($(this).parent().parent()).data("replyseq");
@@ -199,22 +211,15 @@ function parseNotesResult(result){
             OtherNotesResult.notes.splice(i, 1);
         else i++;
     }
-    for(var i = 0;i < OtherNotesResult.users.length;){
-        if(OtherNotesResult.users[i].userID == user_id)
-            OtherNotesResult.users.splice(i,1);
-        else i++;
-    }
     for(var i = 0;i < MyNotesResult.notes.length; ){
         if(MyNotesResult.notes[i].fromUserID != user_id)
             MyNotesResult.notes.splice(i,1);
         else i++;
     }
-    for(var i = 0;i < MyNotesResult.users.length; ){
-        if(MyNotesResult.users[i].userID != user_id)
-            MyNotesResult.users.splice(i,1);
-        else i++;
-    }
-    console.log(MyNotesResult,OtherNotesResult);
+    //console.log(MyNotesResult,OtherNotesResult,CurrentResult);
+    if($($(".nav-tabs > li")[0]).hasClass("active"))
+        CurrentResult = MyNotesResult;
+    else CurrentResult = OtherNotesResult;
 }
 //按笔记所在视频时间排序
 function NoteCMP(a,b)
@@ -222,10 +227,10 @@ function NoteCMP(a,b)
     return parseFloat(a.videoTime) - parseFloat(b.videoTime);
 }
 function updateNotesFunc(result,index) {
-    updateReplysFrame(result,index);
     var str = '';
     var notes = result.notes;
     notes.sort(NoteCMP);
+    updateReplysFrame(result,index);
     var len = notes.length;
     for(var i = 0;i < len; ++ i){
         str += "<div class='timeNotes' data-seq=";
@@ -269,8 +274,11 @@ function updateNotesFrame(video_url, slot_index,user_id){
 //更新笔记回复区域
 function updateReplysFrame(result,index){
     var note = result.notes[noteSeq];
-    if(!note)
+    if(!note) {
+        if(index == 1)
+            addListenerForOperation();
         return;
+    }
     str = '';
     str += "<button class='btn btn-info mybtn' type='button'>笔记</button>";
     str += note.title;
@@ -295,11 +303,17 @@ function updateReplysFrame(result,index){
     //$($(".tab-pane .note .mycontent")[index]).html(note.body);
     $($($(".tab-pane .note")[index]).find(".mycontent")[0]).html(note.body);
     str = '';
-    str += "<a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a><a href='#' class='notePraise'><span class='fui-heart'></span><span> 赞(";
+    if(note.fromUserID == localStorage.id)
+        str += "<a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a>";
+    str += "<a href='#' class='notePraise'><span class='fui-heart'></span><span> 赞(";
     str += note.praises.length;
-    str += ") </span></a><a href='#' class='noteConcern'><span class='fui-eye'></span><span> +关注(";
-    str += note.concerns.length;
-    str += ") </span></a><a href='#' class='noteCollect'><span class='fui-star'></span><span> 收藏(";
+    str += ") </span></a>";
+    if(note.fromUserID != localStorage.id) {
+        str += "<a href='#' class='noteConcern'><span class='fui-eye'></span><span> +关注(";
+        str += note.concerns.length;
+        str += ") </span></a>";
+    }
+    str += "<a href='#' class='noteCollect'><span class='fui-star'></span><span> 收藏(";
     str += note.collects.length;
     str += ") </span></a>";
     //$($(".tab-pane .note .mytoil")[0]).html(str);
@@ -323,7 +337,12 @@ function updateReplysFrame(result,index){
         str += "</a></div></div><div class='mycontent'>";
         str += note.replys[i].body;
         str += "</div> </div>";
-        str += "<div class='toil mytoil'><a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a><a href='#' class='noteDelete'><span class='fui-trash'></span><span> 删除 </span></a><a href='#' class='notePraise'><span class='fui-heart'></span> <span> 赞(";
+        str += "<div class='toil mytoil'>";
+        if(note.replys[i].fromUserID == localStorage.id) {
+            str += "<a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a>";
+            str += "<a href='#' class='noteDelete'><span class='fui-trash'></span><span> 删除 </span></a>";
+        }
+        str += "<a href='#' class='notePraise'><span class='fui-heart'></span> <span> 赞(";
         str += note.replys[i].praises.length;
         str += ") </span></a><a href='#' class='noteComments'><span class='fui-document'></span><span> 展开评论(";
         str += note.replys[i].comments.length;
@@ -343,8 +362,12 @@ function updateReplysFrame(result,index){
             str += getUserFromID(note.replys[i].comments[j].toUserID, result).nickname;
             str += ": </a>";
             str += note.replys[i].comments[j].body;
-            str += "</div></div><div class='toil sectoil'><a href='#' class='noteDelete'><span class='fui-trash'></span>";
-            str += "<span> 删除 </span></a><a href='#' class='noteComment'><span class='fui-chat'></span><span> 评论 </span>";
+            str += "</div></div><div class='toil sectoil'>";
+            if(note.replys[i].comments[j].fromUserID == localStorage.id) {
+                str += "<a href='#' class='noteDelete'><span class='fui-trash'></span>";
+                str += "<span> 删除 </span></a>";
+            }
+            str += "<a href='#' class='noteComment'><span class='fui-chat'></span><span> 评论 </span>";
             str += "</a></div><div class='commentBox'><textarea class='form-control pull-left commentArea' rows='3' placeholder='@'></textarea>";
             str += "<button class='btn btn-success commentSubmit'>提交</button></div></div>";
         }

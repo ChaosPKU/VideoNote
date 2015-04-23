@@ -357,7 +357,7 @@ exports.submitNote = function(req,res){
                         }
                         //添加user到当前video slot关联的users中
                         //console.log(NOTE.userID,allSlots[indexToSave].relatedUsers);
-                        if(inArray(NOTE.userID, allSlots[indexToSave].relatedUsers < 0)){
+                        if(inArray(NOTE.userID, allSlots[indexToSave].relatedUsers) < 0){
                             allSlots[indexToSave].relatedUsers.push(NOTE.userID);
                         }
 
@@ -497,7 +497,7 @@ exports.replyToNote = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(inArray(reply.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
+                        if(inArray(reply.userID, allSlots[targetSlotIndex].relatedUsers) < 0){
                             allSlots[targetSlotIndex].relatedUsers.push(reply.userID);
                         }
 
@@ -624,7 +624,7 @@ exports.commentToReply = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(inArray(comment.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
+                        if(inArray(comment.userID, allSlots[targetSlotIndex].relatedUsers) < 0){
                             allSlots[targetSlotIndex].relatedUsers.push(comment.userID);
                         }
 
@@ -638,7 +638,7 @@ exports.commentToReply = function(req,res){
 
                         var replysANote = notesASlot[targetNoteIndex].replys ;
                         var targetReplyIndex = -1 ;
-                        console.log(replysANote);
+                        //console.log(replysANote);
                         for(targetReplyIndex = 0 ; targetReplyIndex < replysANote.length ; targetReplyIndex++){
                             if(comment.replyIndex == replysANote[targetReplyIndex].replyIndex){
                                 break;
@@ -678,7 +678,7 @@ exports.commentToReply = function(req,res){
 }
 //操作笔记
 exports.operateNote = function(req,res){
-    console.log(req.body);
+    //console.log(req.body);
     var operation = req.body;
     if(!operation.userID){
         res.send({
@@ -740,7 +740,7 @@ exports.operateNote = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
+                        if(inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers) < 0){
                             allSlots[targetSlotIndex].relatedUsers.push(operation.userID);
                         }
 
@@ -892,7 +892,7 @@ exports.praiseOrNotReply = function(req,res){
                         });
                     }
                     else{
-                        console.log(video);
+                        //console.log(video);
                         var allSlots = video.slots;
                         //console.log(allSlots.length);
                         var targetSlotIndex = -1 ;
@@ -902,7 +902,7 @@ exports.praiseOrNotReply = function(req,res){
                             }
                         }
                         //存相关用户
-                        if(inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers < 0)){
+                        if(inArray(operation.userID, allSlots[targetSlotIndex].relatedUsers) < 0){
                             allSlots[targetSlotIndex].relatedUsers.push(operation.userID);
                         }
 
@@ -938,7 +938,7 @@ exports.praiseOrNotReply = function(req,res){
                                 targetOperation.splice(index,1);
                             }
                         }
-                        console.log(video);
+                        //console.log(video);
                         video.save(function (err){
                             if(err){
                                 console.log(err);
@@ -1185,7 +1185,7 @@ exports.deleteReply = function(req,res){
 //删除评论
 exports.deleteComment = function(req,res){
     var comment = req.body.commentToDel;
-    console.log(comment);
+    //console.log(comment);
     if(!req.body.userID){
         res.send({
             status:'error',
@@ -1297,7 +1297,7 @@ exports.deleteComment = function(req,res){
 }
 //上传头像
 exports.uploadHead = function(req,res){
-    console.log(req.files);
+    //console.log(req.files);
     var form = new multiparty.Form({	autoFiles:true ,
         uploadDir: './uploads/tmp'
     });
@@ -1491,8 +1491,8 @@ exports.deleteNote = function(req,res){
                                     //console.log(indexToDel);
                                     user.myNotes.splice(indexToDel,1);
                                     user.save(function (err) {
-                                        console.log(noteDeleted.concerns);
-                                        console.log(noteDeleted.collects);
+                                        //(noteDeleted.concerns);
+                                        //console.log(noteDeleted.collects);
                                         async.series([
                                                 //关注它的所有用户，删关注
                                                 function(delCallback){
@@ -1508,7 +1508,7 @@ exports.deleteNote = function(req,res){
                                                                 var indexToDel = objectIndexInArray({VideoUrl:noteToDel.URL,
                                                                     slotIndex:noteToDel.slotIndex,
                                                                     noteIndex:noteToDel.noteIndex},user.myConcerns);
-                                                                console.log("concern"+indexToDel);
+                                                                //console.log("concern"+indexToDel);
                                                                 user.myConcerns.splice(indexToDel,1);
                                                                 user.save(function(err){
                                                                     if(err){

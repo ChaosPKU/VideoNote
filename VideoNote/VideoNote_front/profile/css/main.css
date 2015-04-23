@@ -448,3 +448,10 @@
     width: 20%;
     float: left;
 }
+.navbar-unread{
+    font-size: 10px;
+    background-color: inherit;
+}
+.navbar-inverse .navbar-nav > .open > .dropdown-menu > .divider{
+    background-color: #9acfea;
+}
