@@ -97,6 +97,66 @@ function arrayQuerySave(queryArray, welldone){
         welldone(null,saveArray);
     });
 }
+function createMessage(slotIndex,noteIndex,url,note,res){
+    //console.log(note);
+    userModel.findOne({userID:note.fromUserID},function(err,user){
+        if(err){
+            res.send({
+                status: 'error',
+                msg: 'user find error!'
+            });
+            return;
+        }
+        if (user) {
+            //console.log(user);
+            var noteStruct = {
+                VideoUrl: decodeURI(url),
+                slotIndex: Number(slotIndex),
+                noteIndex: Number(noteIndex)
+            };
+            if (objectIndexInArray(noteStruct, user.myMessages.myNotesMessage) < 0)
+                user.myMessages.myNotesMessage.push(noteStruct);
+            for (var i = 0; i < note.concerns.length; i++) {
+                userModel.findOne({userID: note.concerns[i]}, function (err, usr) {
+                    if (err) {
+                        res.send({
+                            status: 'error',
+                            msg: 'user find error!'
+                        });
+                        return;
+                    }
+                    if (!usr) {
+                        res.send({
+                            status: 'error',
+                            msg: 'no user found.'
+                        });
+                    }
+                    else {
+                        if (objectIndexInArray(noteStruct, usr.myMessages.myConcernsMessage) < 0)
+                            usr.myMessages.myConcernsMessage.push(noteStruct);
+                    }
+                })
+            }
+            user.save(function (err) {
+                if (err) {
+                    res.send({
+                        status: 'error',
+                        msg: 'user save error!'
+                    });
+                    return;
+                }
+                else {
+                    //console.log("createMessage success");
+                }
+            });
+        } else {
+            res.send({
+                status: 'error',
+                msg: 'no user found.'
+            });
+        }
+    })
+}
 //用户注册
 exports.register = function(req,res){
     //console.log(req.body);
@@ -126,7 +186,11 @@ exports.register = function(req,res){
                 email: newUser.email,
                 myNotes: [],
                 myConcerns: [],
-                myCollects: []
+                myCollects: [],
+                myMessages:{
+                    myNotesMessage:[],
+                    myConcernsMessage:[]
+                }
             });
             userToSave.save(function (err){
                 if(err){
@@ -540,6 +604,7 @@ exports.replyToNote = function(req,res){
                                 });
                             }
                             else{
+                                createMessage(reply.slotIndex,reply.noteIndex,reply.URL,targetNote,res);
                                 res.send({
                                     status: 'success',
                                     msg: 'reply successfully',
@@ -663,6 +728,7 @@ exports.commentToReply = function(req,res){
                                 });
                             }
                             else{
+                                createMessage(comment.slotIndex,comment.noteIndex,comment.URL,notesASlot[targetNoteIndex],res);
                                 res.send({
                                     status: 'success',
                                     msg: 'comment successfully.',
@@ -814,6 +880,7 @@ exports.operateNote = function(req,res){
                                         });
                                     }
                                     else{
+                                        createMessage(operation.slotIndex,operation.noteIndex,operation.URL,targetNote,res);
                                         res.send({
                                             status: 'success',
                                             msg: '操作成功',
@@ -948,6 +1015,7 @@ exports.praiseOrNotReply = function(req,res){
                                 });
                             }
                             else{
+                                createMessage(operation.slotIndex,operation.noteIndex,operation.URL,notesASlot[targetNoteIndex],res);
                                 res.send({
                                     status: 'success',
                                     msg: '回复赞相关操作成功',
@@ -1299,24 +1367,27 @@ exports.deleteComment = function(req,res){
 exports.uploadHead = function(req,res){
     //console.log(req.files);
     var form = new multiparty.Form({	autoFiles:true ,
-        uploadDir: './public/usersUploads/heads/'
+        uploadDir: './uploads/tmp'
     });
-    var fileName = new Date().getTime() + '_';
-    //为了文件名不冲突，用时间做标志
-    form.on('part', function(part){
-        if(!part.filename) return;
-        fileName += part.filename;
-    });
-    form.on('file', function(name, file){
-        var tmp_path = file.path;
-        var heads_path = './public/usersUploads/heads/';
-        var target_path = heads_path + fileName;
-        fs.renameSync(tmp_path, target_path, function(err) {
-            if(err) console.error(err.stack);
-        });
-        res.send(heads_path + fileName);
-    });
-    form.parse(req);
+    console.log(form);
+    //var fileName = new Date().getTime() + '_';
+    ////为了文件名不冲突，用时间做标志
+    //form.on('part', function(part){
+    //    console.log("aaa");
+    //    if(!part.filename) return;
+    //    fileName += part.filename;
+    //});
+    //form.on('file', function(name, file){
+    //    console.log("bbb");
+    //    var tmp_path = file.path;
+    //    var heads_path = './public/usersUploads/heads/';
+    //    var target_path = heads_path + fileName;
+    //    fs.renameSync(tmp_path, target_path, function(err) {
+    //        if(err) console.error(err.stack);
+    //    });
+    //    res.send(heads_path + fileName);
+    //});
+    //form.parse(req);
 }
 //保存头像
 exports.saveHead = function(req,res){
@@ -1825,6 +1896,12 @@ exports.getProfiles = function(req,res){
                         },
                         concern: function(callback){
                             arrayQuerySave(user.myConcerns,callback);
+                        },
+                        noteMessage:function(callback){
+                            arrayQuerySave(user.myMessages.myNotesMessage,callback);
+                        },
+                        concernMessage:function(callback){
+                            arrayQuerySave(user.myMessages.myConcernsMessage,callback);
                         }
                     },
                     function (err, results) {
@@ -1837,7 +1914,11 @@ exports.getProfiles = function(req,res){
                                 baseInfo: baseInfo,
                                 notes: results.note,
                                 collects: results.collect,
-                                concerns: results.concern
+                                concerns: results.concern,
+                                messages:{
+                                    noteMessage:results.noteMessage,
+                                    concernMessage:results.concernMessage
+                                }
                             });
                         }
                     });

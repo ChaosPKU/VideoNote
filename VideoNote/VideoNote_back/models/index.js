@@ -32,7 +32,19 @@ var UserSchema = new Schema({
         VideoUrl: {type: String}, //video的url
         slotIndex: {type: Number},
         noteIndex: {type: Number}
-    }]
+    }],
+    myMessages: {             //我的消息
+        myNotesMessage: [{              //我的消息
+            VideoUrl: {type: String}, //video的url
+            slotIndex: {type: Number},
+            noteIndex: {type: Number}
+        }],
+        myConcernsMessage: [{              //我的消息
+            VideoUrl: {type: String}, //video的url
+            slotIndex: {type: Number},
+            noteIndex: {type: Number}
+        }]
+    }
 });
 var UserModel = mongoose.model("User" , UserSchema);
 exports.UserModel = UserModel;
