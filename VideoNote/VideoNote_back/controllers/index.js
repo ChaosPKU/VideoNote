@@ -1299,7 +1299,7 @@ exports.deleteComment = function(req,res){
 exports.uploadHead = function(req,res){
     //console.log(req.files);
     var form = new multiparty.Form({	autoFiles:true ,
-        uploadDir: './uploads/tmp'
+        uploadDir: './public/usersUploads/heads/'
     });
     var fileName = new Date().getTime() + '_';
     //为了文件名不冲突，用时间做标志
@@ -1309,14 +1309,14 @@ exports.uploadHead = function(req,res){
     });
     form.on('file', function(name, file){
         var tmp_path = file.path;
-        var heads_path = '/usersUploads/heads/';
-        var target_path = './public'+ heads_path + fileName;
+        var heads_path = './public/usersUploads/heads/';
+        var target_path = heads_path + fileName;
         fs.renameSync(tmp_path, target_path, function(err) {
             if(err) console.error(err.stack);
         });
         res.send(heads_path + fileName);
     });
-    //form.parse(req);
+    form.parse(req);
 }
 //保存头像
 exports.saveHead = function(req,res){
@@ -1711,6 +1711,70 @@ exports.getMyBriefProfile = function(req,res){
                     msg: "ok",
                     nickname: user.nickname,
                     head: user.head
+                });
+            }
+        }
+    })
+}
+//获取视频基本信息
+exports.getVideoBasicInfo = function(req,res){
+    var url = decodeURI(req.query.url);
+    if(!url){
+        res.send({
+            status: "error",
+            msg: "video url error!"
+        });
+        return;
+    }
+    videoModel.findOne({URL:url},function(err,video){
+        if(err){
+            res.send({
+                status: "error",
+                msg: "video find error!"
+            });
+        }
+        else{
+            if(!video){
+                res.send({
+                    status: "error",
+                    msg: "no video found."
+                });
+            }
+            else{
+                var notes = [];
+                var replys = [];
+                var comments = [];
+                var maxNotesNum = 0;
+                for(var i = 0;i < parseInt(video.TotalTime / 10) + 1;i ++){
+                    if(i < video.slots.length){
+                        notes.push([i,video.slots[i].notes.length]);
+                        var replysOnNotes = 0;
+                        var commentsOnNotes = 0;
+                        for(var j = 0;j < video.slots[i].notes.length;j ++){
+                            replysOnNotes += video.slots[i].notes[j].replys.length;
+                            for(var k = 0;k < video.slots[i].notes[j].replys.length; k ++){
+                                commentsOnNotes += video.slots[i].notes[j].replys[k].comments.length;
+                            }
+                        }
+                        replys.push([i,replysOnNotes]);
+                        comments.push([i,commentsOnNotes]);
+                        if(maxNotesNum < video.slots[i].notes.length + replysOnNotes + commentsOnNotes);
+                            maxNotesNum = video.slots[i].notes.length + replysOnNotes + commentsOnNotes;
+                    }
+                    else {
+                        notes.push([i, 0]);
+                        replys.push([i,0]);
+                        comments.push([i,0]);
+                    }
+                }
+                res.send({
+                    status: "success",
+                    msg: "ok",
+                    notes:notes,
+                    replys:replys,
+                    comments:comments,
+                    totaltime:video.TotalTime,
+                    maxnotesnum:maxNotesNum
                 });
             }
         }

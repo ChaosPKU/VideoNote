@@ -269,6 +269,34 @@ $(document).ready(function() {
         else
             alert("抱歉，你不能修改此人的基本信息！");
     })
+    var headPopSetting = {
+        placement: "bottom",
+        html: true,
+        container: "body",
+        selector: "#changehead",
+        animation:true,
+        title: function() {
+            return "头像的最佳尺寸为128*128";
+        },
+        content: function() {
+            return '<form id="headForm" enctype="multipart/form-data" method="post" action="">' +
+                '<input type="file" name="file" id="headUpdate" style="width:240px" accept="image/*" />' +
+                '</form>' +
+                '<button class="btn btn-primary" id="uploadHead" style="margin-left:20px">上传头像</button>'+
+                '<button class="btn btn-success" id="saveHead" style="margin-left:30px">保存修改</button>';
+        }
+    };
+    $("#changehead").popover(headPopSetting);
+    $("#changehead").click(function(){
+        $("#changehead").popover("toggle");
+        $("#uploadHead").click(function(){
+            if($("#headUpdate").val()){
+                var form = document.getElementById("headForm");
+                var form_data = new FormData(form);
+                uploadHead(form_data);
+            }
+        })
+    })
 });
 $(".todo > ul > li").click(function(){
     $(this.dataset.target).toggle();
