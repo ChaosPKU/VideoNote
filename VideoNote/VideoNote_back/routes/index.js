@@ -22,6 +22,7 @@ module.exports = function(app){
     app.post('/getNotesOnASlot',controller.getNotesOnASlot);		//拿一个video上的所有笔记
 
     app.get('/getProfiles',controller.getProfiles);	//得到个人信息
+    app.get('/getMessage',controller.getMessage);	//得到个人信息
     app.get('/getMyBriefProfile',controller.getMyBriefProfile);	//得到个人简短的信息
     app.get('/getVideoBasicInfo',controller.getVideoBasicInfo);	//得到视频简短的信息
 };

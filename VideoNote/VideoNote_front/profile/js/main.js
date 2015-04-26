@@ -424,7 +424,7 @@ function setVideo(mp4,webm,slotIndex){
 function basic_bars(response) {
     console.log(response);
   var xTicks = [];
-  for(var i = 0;i < response.notes.length;i ++){
+  for(var i = 1;i < response.notes.length;i ++){
       xTicks.push([i-0.5,i*10]);
   }
   var yTicks = [];
@@ -483,8 +483,9 @@ function basic_bars(response) {
         x2axis:{
         },
         yaxis:{
-            title: '单位/个'          // => axis title
-
+            title: '单位/个',          // => axis title
+            tickFormatter: Flotr.defaultTickFormatter,   //刻度的格式化方式
+            tickDecimals:0                              //刻度小数点后的位数
         },
         y2axis:{
 
@@ -530,6 +531,7 @@ function basic_bars(response) {
 };
 
 $(document).ready( function() {
+    getMessage(localStorage.id);
 	//UI部分
 	//开关笔记栏 设置动画
 	$("#bookmark").click(function(){

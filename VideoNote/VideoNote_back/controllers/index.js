@@ -116,6 +116,7 @@ function createMessage(slotIndex,noteIndex,url,note,res){
             };
             if (objectIndexInArray(noteStruct, user.myMessages.myNotesMessage) < 0)
                 user.myMessages.myNotesMessage.push(noteStruct);
+            console.log(note.concerns);
             for (var i = 0; i < note.concerns.length; i++) {
                 userModel.findOne({userID: note.concerns[i]}, function (err, usr) {
                     if (err) {
@@ -134,6 +135,18 @@ function createMessage(slotIndex,noteIndex,url,note,res){
                     else {
                         if (objectIndexInArray(noteStruct, usr.myMessages.myConcernsMessage) < 0)
                             usr.myMessages.myConcernsMessage.push(noteStruct);
+                        usr.save(function (err) {
+                            if (err) {
+                                res.send({
+                                    status: 'error',
+                                    msg: 'user save error!'
+                                });
+                                return;
+                            }
+                            else {
+                                //console.log("createMessage success");
+                            }
+                        });
                     }
                 })
             }
@@ -1365,29 +1378,26 @@ exports.deleteComment = function(req,res){
 }
 //上传头像
 exports.uploadHead = function(req,res){
-    //console.log(req.files);
+    console.log(req.files);
     var form = new multiparty.Form({	autoFiles:true ,
         uploadDir: './uploads/tmp'
     });
-    console.log(form);
-    //var fileName = new Date().getTime() + '_';
-    ////为了文件名不冲突，用时间做标志
-    //form.on('part', function(part){
-    //    console.log("aaa");
-    //    if(!part.filename) return;
-    //    fileName += part.filename;
-    //});
-    //form.on('file', function(name, file){
-    //    console.log("bbb");
-    //    var tmp_path = file.path;
-    //    var heads_path = './public/usersUploads/heads/';
-    //    var target_path = heads_path + fileName;
-    //    fs.renameSync(tmp_path, target_path, function(err) {
-    //        if(err) console.error(err.stack);
-    //    });
-    //    res.send(heads_path + fileName);
-    //});
-    //form.parse(req);
+    var fileName = new Date().getTime() + '_';
+    //为了文件名不冲突，用时间做标志
+    form.on('part', function(part){
+        if(!part.filename) return;
+        fileName += part.filename;
+    });
+    form.on('file', function(name, file){
+        var tmp_path = file.path;
+        var heads_path = '/usersUploads/heads/';
+        var target_path = './public'+ heads_path + fileName;
+        fs.renameSync(tmp_path, target_path, function(err) {
+            if(err) console.error(err.stack);
+        });
+        res.send(heads_path + fileName);
+    });
+    form.parse(req);
 }
 //保存头像
 exports.saveHead = function(req,res){
@@ -1816,7 +1826,7 @@ exports.getVideoBasicInfo = function(req,res){
                 var replys = [];
                 var comments = [];
                 var maxNotesNum = 0;
-                for(var i = 0;i < parseInt(video.TotalTime / 10) + 1;i ++){
+                for(var i = 0;i <= parseInt(video.TotalTime / 10) + 1;i ++){
                     if(i < video.slots.length){
                         notes.push([i,video.slots[i].notes.length]);
                         var replysOnNotes = 0;
@@ -1915,6 +1925,75 @@ exports.getProfiles = function(req,res){
                                 notes: results.note,
                                 collects: results.collect,
                                 concerns: results.concern,
+                                messages:{
+                                    noteMessage:results.noteMessage,
+                                    concernMessage:results.concernMessage
+                                }
+                            });
+                            user.myMessages.myNotesMessage.splice(0,user.myMessages.myNotesMessage.length);
+                            user.myMessages.myConcernsMessage.splice(0,user.myMessages.myConcernsMessage.length);
+                            user.save(function (err) {
+                                if (err) {
+                                    res.send({
+                                        status: 'error',
+                                        msg: 'user save error!'
+                                    });
+                                    return;
+                                }
+                                else {
+                                    //console.log("createMessage success");
+                                }
+                            });
+                        }
+                    });
+            }
+        }
+    });
+}
+//获取消息列表
+exports.getMessage = function(req,res){
+    var userID = req.query.userID;
+
+    if(!userID){
+        res.send({
+            status:'error',
+            msg:'user id error!'
+        });
+        return;
+    }
+    userModel.findOne({userID:userID},function (err,user){
+        if(err){
+            res.send({
+                status:'error',
+                msg:'user find error!'
+            });
+        }
+        else{
+            if(!user){
+                res.send({
+                    status: 'error',
+                    msg: 'no user found.'
+                });
+                return;
+            }
+            else{
+                var userID = user.userID;
+                async.parallel({
+                        noteMessage:function(callback){
+                            arrayQuerySave(user.myMessages.myNotesMessage,callback);
+                        },
+                        concernMessage:function(callback){
+                            arrayQuerySave(user.myMessages.myConcernsMessage,callback);
+                        }
+                    },
+                    function (err, results) {
+                        if(err){
+                            console.log(err);
+                        }
+                        else{
+                            res.send({
+                                status: "success",
+                                userID:userID,
                                 messages:{
                                     noteMessage:results.noteMessage,
                                     concernMessage:results.concernMessage

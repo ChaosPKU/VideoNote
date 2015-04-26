@@ -1,6 +1,9 @@
 .body {
     background-color: #fff;
 }
+a{
+    cursor: pointer;
+}
 .container {
     width: 95%;
     min-width: 1180px;

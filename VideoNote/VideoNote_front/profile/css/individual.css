@@ -191,3 +191,6 @@
     right: 20px;
     top: 12px;
 }
+.todo ul{
+    border-radius: 6px 6px 6px 6px;
+}

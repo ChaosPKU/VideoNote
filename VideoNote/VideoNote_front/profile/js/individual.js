@@ -22,6 +22,50 @@ function updateProfileUI(response){
     $("#cellphone").val(response.baseInfo.mobilephone);
     $("#email").val(response.baseInfo.email);
     var str = '';
+    for(var i = 0;i < response.messages.noteMessage.length; ++ i){
+        str += "<div class='timeNotes' data-slotIndex='";
+        str += response.messages.noteMessage[i].slotIndex;
+        str += "' data-noteIndex='";
+        str += response.messages.noteMessage[i].noteIndex;
+        str += "' data-URL = '";
+        str += response.messages.noteMessage[i].URL;
+        str += "' data-videoTime = '";
+        str += response.messages.noteMessage[i].videoTime;
+        str += "' ><img src = ";
+        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.messages.noteMessage[i]._time + "_.jpeg";
+        str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
+        str += response.messages.noteMessage[i].title;
+        str += "</div><div class='fromUser'><span class='fui-user'></span>";
+        str += response.messages.noteMessage[i].from;
+        str += "</div><div class='createTime'><span class='fui-calendar'></span>";
+        str += response.messages.noteMessage[i].time;
+        str += "</div><div class='videoTime'>";
+        str += formatTime(response.messages.noteMessage[i].videoTime);
+        str += "</div></div></div>";
+    }
+    for(var i = 0;i < response.messages.concernMessage.length; ++ i){
+        str += "<div class='timeNotes' data-slotIndex='";
+        str += response.messages.concernMessage[i].slotIndex;
+        str += "' data-noteIndex='";
+        str += response.messages.concernMessage[i].noteIndex;
+        str += "' data-URL = '";
+        str += response.messages.concernMessage[i].URL;
+        str += "' data-videoTime = '";
+        str += response.messages.concernMessage[i].videoTime;
+        str += "' ><img src = ";
+        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.messages.concernMessage[i]._time + "_.jpeg";
+        str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
+        str += response.messages.concernMessage[i].title;
+        str += "</div><div class='fromUser'><span class='fui-user'></span>";
+        str += response.messages.concernMessage[i].from;
+        str += "</div><div class='createTime'><span class='fui-calendar'></span>";
+        str += response.messages.concernMessage[i].time;
+        str += "</div><div class='videoTime'>";
+        str += formatTime(response.messages.concernMessage[i].videoTime);
+        str += "</div></div></div>";
+    }
+    $("#nav-div-2 .notesGroup").html(str);
+    str = '';
     for(var i = 0;i < response.notes.length; ++ i){
         str += "<div class='timeNotes' data-slotIndex='";
         str += response.notes[i].slotIndex;
@@ -43,7 +87,7 @@ function updateProfileUI(response){
         str += formatTime(response.notes[i].videoTime);
         str += "</div></div></div>";
     }
-    $("#nav-div-2 .notesGroup").html(str);
+    $("#nav-div-3 .notesGroup").html(str);
     str = '';
     for(var i = 0;i < response.concerns.length; ++ i){
         str += "<div class='timeNotes' data-slotIndex='";
@@ -66,7 +110,7 @@ function updateProfileUI(response){
         str += formatTime(response.concerns[i].videoTime);
         str += "</div></div></div>";
     }
-    $("#nav-div-3 .notesGroup").html(str);
+    $("#nav-div-4 .notesGroup").html(str);
     str = '';
     for(var i = 0;i < response.collects.length; ++ i){
         str += "<div class='timeNotes' data-slotIndex='";
@@ -89,7 +133,7 @@ function updateProfileUI(response){
         str += formatTime(response.collects[i].videoTime);
         str += "</div></div></div>";
     }
-    $("#nav-div-4 .notesGroup").html(str);
+    $("#nav-div-5 .notesGroup").html(str);
 
     $(".timeNotes").click(function(){
         var content = $(this).data();
