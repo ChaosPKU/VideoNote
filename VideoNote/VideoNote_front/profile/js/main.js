@@ -300,6 +300,7 @@ function updateReplysFrame(result,index){
     str += " </a>";
     //$($(".tab-pane .note .detail")[index]).html(str);
     $($($(".tab-pane .note")[index]).find(".detail")[0]).html(str);
+    $($($(".tab-pane .note")[index]).find(".myrow .pic")[0]).attr({"src":user.head});
     //$($(".tab-pane .note .mycontent")[index]).html(note.body);
     $($($(".tab-pane .note")[index]).find(".mycontent")[0]).html(note.body);
     str = '';
@@ -324,13 +325,15 @@ function updateReplysFrame(result,index){
     str += "</b></span></button>";
     for(var i = 0; i < note.replys.length; ++ i){
         str += "<div class='reply' data-replyseq = ";
+        var user =  getUserFromID(note.replys[i].fromUserID,result);
         str += note.replys[i].replyIndex;
         str += ">";
-        str += "<div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000' ";
+        str += "<div class='myrow'><img class='pic' src=' ";
+        str += user.head;
+        str += "'><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000' ";
         str += "data-id = ";
         str += note.replys[i].fromUserID;
         str += " >";
-        var user =  getUserFromID(note.replys[i].fromUserID,result);
         str += user.nickname;
         str += "</a></div><a class='icon'>";
         str += note.replys[i].time;
@@ -352,14 +355,17 @@ function updateReplysFrame(result,index){
         for(var j = 0;j < note.replys[i].comments.length; ++ j) {
             str += "<div class='secReply' data-commentSeq = '";
             str += j;
-            str += "'><div class='myrow'><div class='pic'></div><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  target='_blank' style='font-size:20px;color:#000' data-id = '";
+            str += "'><div class='myrow'><img class='pic' src='";
+            var user = getUserFromID(note.replys[i].comments[j].fromUserID, result);
+            str += user.head;
+            str += "'><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  target='_blank' style='font-size:20px;color:#000' data-id = '";
             str += note.replys[i].comments[j].fromUserID;
             str += "'>";
-            str += getUserFromID(note.replys[i].comments[j].fromUserID, result).nickname;
+            str += user.nickname;
             str += "</a></div><a class='icon'>";
             str += note.replys[i].comments[j].time;
             str += "</a></div></div><div class='mycontent'><a class='at'>@";
-            str += getUserFromID(note.replys[i].comments[j].toUserID, result).nickname;
+            str += user.nickname;
             str += ": </a>";
             str += note.replys[i].comments[j].body;
             str += "</div></div><div class='toil sectoil'>";

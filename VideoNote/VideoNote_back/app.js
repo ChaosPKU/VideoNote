@@ -21,7 +21,6 @@ app.use(express.favicon(path.join(__dirname, 'public/img/logo.ico')));
 app.use(express.logger('dev'));
 //更新后的express没有
 //app.use(bodyParser.json());
-app.use(express.bodyParser({limit: '5mb'}));
 app.use(express.json());
 app.use(express.urlencoded());
 

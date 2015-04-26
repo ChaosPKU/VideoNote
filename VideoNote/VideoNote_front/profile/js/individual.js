@@ -21,6 +21,7 @@ function updateProfileUI(response){
     $("#nickname").val(response.baseInfo.nickname);
     $("#cellphone").val(response.baseInfo.mobilephone);
     $("#email").val(response.baseInfo.email);
+    $(".headarea").find("img").attr({"src":response.baseInfo.head});
     var str = '';
     for(var i = 0;i < response.messages.noteMessage.length; ++ i){
         str += "<div class='timeNotes' data-slotIndex='";
@@ -338,6 +339,15 @@ $(document).ready(function() {
                 var form = document.getElementById("headForm");
                 var form_data = new FormData(form);
                 uploadHead(form_data);
+                $(this).text("上传中...");
+            }
+        })
+        $("#saveHead").click(function(){
+            if($("#headUpdate").val()){
+                var userID = localStorage.id;
+                var head = $(".headarea").find("img").attr("src");
+                saveHead(userID, head);
+                $(this).text("保存中...");
             }
         })
     })
