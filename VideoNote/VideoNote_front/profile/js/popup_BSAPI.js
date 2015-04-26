@@ -127,7 +127,7 @@ function getMyBriefProfile(account){
 				localStorage.nickname = response.nickname;
 				localStorage.head = response.head;
 				document.getElementById('disnickname').innerHTML = "" + localStorage.nickname;
-				$("#headicon").attr("src",ServerIP+localStorage.head);
+				$("#headicon").attr("src",localStorage.head);
 			}
 			else {
 				console.log(response.msg);
