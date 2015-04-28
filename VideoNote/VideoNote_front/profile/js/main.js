@@ -445,7 +445,7 @@ function basic_bars(response) {
     var option = {
         colors: ['#00A8F0', '#C0D800', '#CB4B4B', '#4DA74D', '#9440ED'],  //线条的颜色
         ieBackgroundColor:'#3ec5ff',                    //选中时的背景颜色
-        title:'笔记分布统计',               //标题
+        title:'笔记分布趋势统计图',               //标题
         subtitle:'',                           //子标题
         shadowSize:0,                                 //线条阴影
         defaultType:'bars',                           //图表类型,可选值:bars,bubbles,candles,gantt,lines,markers,pie,points,radar
@@ -454,15 +454,6 @@ function basic_bars(response) {
         fontSize:10,                                  //字体大小
         resolution:10,                                  //分辨率 数字越大越模糊
         parseFloat:false,                               //是否将数据转化为浮点型
-        bars:{
-            show:true,
-            horizontal:horizontal,
-            shadowSize:0,
-            lineWidth:0,
-            barWidth:1,
-            fill:true,
-            stacked:true
-        },
         xaxis: {
             ticks:xTicks, // 自定义X轴
             minorTicks: null,
@@ -512,27 +503,32 @@ function basic_bars(response) {
             circular: false        // => 是否以环形的方式显示
         },
         mouse:{
-            //track: true,          // => 为true时,当鼠标移动到每个折点时,会显示折点的坐标
+            track: true,          // => 为true时,当鼠标移动到每个折点时,会显示折点的坐标
             //trackAll: true,       // => 为true时,当鼠标在线条上移动时,显示所在点的坐标
-            //position: 'n',        // => 鼠标事件显示数据的位置 (default south-east)
-            relative: true       // => 当为true时,鼠标移动时,即使不在线条上,也会显示相应点的数据
-            //trackFormatter: Flotr.defaultTrackFormatter, // => formats the values in the value box
-            //margin: 5,             // => margin in pixels of the valuebox
-            //lineColor: '#FF3F19',  // => 鼠标移动到线条上时,点的颜色
-            //trackDecimals: 0,      // => 数值小数点后的位数
-            //sensibility: 2,        // => 值越小,鼠标事件越精确
-            //trackY: true,          // => whether or not to track the mouse in the y axis
-            //radius: 3,             // => radius of the track point
+            position: 'ne',        // => 鼠标事件显示数据的位置 (default south-east)
+            relative: false,       // => 当为true时,鼠标移动时,即使不在线条上,也会显示相应点的数据
+            trackFormatter: Flotr.defaultTrackFormatter, // => formats the values in the value box
+            margin: 5,             // => margin in pixels of the valuebox
+            lineColor: '#FF3F19',  // => 鼠标移动到线条上时,点的颜色
+            trackDecimals: 0,      // => 数值小数点后的位数
+            sensibility: 1,        // => 值越小,鼠标事件越精确
+            trackY: true,          // => whether or not to track the mouse in the y axis
+            radius: 3             // => radius of the track point
             //fillColor: null,       // => color to fill our select bar with only applies to bar and similar graphs (only bars for now)
             //fillOpacity: 0.4       // => o
+        },
+        legend:{
+            container:$("#legendContainer"),
+            position:'ne'
         }
     };
 
     // Draw Graph
     var data = [
-        { data : response.notes, label :'笔记' ,lines : { show : false }, points : { show : false }},
-        { data : response.replys, label :'回复' ,lines : { show :false }, points : { show : false }},
-        { data : response.comments, label :'评论' ,lines : { show : false }, points : { show : false }}]
+        { data : response.notes, label :'笔记' ,lines : { show : true }, points : { show : true }},
+        { data : response.replys, label :'回复' ,lines : { show :true }, points : { show : true }},
+        { data : response.comments, label :'评论' ,lines : { show : true }, points : { show : true }}
+        ];
     Flotr.draw(container, data, option);
 };
 
