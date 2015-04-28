@@ -28,63 +28,62 @@
 
  401: 真发布笔记(相关区域)
  */
-
+var serverIP = 'http://127.0.0.1:8880';
 //110:切换视频时间
-function recordPageChange(who, courseID, pdf, page, notesNum){
+function recordTimeChange(who, video, slot, video_time,notesNum){
     //console.log(arguments);
     jQuery.ajax({
-        url:'/recordPageChange',
+        url:serverIP + '/recordPageChange',
         type:'post',
         data:{
             who: who,
             when: new Date().getTime(),
-            whatCourse: courseID,
-            whatPDF: pdf,
-            whatPage: page,
+            which_video: video,
+            which_time:video_time,
+            whatSlot: slot,
             doWhat: 110,
             status: [notesNum]
         },
         success:function(response){
-            // console.log(response);
+            console.log(response);
         },
         error:function(response){
-
+            console.log(response);
         }
     });
 }
-//130/131: 切换查看最新/最热笔记
-function recordNewOrHot(who, courseID, pdf, page, switchHot){
-    //console.log(arguments);
-    // switchHot == 0, 切换成最新 —— 130
-    // switchHot == 1, 切换成最热 —— 131
+//130/131: 切换查看我的/其他笔记
+function recordMyOrOther(who, video, slot, video_time, switchOther){
+    // switchOther == 0, 切换成我的笔记 —— 130
+    // switchOther == 1, 切换成其他笔记 —— 131
     jQuery.ajax({
-        url:'/recordNewOrHot',
+        url:serverIP + '/recordNewOrHot',
         type:'post',
         data:{
             who: who,
             when: new Date().getTime(),
-            whatCourse: courseID,
-            whatPDF: pdf,
-            whatPage: page,
-            doWhat: switchHot == 0 ? 130 : 131
+            which_video: video,
+            which_time:video_time,
+            whatSlot: slot,
+            doWhat: switchOther == 0 ? 130 : 131
         },
         success:function(response){
-            // console.log(response);
+            console.log(response);
         },
         error:function(response){
-
+            console.log(response);
         }
     });
 }
 //200: 查看某个笔记(该笔记一套相关信息)
-function recordViewANote(who, courseID, pdf, page, noteInfo){
+function recordViewANote(who, video, slot, video_time, noteInfo){
     /*
      noteInfo 需要用到的东西
      noteIndex
      from
      title
-     type
-     relatedRangeContent
+     videoTime
+     screenshot
      clickNum
      replyNum
      praiseNum
@@ -94,80 +93,79 @@ function recordViewANote(who, courseID, pdf, page, noteInfo){
     // console.log(arguments);
 
     jQuery.ajax({
-        url:'/recordViewANote',
+        url:serverIP + '/recordViewANote',
         type:'post',
         data:{
             who: who,
             when: new Date().getTime(),
-            whatCourse: courseID,
-            whatPDF: pdf,
-            whatPage: page,
+            which_video: video,
+            which_time:video_time,
+            whatSlot: slot,
             doWhat: 200,
             status: [noteInfo.noteIndex, noteInfo.fromUserID, noteInfo.title, noteInfo.type,
-                noteInfo.relatedRangeContent, noteInfo.clickCnt, noteInfo.replys.length,
+                noteInfo.videoTime, noteInfo.screenshot, noteInfo.clickCnt, noteInfo.replys.length,
                 noteInfo.praises.length, noteInfo.concerns.length, noteInfo.collects.length]
         },
         success:function(response){
-            //   console.log(response);
+            console.log(response);
         },
         error:function(response){
-
+            console.log(response);
         }
     });
 }
 //210: 假回复
-function recordFakeReply(who, courseID, pdf, page, noteInfo){
+function recordFakeReply(who, video, slot, video_time, noteInfo){
     /*
      noteInfo 与上一个一样
      */
-    //console.log(arguments);
     jQuery.ajax({
-        url:'/recordFakeReply',
+        url:serverIP + '/recordViewANote',
         type:'post',
         data:{
             who: who,
             when: new Date().getTime(),
-            whatCourse: courseID,
-            whatPDF: pdf,
-            whatPage: page,
-            doWhat: 210,
+            which_video: video,
+            which_time:video_time,
+            whatSlot: slot,
+            doWhat: 200,
             status: [noteInfo.noteIndex, noteInfo.fromUserID, noteInfo.title, noteInfo.type,
-                noteInfo.relatedRangeContent, noteInfo.clickCnt, noteInfo.replys.length,
+                noteInfo.videoTime, noteInfo.screenshot, noteInfo.clickCnt, noteInfo.replys.length,
                 noteInfo.praises.length, noteInfo.concerns.length, noteInfo.collects.length]
         },
         success:function(response){
             console.log(response);
         },
         error:function(response){
-
+            console.log(response);
         }
     });
 }
 //211: 真回复
-function recordRealReply(who, courseID, pdf, page, noteInfo){
+function recordRealReply(who, video, slot, video_time, noteInfo){
     /*
      noteInfo 与上一个一样
      */
     //console.log(arguments);
     jQuery.ajax({
-        url:'/recordRealReply',
+        url:serverIP + '/recordViewANote',
         type:'post',
         data:{
             who: who,
             when: new Date().getTime(),
-            whatCourse: courseID,
-            whatPDF: pdf,
-            whatPage: page,
-            doWhat: 211,
+            which_video: video,
+            which_time:video_time,
+            whatSlot: slot,
+            doWhat: 200,
             status: [noteInfo.noteIndex, noteInfo.fromUserID, noteInfo.title, noteInfo.type,
-                noteInfo.relatedRangeContent, noteInfo.clickCnt, noteInfo.replys.length,
+                noteInfo.videoTime, noteInfo.screenshot, noteInfo.clickCnt, noteInfo.replys.length,
                 noteInfo.praises.length, noteInfo.concerns.length, noteInfo.collects.length]
         },
         success:function(response){
             console.log(response);
         },
         error:function(response){
-
+            console.log(response);
         }
     });
 }

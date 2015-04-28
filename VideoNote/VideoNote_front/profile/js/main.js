@@ -229,6 +229,10 @@ function NoteCMP(a,b)
 function updateNotesFunc(result,index) {
     var str = '';
     var notes = result.notes;
+    if(!notes) {
+        console.log('error');
+        return;
+    }
     notes.sort(NoteCMP);
     updateReplysFrame(result,index);
     var len = notes.length;
@@ -698,6 +702,12 @@ $(document).ready( function() {
 			sendResponse("success");
 		}
         else if(message.operation == "setNote"){
+            if(message.contents.from != localStorage.id){
+                $($(".nav-tabs > li")[0]).removeClass('active');
+                $($(".nav-tabs > li")[1]).addClass('active');
+                $($(".tab-pane")[0]).removeClass('active');
+                $($(".tab-pane")[1]).addClass('active');
+            }
             isNewVideo = 1;
             localStorage.setItem('time',message.contents.videotime);
             var str = message.contents.url;
