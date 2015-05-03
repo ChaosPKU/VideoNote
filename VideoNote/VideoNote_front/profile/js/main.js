@@ -21,7 +21,7 @@ function getUserFromID(id,result){
 }
 //注册评论、展开评论、赞等事件
 function addListenerForOperation(){
-    $(".toil > a").click(function(){
+    var handler = function(){
         var user_id = localStorage.id;
         var video_url = localStorage.video_url;
         var video_time = localStorage.time;
@@ -29,9 +29,12 @@ function addListenerForOperation(){
         var operation = 0;
         var upordown = 0;
         if($($($(this).parents()[1])[0]).hasClass("note")){  //是对note的操作
-            operation = 0;
+            operation = -1;
             upordown = 0;
-            if($(this).hasClass("notePraise")){
+            if($(this).hasClass("noteEdit")){
+                operation = 0;
+            }
+            else if($(this).hasClass("notePraise")){
                 operation = 1;
             }
             else if($(this).hasClass("noteConcern")){
@@ -48,22 +51,6 @@ function addListenerForOperation(){
                 $("#editNoteTitle").val(title);
                 $("#editModal").modal();
                 $("#redactor_content_3").setCode(content);
-                $("#saveEdit").click(function(){
-                    var note = {};
-                    note.title = $('#editNoteTitle').val();
-                    note.body = $("#redactor_content_3").getCode();
-                    note.URL = localStorage.video_url;
-                    note.slotIndex = parseInt(CurrentResult.notes[noteSeq].videoTime / slot_length);
-                    note.noteIndex = CurrentResult.notes[noteSeq].noteIndex;
-                    var smallAbstract = $(note.body).text();
-                    if(smallAbstract.length > 80){
-                        smallAbstract = smallAbstract.substring(0,80);
-                        smallAbstract = smallAbstract + "...";
-                    }
-                    note.abstract = smallAbstract;
-                    editNote(localStorage.id,note,updateNotesFrame);
-                    recordEdit(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,note);
-                })
             }
             else {
                 if($($(this)[0].children[1]).html().split("(")[1].split(")")[0] != "0") {
@@ -77,7 +64,7 @@ function addListenerForOperation(){
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("reply")){  //是对reply的操作
-            operation = 0;   //noteEdit
+            operation = -1;
             upordown = 0;
             if($(this).hasClass("notePraise")){
                 operation = 1;
@@ -149,31 +136,17 @@ function addListenerForOperation(){
                 note.replyIndex = $($(this).parents()[1]).data('replyseq');
                 replyToDelete(localStorage.id,note,updateNotesFrame);
             }
-            if(operation == 0){  //noteEdit
+            else if($(this).hasClass("noteEdit")){  //noteEdit
+                operation = 0;
                 var content = $($($(this).parents()[1]).children()[0]).find(".mycontent").html();
                 $("#editReplyModal").modal();
                 $("#redactor_content_4").setCode(content);
                 var replyIndex = $($(this).parents()[1]).data('replyseq');
-                $("#saveReplyEdit").click(function(){
-                    var note = {};
-                    note.body = $("#redactor_content_4").getCode();
-                    note.URL = localStorage.video_url;
-                    note.slotIndex = parseInt(CurrentResult.notes[noteSeq].videoTime / slot_length);
-                    note.noteIndex = CurrentResult.notes[noteSeq].noteIndex;
-                    note.replyIndex = replyIndex;
-                    var smallAbstract = $(note.body).text();
-                    if(smallAbstract.length > 80){
-                        smallAbstract = smallAbstract.substring(0,80);
-                        smallAbstract = smallAbstract + "...";
-                    }
-                    note.abstract = smallAbstract;
-                    replyToEditSubmit(localStorage.id,note,updateNotesFrame);
-                })
             }
-            else if(operation == 1){
-                operateNote(user_id,video_url,slot_index,CurrentResult.notes[noteSeq].noteIndex,operation - 1,upordown,updateNotesFrame);
-                recordOperateNote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
-            }
+            //else if(operation == 1){
+            //    operateNote(user_id,video_url,slot_index,CurrentResult.notes[noteSeq].noteIndex,operation - 1,upordown,updateNotesFrame);
+            //    recordOperateNote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
+            //}
         }
         else if($($($(this).parents()[1])[0]).hasClass("secReply")){  //是对secReply的操作
             if($(this).hasClass("noteDelete")){
@@ -202,7 +175,13 @@ function addListenerForOperation(){
             }
         }
         else console.log("operation error!");
-    })
+    }
+    $(".toil > a").each(function(){
+        $(this)[0].removeEventListener('click',handler,false);
+    });
+    $(".toil > a").each(function(){
+        $(this)[0].addEventListener('click',handler,false);
+    });
 }
 function parseNotesResult(result){
     var user_id = localStorage.id;
@@ -809,5 +788,35 @@ $(document).ready( function() {
         replyToNote(user_id, video_url, slot_index, noteIndex, note, updateNotesFrame);
         recordRealReply(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq]);
     })
-
+    $("#saveEdit").click(function(){
+        var note = {};
+        note.title = $('#editNoteTitle').val();
+        note.body = $("#redactor_content_3").getCode();
+        note.URL = localStorage.video_url;
+        note.slotIndex = parseInt(CurrentResult.notes[noteSeq].videoTime / slot_length);
+        note.noteIndex = CurrentResult.notes[noteSeq].noteIndex;
+        var smallAbstract = $(note.body).text();
+        if(smallAbstract.length > 80){
+            smallAbstract = smallAbstract.substring(0,80);
+            smallAbstract = smallAbstract + "...";
+        }
+        note.abstract = smallAbstract;
+        editNote(localStorage.id,note,updateNotesFrame);
+        recordEdit(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,note);
+    })
+    $("#saveReplyEdit").click(function(){
+        var note = {};
+        note.body = $("#redactor_content_4").getCode();
+        note.URL = localStorage.video_url;
+        note.slotIndex = parseInt(CurrentResult.notes[noteSeq].videoTime / slot_length);
+        note.noteIndex = CurrentResult.notes[noteSeq].noteIndex;
+        note.replyIndex = replyIndex;
+        var smallAbstract = $(note.body).text();
+        if(smallAbstract.length > 80){
+            smallAbstract = smallAbstract.substring(0,80);
+            smallAbstract = smallAbstract + "...";
+        }
+        note.abstract = smallAbstract;
+        replyToEditSubmit(localStorage.id,note,updateNotesFrame);
+    })
 });
