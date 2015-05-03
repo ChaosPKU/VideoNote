@@ -202,7 +202,7 @@ function recordOperateReply(who, video, slot, video_time,  noteInfo, which , upO
 }
 //250: 记录编辑操作
 function recordEdit(who, video, slot, video_time, noteInfo){
-    console.log(arguments);
+    //console.log(arguments);
     jQuery.ajax({
         url:serverIP + '/recordEdit',
         type:'post',

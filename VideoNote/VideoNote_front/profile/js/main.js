@@ -62,6 +62,7 @@ function addListenerForOperation(){
                     }
                     note.abstract = smallAbstract;
                     editNote(localStorage.id,note,updateNotesFrame);
+                    recordEdit(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,note);
                 })
             }
             else {
@@ -72,6 +73,7 @@ function addListenerForOperation(){
                     upordown = 0;
                 }
                 operateNote(user_id,video_url,slot_index,CurrentResult.notes[noteSeq].noteIndex,operation - 1,upordown,updateNotesFrame);
+                recordOperateReply(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("reply")){  //是对reply的操作
@@ -170,6 +172,7 @@ function addListenerForOperation(){
             }
             else if(operation == 1){
                 operateNote(user_id,video_url,slot_index,CurrentResult.notes[noteSeq].noteIndex,operation - 1,upordown,updateNotesFrame);
+                recordOperateReply(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("secReply")){  //是对secReply的操作
@@ -804,6 +807,7 @@ $(document).ready( function() {
         var slot_index = parseInt(parseInt(CurrentResult.notes[noteSeq].videoTime) / slot_length);   //设定10s为一个时间段
         var noteIndex = CurrentResult.notes[noteSeq].noteIndex;
         replyToNote(user_id, video_url, slot_index, noteIndex, note, updateNotesFrame);
+        recordRealReply(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq]);
     })
 
 });
