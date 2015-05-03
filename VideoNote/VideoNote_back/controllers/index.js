@@ -878,7 +878,7 @@ exports.operateNote = function(req,res){
 
                         video.save(function (err){
                             if(err){
-                                console.log(err);
+                                //console.log(err);
                                 res.send({
                                     status: 'error',
                                     msg: 'video save error'
@@ -887,7 +887,7 @@ exports.operateNote = function(req,res){
                             else{
                                 user.save(function (err){
                                     if(err){
-                                        console.log(err);
+                                        //console.log(err);
                                         res.send({
                                             status: 'error',
                                             msg: '操作用户存储error'
@@ -2214,7 +2214,7 @@ exports.recordTimeChange = function(req,res){
                 //console.log(logContent);
                 fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
                     if(err){
-                        console.log(err);
+                        //console.log(err);
                         console.error("write log error");
                     }else{
                         res.send("ok");
@@ -2301,7 +2301,7 @@ exports.recordRealReply = function(req,res){
 //220/221: 赞/取消赞(该笔记一套相关信息)
 //230/231: 关注/取消关注(该笔记一套相关信息)
 //240/241: 收藏/取消收藏(该笔记一套相关信息)
-exports.recordOperateReply = function(req,res){
+exports.recordOperateNote = function(req,res){
     var event = req.body;
     var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
         event.which_time + "::" + event.whatSlot;

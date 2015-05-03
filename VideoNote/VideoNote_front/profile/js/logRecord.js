@@ -165,7 +165,7 @@ function recordRealReply(who, video, slot, video_time, noteInfo){
 //220/221: 赞/取消赞(该笔记一套相关信息)
 //230/231: 关注/取消关注(该笔记一套相关信息)
 //240/241: 收藏/取消收藏(该笔记一套相关信息)
-function recordOperateReply(who, video, slot, video_time,  noteInfo, which , upOrDown){
+function recordOperateNote(who, video, slot, video_time,  noteInfo, which , upOrDown){
     /*
      which : 0 赞， 1 关注， 2 收藏
      upOrDown: 0 加， 1 减
@@ -179,7 +179,7 @@ function recordOperateReply(who, video, slot, video_time,  noteInfo, which , upO
         doWhat = upOrDown == 0 ? 240 : 241 ;
     }
     jQuery.ajax({
-        url:serverIP + '/recordOperateReply',
+        url:serverIP + '/recordOperateNote',
         type:'post',
         data:{
             who: who,

@@ -73,7 +73,7 @@ function addListenerForOperation(){
                     upordown = 0;
                 }
                 operateNote(user_id,video_url,slot_index,CurrentResult.notes[noteSeq].noteIndex,operation - 1,upordown,updateNotesFrame);
-                recordOperateReply(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
+                recordOperateNote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("reply")){  //是对reply的操作
@@ -172,7 +172,7 @@ function addListenerForOperation(){
             }
             else if(operation == 1){
                 operateNote(user_id,video_url,slot_index,CurrentResult.notes[noteSeq].noteIndex,operation - 1,upordown,updateNotesFrame);
-                recordOperateReply(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
+                recordOperateNote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq],operation - 1,upordown);
             }
         }
         else if($($($(this).parents()[1])[0]).hasClass("secReply")){  //是对secReply的操作

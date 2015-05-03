@@ -31,7 +31,7 @@ module.exports = function(app){
     app.post('/recordViewANote',controller.recordViewANote);  //200: 查看某个笔记(该笔记一套相关信息)
     app.post('/recordFakeReply',controller.recordFakeReply);  //210: 假回复
     app.post('/recordRealReply',controller.recordRealReply); //211: 真回复
-    app.post('/recordOperateReply',controller.recordOperateReply);  //记录对笔记的操作
+    app.post('/recordOperateNote',controller.recordOperateNote);  //记录对笔记的操作
                                                                     //220/221: 赞/取消赞(该笔记一套相关信息)
                                                                     //230/231: 关注/取消关注(该笔记一套相关信息)
                                                                     //240/241: 收藏/取消收藏(该笔记一套相关信息)
