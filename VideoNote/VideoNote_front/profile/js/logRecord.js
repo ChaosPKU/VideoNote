@@ -10,7 +10,7 @@
  400: 假发布笔记(相关区域)
 
  110: 切换视频时间（此时有多少相关笔记）
- 120: 暂停
+ 160: 暂停
  130/131: 切换查看我的/其他笔记
  132:查看视频分析
 
@@ -30,7 +30,7 @@
  */
 var serverIP = 'http://127.0.0.1:8880';
 //110:切换视频时间
-function recordTimeChange(who, video, slot, video_time,notesNum){
+function recordTimeChange(who, video, slot, video_time,fromTime){
     jQuery.ajax({
         url:serverIP + '/recordTimeChange',
         type:'post',
@@ -41,7 +41,7 @@ function recordTimeChange(who, video, slot, video_time,notesNum){
             which_time:video_time,
             whatSlot: slot,
             doWhat: 110,
-            status: [notesNum]
+            status: [fromTime]
         },
         success:function(response){
             console.log(response);
@@ -125,7 +125,8 @@ function recordFakeReply(who, video, slot, video_time, noteInfo){
             whatSlot: slot,
             doWhat: 210,
             status: [noteInfo.noteIndex, noteInfo.fromUserID, noteInfo.title,
-                noteInfo.videoTime, noteInfo.screenshot, noteInfo.clickCnt, noteInfo.replys.length,
+                noteInfo.videoTime, noteInfo.screenshot, noteInfo.clickCnt, //除本次外的点击量
+                noteInfo.replys.length,
                 noteInfo.praises.length, noteInfo.concerns.length, noteInfo.collects.length]
         },
         success:function(response){
@@ -375,28 +376,7 @@ function recordViewAnalysis(who, video,slot,video_time){
         }
     });
 }
-//132 查看视频分析
-function recordViewAnalysis(who, video,slot,video_time){
-    jQuery.ajax({
-        url:serverIP + '/recordViewAnalysis',
-        type:'post',
-        data:{
-            who: who,
-            when: new Date().getTime(),
-            which_video: video,
-            which_time:video_time,
-            whatSlot: slot,
-            doWhat: 132
-        },
-        success:function(response){
-            console.log(response);
-        },
-        error:function(response){
-            console.log(response);
-        }
-    });
-}
-//120 暂停
+//160 暂停
 function recordPause(who, video,slot,video_time){
     jQuery.ajax({
         url:serverIP + '/recordPause',
@@ -407,7 +387,7 @@ function recordPause(who, video,slot,video_time){
             which_video: video,
             which_time:video_time,
             whatSlot: slot,
-            doWhat: 120
+            doWhat: 160
         },
         success:function(response){
             console.log(response);

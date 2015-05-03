@@ -67,6 +67,7 @@ var VideoSchema = new Schema({
             screenshot: {type: String , default:"/usersUploads/screenshot/default.jpeg"}, //存头像的path
             abstract: {type: String},
             body: {type: String},
+            clickCnt: {type: Number}, //点击量
             praises: [String],  //这三个数组里存的是执行相关动作的用户的ID
             concerns: [String], //↑
             collects: [String], //↑

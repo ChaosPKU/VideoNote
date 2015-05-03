@@ -79,14 +79,14 @@ function arrayQuerySave(queryArray, welldone){
                         slotIndex: item.slotIndex,
                         noteIndex: item.noteIndex,
                         title: targetNote.title,
-                        type: (targetNote.type==0)?"笔记":"问题",
                         from: targetUser.nickname,
                         time: targetNote.time,
                         _time: targetNote._time,
                         videoTime :targetNote.videoTime,
                         relatedRangeContent: targetNote.relatedRangeContent,
                         abstract: targetNote.abstract,
-                        body: targetNote.body
+                        body: targetNote.body,
+                        clickCnt:targetNote.clickCnt
                     });
                     callback();
                 });
@@ -461,6 +461,7 @@ exports.submitNote = function(req,res){
                             //relatedRangeContent: NOTE.note.relatedRangeContent,
                             abstract: NOTE.note.abstract,
                             body: NOTE.note.body,
+                            clickCnt:0,
                             //clickCnt: 0,
                             praises: [],
                             concerns: [],
@@ -1677,6 +1678,103 @@ exports.deleteNote = function(req,res){
         }
     })
 }
+//记录笔记点击量
+exports.clickThisNote = function(req,res){
+    var Note = req.body;
+    if(!Note.userID){
+        res.send({
+            status:'error',
+            msg:'no user!'
+        });
+        return;
+    }
+    if(!Note.URL){
+        res.send({
+            status:'error',
+            msg:'url error, please reopen the note page!'
+        });
+        return;
+    }
+    if(!Note.slotIndex || Note.slotIndex<0){
+        res.send({
+            status:'error',
+            msg:'slot index error,please reopen the note page!'
+        });
+        return;
+    }
+    if(!Note.noteIndex || Note.noteIndex<0){
+        res.send({
+            status:'error',
+            msg:'note index error,please submit note again!'
+        });
+        return;
+    }
+    userModel.findOne({userID: Note.userID}, function (err, user) {
+        if(err){
+            res.send({
+                status: 'error',
+                msg: 'user find error'
+            });
+        }
+        else{
+            if(!user){
+                res.send({
+                    status: 'error',
+                    msg: 'no user found'
+                });
+            }
+            else{
+                videoModel.findOne({URL: decodeURI(Note.URL)}, function (err, video){
+                    if(err){
+                        res.send({
+                            status: 'error',
+                            msg: 'video find error'
+                        });
+                    }
+                    else{
+                        var allSlots = video.slots;
+                        var targetSlotIndex = -1 ;
+                        for(targetSlotIndex = 0 ; targetSlotIndex < allSlots.length ; targetSlotIndex++){
+                            if(Note.slotIndex == allSlots[targetSlotIndex].slotIndex){
+                                break;
+                            }
+                        }
+
+                        var notesASlot = allSlots[targetSlotIndex].notes ;
+                        var targetNoteIndex = -1 ;
+                        for(targetNoteIndex = 0 ; targetNoteIndex < notesASlot.length ; targetNoteIndex++){
+                            if(Note.noteIndex == notesASlot[targetNoteIndex].noteIndex){
+                                break;
+                            }
+                        }
+                        var targetNote = notesASlot[targetNoteIndex] ;
+                        if(!targetNote.clickCnt)
+                            targetNote.clickCnt = 1;
+                        else targetNote.clickCnt ++;
+
+                        video.save(function (err){
+                            if(err){
+                                console.log(err);
+                                res.send({
+                                    status: 'error',
+                                    msg: 'video save error'
+                                });
+                            }
+                            else{
+                                res.send({
+                                    status: 'success',
+                                    msg: 'click record success',
+                                    result: targetNote
+                                });
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    })
+}
+
 //个人主页中编辑笔记
 exports.editNote = function(req,res){
     var userID = req.body.userID;
@@ -1740,7 +1838,6 @@ exports.editNote = function(req,res){
                                         msg: 'edit successfully.',
                                         result: {
                                             title: noteWillEdit.title,
-                                            type: (noteWillEdit.type==0)?"笔记":"问题",
                                             abstract: noteWillEdit.abstract,
                                             body: noteWillEdit.body
                                         }
@@ -2077,6 +2174,308 @@ exports.getNotesOnASlot = function(req,res){
                     });
                 }
             }
+        }
+    });
+}
+//110 记录视频时间切换事件
+exports.recordTimeChange = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+
+    videoModel.findOne({URL: decodeURI(event.which_video)}, function (err, video) {
+        if (err) {
+            res.send({
+                status: 'error',
+                msg: 'video find error'
+            });
+        }
+        else {
+            if (!video) {
+                res.send({
+                    status: 'error',
+                    msg: 'no video.'
+                });
+            }
+            else {
+                var slots = video.slots;
+                //console.log(slots);
+                var targetIndex = 0;
+                for (targetIndex = 0; targetIndex < slots.length; targetIndex++) {
+                    if (slots[targetIndex].slotIndex == event.whatSlot) {
+                        break;
+                    }
+                }
+                logContent += "::" + slots[targetIndex].notes.length;
+                for(var i = 0; i < event.status.length; i++){
+                    logContent += "::" + event.status[i];
+                }
+                logContent += "\n";
+                //console.log(logContent);
+                fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+                    if(err){
+                        console.log(err);
+                        console.error("write log error");
+                    }else{
+                        res.send("ok");
+                    }
+                });
+            }
+        }
+    })
+}
+//130/131: 切换查看我的/其他笔记
+exports.recordMyOrOther = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//200: 查看某个笔记(该笔记一套相关信息)
+exports.recordViewANote = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//210: 假回复
+exports.recordFakeReply = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//211: 真回复
+exports.recordRealReply = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//记录对笔记的操作
+//220/221: 赞/取消赞(该笔记一套相关信息)
+//230/231: 关注/取消关注(该笔记一套相关信息)
+//240/241: 收藏/取消收藏(该笔记一套相关信息)
+exports.recordOperateReply = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//250: 记录编辑操作
+exports.recordEdit = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//260: 记录删除操作
+exports.recordDelete = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//300: 查阅某人资料
+exports.recordViewInfo = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//401: 真的发布笔记
+exports.recordRealNote = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//400: 假发布笔记
+exports.recordFakeNote = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//100: 打开某个video
+exports.recordOpenVideo = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//120/121 显示/关闭笔记区域
+exports.recordOpenNoteOrNot = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//132 查看视频分析
+exports.recordViewAnalysis = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//160 暂停
+exports.recordPause = function(req,res){
+    console.log(req);
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            //console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
         }
     });
 }
