@@ -260,10 +260,11 @@ function updateNotesFunc(result,index) {
         $('.tab-content .notesGroup').css('display','none');
         $('.tab-content')[0].scrollTop = 0;
         noteSeq = $(this).data('seq');
-        updateReplysFrame(CurrentResult,seqNum);
-        if(seqNum == index)
-            clickThisNote(CurrentResult.notes[noteSeq].fromUserID,localStorage.video_url,parseInt(parseInt(CurrentResult.notes[noteSeq].videoTime) / slot_length),CurrentResult.notes[noteSeq].noteIndex);
-        recordViewANote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq]);
+        updateReplysFrame(result,index);
+        if(index == seqNum) {
+            clickThisNote(CurrentResult.notes[noteSeq].fromUserID, localStorage.video_url, parseInt(parseInt(CurrentResult.notes[noteSeq].videoTime) / slot_length), CurrentResult.notes[noteSeq].noteIndex);
+            recordViewANote(localStorage.id, localStorage.video_url, parseInt(parseInt(localStorage.time) / slot_length), localStorage.time, CurrentResult.notes[noteSeq]);
+        }
         $('.tab-content .replys').css('display','block');
     })
 }
