@@ -27,6 +27,8 @@ module.exports = function(app){
     app.post('/recordOpenNoteOrNot',controller.recordOpenNoteOrNot); //120/121 显示/关闭笔记区域
     app.post('/recordMyOrOther',controller.recordMyOrOther); //130/131: 切换查看我的/其他笔记
     app.post('/recordViewAnalysis',controller.recordViewAnalysis); //132 查看视频分析
+    app.post('/recordVideoDownload',controller.recordVideoDownload); //140:下载视频
+    app.post('/recordVideoChange',controller.recordVideoChange); //150:切换视频
     app.post('/recordPause',controller.recordPause); //160 暂停
     app.post('/recordViewANote',controller.recordViewANote);  //200: 查看某个笔记(该笔记一套相关信息)
     app.post('/recordFakeReply',controller.recordFakeReply);  //210: 假回复

@@ -270,7 +270,7 @@ function recordViewInfo(who, video, slot, video_time, noteInfo, viewWho){
     });
 }
 //401: 真的发布笔记
-function recordRealNote(who, video, slot, video_time, relContent){
+function recordRealNote(who, video, slot, video_time, noteInfo){
     jQuery.ajax({
         url:serverIP + '/recordRealNote',
         type:'post',
@@ -281,7 +281,7 @@ function recordRealNote(who, video, slot, video_time, relContent){
             which_time:video_time,
             whatSlot: slot,
             doWhat: 401,
-            status: [relContent]
+            status: [noteInfo.title,noteInfo.body]
         },
         success:function(response){
             console.log(response);
@@ -292,7 +292,7 @@ function recordRealNote(who, video, slot, video_time, relContent){
     });
 }
 //400: 假发布笔记
-function recordFakeNote(who, video, slot, video_time, relContent){
+function recordFakeNote(who, video, slot, video_time, noteInfo){
     jQuery.ajax({
         url:serverIP + '/recordFakeNote',
         type:'post',
@@ -303,7 +303,7 @@ function recordFakeNote(who, video, slot, video_time, relContent){
             which_time:video_time,
             whatSlot: slot,
             doWhat: 400,
-            status: [relContent]
+            status: [noteInfo.title,noteInfo.body]
         },
         success:function(response){
             console.log(response);
@@ -388,6 +388,49 @@ function recordPause(who, video,slot,video_time){
             which_time:video_time,
             whatSlot: slot,
             doWhat: 160
+        },
+        success:function(response){
+            console.log(response);
+        },
+        error:function(response){
+            console.log(response);
+        }
+    });
+}
+//150 切换视频
+function recordVideoChange(who, video,slot,video_time,to){
+    jQuery.ajax({
+        url:serverIP + '/recordVideoChange',
+        type:'post',
+        data:{
+            who: who,
+            when: new Date().getTime(),
+            which_video: video,
+            which_time:video_time,
+            whatSlot: slot,
+            status: [to],
+            doWhat: 150
+        },
+        success:function(response){
+            console.log(response);
+        },
+        error:function(response){
+            console.log(response);
+        }
+    });
+}
+//140 下载视频
+function recordVideoDownload(who, video,slot,video_time){
+    jQuery.ajax({
+        url:serverIP + '/recordVideoDownload',
+        type:'post',
+        data:{
+            who: who,
+            when: new Date().getTime(),
+            which_video: video,
+            which_time:video_time,
+            whatSlot: slot,
+            doWhat: 140
         },
         success:function(response){
             console.log(response);

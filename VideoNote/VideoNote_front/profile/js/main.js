@@ -43,14 +43,22 @@ function addListenerForOperation(){
             else if($(this).hasClass("noteCollect")){
                 operation = 3;
             }
+            else if($(this).hasClass("noteDelete")){
+                operation = 4;
+            }
             if(operation == 0){  //noteEdit
-                console.log(CurrentResult);
+                //console.log(CurrentResult);
                 var array = $($(this).parents()[1]).find(".title").html().split('>');
                 var title = array[array.length - 1];
                 var content = $($($(this).parents()[1]).children()[0]).find(".mycontent").html();
                 $("#editNoteTitle").val(title);
                 $("#editModal").modal();
                 $("#redactor_content_3").setCode(content);
+            }
+            else if(operation == 4){
+                var noteToDel = CurrentResult.notes[noteSeq].noteIndex;
+                recordDelete(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,noteToDel);
+                deleteNote(user_id,video_url,slot_index,CurrentResult.notes[noteSeq].noteIndex,updateNotesFrame);
             }
             else {
                 if($($(this)[0].children[1]).html().split("(")[1].split(")")[0] != "0") {
@@ -182,6 +190,9 @@ function addListenerForOperation(){
     $(".toil > a").each(function(){
         $(this)[0].addEventListener('click',handler,false);
     });
+    $("a.linkToIndividual").click(function(){
+        recordViewInfo(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq]);
+    })
 }
 function parseNotesResult(result){
     var user_id = localStorage.id;
@@ -264,7 +275,6 @@ function updateNotesFrame(video_url, slot_index,user_id){
 //更新笔记回复区域
 function updateReplysFrame(result,index){
     var note = result.notes[noteSeq];
-    console.log(note);
     if(!note) {
         if(index == 1)
             addListenerForOperation();
@@ -276,11 +286,11 @@ function updateReplysFrame(result,index){
     $($(".tab-pane .note .title")[index]).html(str);
     $($(".tab-pane .note .replyList")[index]).html("");
     var str = '';
-    str += "<a class='icon' href='../profile/individual.html?want=";
+    str += "<a class='icon linkToIndividual' href='../profile/individual.html?want=";
     str += note.fromUserID;
-    str += "' target='_blank'><span class='fui-user' ";
-    str += "data-id = ";
+    str += "' target='_blank' data-id = ' ";
     str += note.fromUserID;
+    str += " '><span class='fui-user' ";
     str += " ></span> ";
     var user = getUserFromID(note.fromUserID,result);
     str += user.nickname;
@@ -295,8 +305,10 @@ function updateReplysFrame(result,index){
     //$($(".tab-pane .note .mycontent")[index]).html(note.body);
     $($($(".tab-pane .note")[index]).find(".mycontent")[0]).html(note.body);
     str = '';
-    if(note.fromUserID == localStorage.id)
+    if(note.fromUserID == localStorage.id) {
         str += "<a href='#' class='noteEdit'><span class='fui-new'></span><span> 编辑 </span></a>";
+        str += "<a href='#' class='noteDelete'><span class='fui-trash'></span><span> 删除 </span></a>";
+    }
     str += "<a href='#' class='notePraise'><span class='fui-heart'></span><span> 赞(";
     str += note.praises.length;
     str += ") </span></a>";
@@ -321,7 +333,9 @@ function updateReplysFrame(result,index){
         str += ">";
         str += "<div class='myrow'><img class='pic' src=' ";
         str += user.head;
-        str += "'><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  target='_blank' style='font-size:20px;color:#000' ";
+        str += "'><div class='info'><div class='detail'><div class='icon name'><button class='btn btn-info mybtn' type='button'>回复</button><a  class='linkToIndividual' href='../profile/individual.html?want=";
+        str += note.replys[i].fromUserID;
+        str += "'target='_blank' style='font-size:20px;color:#000' ";
         str += "data-id = ";
         str += note.replys[i].fromUserID;
         str += " >";
@@ -349,14 +363,20 @@ function updateReplysFrame(result,index){
             str += "'><div class='myrow'><img class='pic' src='";
             var user = getUserFromID(note.replys[i].comments[j].fromUserID, result);
             str += user.head;
-            str += "'><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  target='_blank' style='font-size:20px;color:#000' data-id = '";
+            str += "'><div class='info'><div class='detail'><div class='icon name'> <button class='btn btn-info mybtn' type='button'>评论</button> <a  class='linkToIndividual' href='../profile/individual.html?want=";
+            str += note.replys[i].comments[j].fromUserID;
+            str += "' target='_blank' style='font-size:20px;color:#000' data-id = '";
             str += note.replys[i].comments[j].fromUserID;
             str += "'>";
             str += user.nickname;
             str += "</a></div><a class='icon'>";
             str += note.replys[i].comments[j].time;
-            str += "</a></div></div><div class='mycontent'><a class='at'>@";
-            str += user.nickname;
+            str += "</a></div></div><div class='mycontent'><a class='at linkToIndividual' href='../profile/individual.html?want=";
+            str += note.replys[i].comments[j].toUserID;
+            str += "' target='_blank' data-id=' ";
+            str += note.replys[i].comments[j].toUserID;
+            str += "' >@";
+            str += getUserFromID(note.replys[i].comments[j].toUserID, result).nickname;
             str += ": </a>";
             str += note.replys[i].comments[j].body;
             str += "</div></div><div class='toil sectoil'>";
@@ -429,10 +449,12 @@ function setVideo(mp4,webm,slotIndex){
     $('video')[0].addEventListener('pause',function(){
         recordPause(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time);
     })
+    $($('video')[0]).on('contextmenu', function(e) {
+        //e.preventDefault();
+    });
 }
 
 function basic_bars(response) {
-    console.log(response);
     var xTicks = [];
     for(var i = 1;i < response.notes.length;i ++){
         xTicks.push([i-0.5,i*slot_length]);
@@ -647,6 +669,12 @@ $(document).ready( function() {
     $('#replyModal_1 button[data-dismiss=modal]').click(function(){
         recordFakeReply(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,CurrentResult.notes[noteSeq]);
     })
+    $('#replyModal_2 button[data-dismiss=modal]').click(function(){
+        var note = {};
+        note.title = $("#noteTitle").val();
+        note.body = $('#redactor_content_2').getCode();
+        recordFakeNote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,note);
+    })
     //redactor初始化
     $('.replys .head .btn-info').click(function(){
         $('#redactor_content_1').redactor({
@@ -693,7 +721,7 @@ $(document).ready( function() {
     }
     //监听是否有新的视频资源
     chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-        console.log(message);
+        //console.log(message);
         if(message.operation == "setVideo")
         {
             isNewVideo = 1;
@@ -709,8 +737,8 @@ $(document).ready( function() {
             sendResponse("success");
         }
         else if(message.operation == "setNote"){
+            //alert(message.contents.from + "   " + localStorage.nickname);
             if(message.contents.from != localStorage.nickname){
-                //alert(message.contents.from + "   " + localStorage.id);
                 $($(".nav-tabs > li")[0]).removeClass('active');
                 $($(".nav-tabs > li")[1]).addClass('active');
                 $($(".tab-pane")[0]).removeClass('active');
@@ -749,6 +777,7 @@ $(document).ready( function() {
             setVideo(null,src,0);
         else if(src.substr(len - 3,len) == 'mp4')
             setVideo(src,null,0);
+        recordVideoChange(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,src);
     })
 
     //***********  与服务器交互部分  ***********//
@@ -771,6 +800,7 @@ $(document).ready( function() {
         var video_total_time = localStorage.video_total_time;
         var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
         submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note,noteSubmitTime,updateNotesFrame);
+        recordRealNote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,note);
     })
     $("#replySubmit").click(function(){
         var note = {};

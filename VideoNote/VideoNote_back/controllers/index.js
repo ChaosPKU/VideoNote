@@ -116,7 +116,7 @@ function createMessage(slotIndex,noteIndex,url,note,res){
             };
             if (objectIndexInArray(noteStruct, user.myMessages.myNotesMessage) < 0)
                 user.myMessages.myNotesMessage.push(noteStruct);
-            console.log(note.concerns);
+            //console.log(note.concerns);
             for (var i = 0; i < note.concerns.length; i++) {
                 userModel.findOne({userID: note.concerns[i]}, function (err, usr) {
                     if (err) {
@@ -307,7 +307,7 @@ exports.fileUpload = function(req,res){
         fileName += part.filename;
     });
     form.on('file', function(name, file){
-        console.log('fileName:'+ fileName);
+        //console.log('fileName:'+ fileName);
         var tmp_path = file.path;
         var files_path = '/usersUploads/files/';
         var target_path = './public'+ files_path + fileName;
@@ -1379,7 +1379,7 @@ exports.deleteComment = function(req,res){
 }
 //上传头像
 exports.uploadHead = function(req,res){
-    console.log(req.files);
+    //console.log(req.files);
     var form = new multiparty.Form({	autoFiles:true ,
         uploadDir: './uploads/tmp'
     });
@@ -1505,7 +1505,7 @@ exports.updateProfiles = function(req,res){
         }
     })
 }
-//个人主页中删除笔记
+//删除笔记
 exports.deleteNote = function(req,res){
     var noteToDel = req.body;
     //console.log(noteToDel);
@@ -1524,7 +1524,7 @@ exports.deleteNote = function(req,res){
                 });
             }
             else{
-                videoModel.findOne({URL: noteToDel.URL}, function (err, video){
+                videoModel.findOne({URL: decodeURI(noteToDel.URL)}, function (err, video){
                     if(err){
                         res.send({
                             status: 'error',
@@ -1533,17 +1533,12 @@ exports.deleteNote = function(req,res){
                     }
                     else{
                         var allSlots = video.slots;
-                        //console.log(allSlots.length);
-                        //console.log(reply.slotIndex);
                         var targetSlotIndex;
                         for(targetSlotIndex = 0 ; targetSlotIndex < allSlots.length ; targetSlotIndex++){
                             if(noteToDel.slotIndex == allSlots[targetSlotIndex].slotIndex){
                                 break;
                             }
                         }
-                        //console.log(targetSlotIndex);
-                        //console.log(allSlots[targetSlotIndex]);
-
                         var notesASlot = allSlots[targetSlotIndex].notes ;
                         var targetNoteIndex;
                         for(targetNoteIndex = 0 ; targetNoteIndex < notesASlot.length ; targetNoteIndex++){
@@ -1551,8 +1546,6 @@ exports.deleteNote = function(req,res){
                                 break;
                             }
                         }
-                        //console.log(targetNoteIndex);
-                        //找到了才可以删除
                         if(targetNoteIndex < notesASlot.length){
                             var noteDeleted = notesASlot[targetNoteIndex];
                             notesASlot.splice(targetNoteIndex,1);
@@ -1567,7 +1560,7 @@ exports.deleteNote = function(req,res){
                                 }
                                 else{
                                     //删除相关用户 还要有关注它的和收藏它的
-                                    var indexToDel = objectIndexInArray({VideoUrl:noteToDel.URL,
+                                    var indexToDel = objectIndexInArray({VideoUrl:decodeURI(noteToDel.URL),
                                         slotIndex:noteToDel.slotIndex,
                                         noteIndex:noteToDel.noteIndex},user.myNotes);
                                     //console.log(indexToDel);
@@ -1587,7 +1580,7 @@ exports.deleteNote = function(req,res){
                                                                     msg: 'user find error'
                                                                 });
                                                             }else{
-                                                                var indexToDel = objectIndexInArray({VideoUrl:noteToDel.URL,
+                                                                var indexToDel = objectIndexInArray({VideoUrl:decodeURI(noteToDel.URL),
                                                                     slotIndex:noteToDel.slotIndex,
                                                                     noteIndex:noteToDel.noteIndex},user.myConcerns);
                                                                 //console.log("concern"+indexToDel);
@@ -1622,7 +1615,7 @@ exports.deleteNote = function(req,res){
                                                                     msg: 'user find error'
                                                                 });
                                                             }else{
-                                                                var indexToDel = objectIndexInArray({VideoUrl:noteToDel.URL,
+                                                                var indexToDel = objectIndexInArray({VideoUrl:decodeURI(noteToDel.URL),
                                                                     slotIndex:noteToDel.slotIndex,
                                                                     noteIndex:noteToDel.noteIndex},user.myCollects);
                                                                 user.myCollects.splice(indexToDel,1);
@@ -2210,7 +2203,8 @@ exports.recordTimeChange = function(req,res){
                 for(var i = 0; i < event.status.length; i++){
                     logContent += "::" + event.status[i];
                 }
-                logContent += "\n";
+                if(logContent[logContent.length - 1] != '\n')
+                    logContent += "\n";
                 //console.log(logContent);
                 fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
                     if(err){
@@ -2229,7 +2223,8 @@ exports.recordMyOrOther = function(req,res){
     var event = req.body;
     var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
         event.which_time + "::" + event.whatSlot;
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2248,7 +2243,8 @@ exports.recordViewANote = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2267,7 +2263,8 @@ exports.recordFakeReply = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2286,7 +2283,8 @@ exports.recordRealReply = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2308,7 +2306,8 @@ exports.recordOperateNote = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2327,7 +2326,8 @@ exports.recordEdit = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2346,7 +2346,8 @@ exports.recordDelete = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2365,7 +2366,8 @@ exports.recordViewInfo = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2384,7 +2386,9 @@ exports.recordRealNote = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    //console.log(logContent[logContent.length - 1]);
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2403,7 +2407,8 @@ exports.recordFakeNote = function(req,res){
     for(var i = 0; i < event.status.length; i++){
         logContent += "::" + event.status[i];
     }
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2419,7 +2424,8 @@ exports.recordOpenVideo = function(req,res){
     var event = req.body;
     var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
         event.which_time + "::" + event.whatSlot;
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2435,7 +2441,8 @@ exports.recordOpenNoteOrNot = function(req,res){
     var event = req.body;
     var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
         event.which_time + "::" + event.whatSlot;
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2451,7 +2458,8 @@ exports.recordViewAnalysis = function(req,res){
     var event = req.body;
     var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
         event.which_time + "::" + event.whatSlot;
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
@@ -2464,11 +2472,48 @@ exports.recordViewAnalysis = function(req,res){
 }
 //160 暂停
 exports.recordPause = function(req,res){
-    console.log(req);
     var event = req.body;
     var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
         event.which_time + "::" + event.whatSlot;
-    logContent += "\n";
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            //console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//140 下载视频
+exports.recordVideoDownload = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
+    //console.log(logContent);
+    fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
+        if(err){
+            //console.log(err);
+            console.error("write log error");
+        }else{
+            res.send("ok");
+        }
+    });
+}
+//150 切换视频
+exports.recordVideoChange = function(req,res){
+    var event = req.body;
+    var logContent = event.doWhat + "::" + event.when + "::" + event.who + "::" + event.which_video + "::" +
+        event.which_time + "::" + event.whatSlot;
+    for(var i = 0; i < event.status.length; i++){
+        logContent += "::" + event.status[i];
+    }
+    if(logContent[logContent.length - 1] != '\n')
+        logContent += "\n";
     //console.log(logContent);
     fs.appendFile("logs/trace.log",logContent,"utf-8",function(err){
         if(err){
