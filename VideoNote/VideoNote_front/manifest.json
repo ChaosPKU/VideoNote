@@ -16,7 +16,8 @@
     "storage",
     "contextMenus",
     "streamsPrivate",
-    "desktopCapture"
+    "desktopCapture",
+    "downloads"
   ],
   "content_scripts": [{
     "matches": [

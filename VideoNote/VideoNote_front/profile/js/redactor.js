@@ -191,7 +191,7 @@ var RTOOLBAR = {};
 	
 					this.pasteCleanUp();
 	
-				}, this), 200);
+				}, this), 0);
 				
 
 
@@ -713,7 +713,8 @@ var RTOOLBAR = {};
 			
 			html = html.replace(/<b(.*?)id="internal-source-marker(.*?)">([\w\W]*?)<\/b>/gi, "$3");
 
-			html = html.replace(/#marker#/, '<span id="pastemarkerend">&nbsp;</span>');
+			//html = html.replace(/#marker#/, '<span id="pastemarkerend">&nbsp;</span>');
+			html = html.replace(/#marker#/, '');
 
 			this.$editor.html(html);
 
@@ -892,7 +893,7 @@ var RTOOLBAR = {};
 		},
 		buildButton: function(key, s)
 		{
-			var button = $('<a title="' + s.title + '" class="redactor_btn_' + key + '"><span>&nbsp;</span></a>');
+			var button = $('<a href="javascript:void(null);" title="' + s.title + '" class="redactor_btn_' + key + '"><span>&nbsp;</span></a>');
 			if (typeof(s.func) == 'undefined') button.click($.proxy(function() { this.execCommand(s.exec, key); }, this));
 			else if (s.func != 'show') button.click($.proxy(function(e) { this[s.func](e); }, this));
 
@@ -909,7 +910,7 @@ var RTOOLBAR = {};
 					if (d.name == 'separator') drop_a = $('<a class="redactor_separator_drop">');
 					else
 					{
-						drop_a = $('<a style="' + d.style + '">' + d.title + '</a>');
+						drop_a = $('<a href="javascript:void(null);" style="' + d.style + '">' + d.title + '</a>');
 
 						if (typeof(d.func) == 'undefined') $(drop_a).click($.proxy(function() { this.execCommand(d.exec, x); }, this));
 						else $(drop_a).click($.proxy(function(e) { this[d.func](e); }, this));
@@ -940,14 +941,14 @@ var RTOOLBAR = {};
 			{
 				var color = this.opts.colors[i];
 
-				var swatch = $('<a rel="' + color + '" class="redactor_color_link"></a>').css({ 'backgroundColor': color });
+				var swatch = $('<a rel="' + color + '" href="javascript:void(null);" class="redactor_color_link"></a>').css({ 'backgroundColor': color });
 				$(dropdown).append(swatch);
 
 				var _self = this;
 				$(swatch).click(function() { _self.execCommand(mode, $(this).attr('rel')); });
 			}
 
-			var elnone = $('<a class="redactor_color_none"></a>').html(RLANG.none);
+			var elnone = $('<a href="javascript:void(null);" class="redactor_color_none"></a>').html(RLANG.none);
 
 			if (key == 'backcolor')	elnone.click($.proxy(this.setBackgroundNone, this));
 			else elnone.click($.proxy(this.setColorNone, this));

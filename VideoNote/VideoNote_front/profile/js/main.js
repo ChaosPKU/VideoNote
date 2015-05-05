@@ -449,9 +449,16 @@ function setVideo(mp4,webm,slotIndex){
     $('video')[0].addEventListener('pause',function(){
         recordPause(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time);
     })
-    $($('video')[0]).on('contextmenu', function(e) {
-        //e.preventDefault();
-    });
+    //chrome.contextMenus.onClicked.addListener(function(info,tab){
+    //        console.log(info);
+    //    })
+    //$($('video')[0]).on('contextmenu', function(e) {
+    //    //e.preventDefault();
+    //
+    //});
+    chrome.downloads.onCreated.addListener(function(info){
+        recordVideoDownload(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time);
+    })
 }
 
 function basic_bars(response) {
