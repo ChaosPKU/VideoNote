@@ -16,8 +16,9 @@ function formatTime(second) {
     return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
 }
 function updateProfileUI(response){
-    console.log(response);
     $("#user_id").html(response.baseInfo.userID);
+    if(response.baseInfo.userID != localStorage.id)
+        $('#userProfile .btn').attr({"disabled":"true"});
     $("#nickname").val(response.baseInfo.nickname);
     $("#cellphone").val(response.baseInfo.mobilephone);
     $("#email").val(response.baseInfo.email);
