@@ -43,7 +43,7 @@ function timePadZero(number){
 function easyTime(date){
     return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+timePadZero(date.getHours())+':'+ timePadZero(date.getMinutes());
 }
-//async的eachSeries，为数组中的信息进行异步有序查询并将查询后得到的新数组返回而打造的吊炸天的函数
+//async的eachSeries，为数组中的信息进行异步有序查询并将查询后得到的新数组返回
 function arrayQuerySave(queryArray, welldone){
     var saveArray = [];
     async.eachSeries(queryArray, function (item,callback){
