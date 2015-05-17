@@ -17,8 +17,10 @@ function formatTime(second) {
 }
 function updateProfileUI(response){
     $("#user_id").html(response.baseInfo.userID);
-    if(response.baseInfo.userID != localStorage.id)
-        $('#userProfile .btn').attr({"disabled":"true"});
+    if(response.baseInfo.userID != localStorage.id) {
+        $('#userProfile .btn').attr({"disabled": "true"});
+        $('#changehead').attr({"disabled": "true"});
+    }
     $("#nickname").val(response.baseInfo.nickname);
     $("#cellphone").val(response.baseInfo.mobilephone);
     $("#email").val(response.baseInfo.email);
