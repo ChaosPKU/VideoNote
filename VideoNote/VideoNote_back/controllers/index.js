@@ -1917,8 +1917,12 @@ exports.getVideoBasicInfo = function(req,res){
                 var comments = [];
                 var maxNotesNum = 0;
                 for(var i = 0;i <= parseInt(video.TotalTime / 10) + 1;i ++){
-                    if(i < video.slots.length){
-                        notes.push([i,video.slots[i].notes.length]);
+                    notes.push([i,0]);
+                    replys.push([i,0]);
+                    comments.push([i,0]);
+                }
+                for(var i = 0;i < video.slots.length;i ++){
+                        notes[video.slots[i].slotIndex][1] = video.slots[i].notes.length;
                         var replysOnNotes = 0;
                         var commentsOnNotes = 0;
                         for(var j = 0;j < video.slots[i].notes.length;j ++){
@@ -1927,16 +1931,11 @@ exports.getVideoBasicInfo = function(req,res){
                                 commentsOnNotes += video.slots[i].notes[j].replys[k].comments.length;
                             }
                         }
-                        replys.push([i,replysOnNotes]);
-                        comments.push([i,commentsOnNotes]);
+                        replys[video.slots[i].slotIndex][1] = replysOnNotes;
+                        comments[video.slots[i].slotIndex][1] = commentsOnNotes;
                         if(maxNotesNum < video.slots[i].notes.length + replysOnNotes + commentsOnNotes);
-                            maxNotesNum = video.slots[i].notes.length + replysOnNotes + commentsOnNotes;
-                    }
-                    else {
-                        notes.push([i, 0]);
-                        replys.push([i,0]);
-                        comments.push([i,0]);
-                    }
+                        maxNotesNum = video.slots[i].notes.length + replysOnNotes + commentsOnNotes;
+
                 }
                 res.send({
                     status: "success",
