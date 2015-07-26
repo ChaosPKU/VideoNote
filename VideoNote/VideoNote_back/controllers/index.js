@@ -287,7 +287,7 @@ exports.imageUpload = function(req,res){
         fs.renameSync(tmp_path, target_path, function(err) {
             if(err) console.error(err.stack);
         });
-        res.send('<a href="'+ images_path + fileName +'" target="_blank"><img style="max-width:300px" src="http://127.0.0.1:8880'+ images_path + fileName +'" alt="'+ fileName +'"/></a>');
+        res.send('<a href="'+ images_path + fileName +'" target="_blank"><img style="max-width:300px" src="http://182.92.224.53:8801'+ images_path + fileName +'" alt="'+ fileName +'"/></a>');
     });
     form.parse(req);
 }
@@ -314,7 +314,7 @@ exports.fileUpload = function(req,res){
         fs.renameSync(tmp_path, target_path, function(err) {
             if(err) console.error(err.stack);
         });
-        res.send('<a style="max-width:300px" href="http://127.0.0.1:8880'+ files_path + fileName +'" target="_blank">'+ originalName +'</a>');
+        res.send('<a style="max-width:300px" href="http://182.92.224.53:8801'+ files_path + fileName +'" target="_blank">'+ originalName +'</a>');
     });
     form.parse(req);
 }

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-mongoose.connect('mongodb://localhost/videonote' , function(err){
+mongoose.connect('mongodb://localhost:27017/videonote' , function(err){
   if(err){
     console.log(err);
   }
@@ -15,7 +15,7 @@ var UserSchema = new Schema({
     salt: {type: String}, //↓
     hash: {type: String}, //这两个共同存密码
     nickname: {type: String},
-    head: {type: String , default:"http://127.0.0.1:8880/img/icon128.png"}, //存头像的path
+    head: {type: String , default:"http://182.92.224.53:8801/img/icon128.png"}, //存头像的path
     mobilephone: {type: String},
     email: {type: String},
     myNotes: [{             //我的笔记

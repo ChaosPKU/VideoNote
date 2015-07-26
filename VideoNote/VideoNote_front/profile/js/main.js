@@ -394,16 +394,10 @@ function updateReplysFrame(result,index){
     if(index == 1)
         addListenerForOperation();
 }
-function setVideo(mp4,webm,slotIndex){
+function setVideo(src,slotIndex){
     var str = '';
-    if(webm){
-        str += '<source src="' + webm + '" type="video/webm">';
-        localStorage.setItem('webm',webm);
-    }
-    if(mp4){
-        str += '<source src="' + mp4 + '" type="video/mp4">';
-        localStorage.setItem('mp4',mp4);
-    }
+        str += '<source src="' + src + '">';
+        localStorage.setItem('VideoSrc',src);
     $("video").html(str);
     $('video')[0].addEventListener('loadedmetadata',function(){
         recordOpenVideo(localStorage.id,localStorage.video_url);
@@ -717,30 +711,29 @@ $(document).ready( function() {
 
     //功能性部分
     //已有播放记录，则根据记录设置播放
-    if(localStorage.mp4||localStorage.webm){
+    if(localStorage.VideoSrc){
         setTimeout(function(){
             if(!isNewVideo)
             {
-                setVideo(localStorage.mp4,localStorage.webm,0);
+                setVideo(localStorage.VideoSrc,0);
             }
             else isNewVideo = 0;
         }, 500);
     }
     //监听是否有新的视频资源
     chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-        //console.log(message);
+        console.log(message);
         if(message.operation == "setVideo")
         {
             isNewVideo = 1;
             localStorage.setItem('time',0);
-            if(message.contents.site == 'coursea')
-                setVideo(message.contents.mp4,message.contents.webm,0);
-            else if(message.contents.site == 'edx')
-            {
-                $("video").html(message.contents.source);
-                $("video")[0].currentTime = localStorage.time;
-                VideoLoop();
-            }
+            setVideo(message.contents.info.srcUrl,0);
+            //else if(message.contents.site == 'edx')
+            //{
+            //    $("video").html(message.contents.source);
+            //    $("video")[0].currentTime = localStorage.time;
+            //    VideoLoop();
+            //}
             sendResponse("success");
         }
         else if(message.operation == "setNote"){
@@ -754,12 +747,7 @@ $(document).ready( function() {
             isNewVideo = 1;
             localStorage.setItem('time',message.contents.videotime);
             var str = message.contents.url;
-            if(str.substr(str.length - 4,4) == 'webm'){
-                setVideo(null,str,message.contents.slotindex);
-            }
-            else if(str.substr(str.length - 3,3) == 'mp4'){
-                setVideo(str,null,message.contents.slotindex);
-            }
+                setVideo(str,message.contents.slotindex);
             sendResponse("success");
         }
         else
@@ -780,10 +768,7 @@ $(document).ready( function() {
     $("#form2").submit(function(){
         var src = $("#navbarInput-02").val();
         var len = src.length;
-        if(src.substr(len - 3,len) == 'ebm')
-            setVideo(null,src,0);
-        else if(src.substr(len - 3,len) == 'mp4')
-            setVideo(src,null,0);
+            setVideo(src,0);
         recordVideoChange(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,src);
     })
 

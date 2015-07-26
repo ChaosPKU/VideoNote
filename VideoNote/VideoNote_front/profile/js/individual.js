@@ -38,7 +38,7 @@ function updateProfileUI(response){
         str += "' data-videoTime = '";
         str += response.messages.noteMessage[i].videoTime;
         str += "' ><img src = ";
-        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.messages.noteMessage[i]._time + "_.jpeg";
+        str += "http://182.92.224.53:8801/usersUploads/screenshot/" + response.messages.noteMessage[i]._time + "_.jpeg";
         str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
         str += response.messages.noteMessage[i].title;
         str += "</div><div class='fromUser'><span class='fui-user'></span>";
@@ -61,7 +61,7 @@ function updateProfileUI(response){
         str += "' data-videoTime = '";
         str += response.messages.concernMessage[i].videoTime;
         str += "' ><img src = ";
-        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.messages.concernMessage[i]._time + "_.jpeg";
+        str += "http://182.92.224.53:8801/usersUploads/screenshot/" + response.messages.concernMessage[i]._time + "_.jpeg";
         str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
         str += response.messages.concernMessage[i].title;
         str += "</div><div class='fromUser'><span class='fui-user'></span>";
@@ -86,7 +86,7 @@ function updateProfileUI(response){
         str += "' data-videoTime = '";
         str += response.notes[i].videoTime;
         str += "' ><img src = ";
-        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.notes[i]._time + "_.jpeg";
+        str += "http://182.92.224.53:8801/usersUploads/screenshot/" + response.notes[i]._time + "_.jpeg";
         str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
         str += response.notes[i].title;
         str += "</div><div class='fromUser'><span class='fui-user'></span>";
@@ -111,7 +111,7 @@ function updateProfileUI(response){
         str += "' data-videoTime = '";
         str += response.concerns[i].videoTime;
         str += "' ><img src = ";
-        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.concerns[i]._time + "_.jpeg";
+        str += "http://182.92.224.53:8801/usersUploads/screenshot/" + response.concerns[i]._time + "_.jpeg";
         str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
         str += response.concerns[i].title;
         str += "</div><div class='fromUser'><span class='fui-user'></span>";
@@ -136,7 +136,7 @@ function updateProfileUI(response){
         str += "' data-videoTime = '";
         str += response.collects[i].videoTime;
         str += "' ><img src = ";
-        str += "http://127.0.0.1:8880/usersUploads/screenshot/" + response.collects[i]._time + "_.jpeg";
+        str += "http://182.92.224.53:8801/usersUploads/screenshot/" + response.collects[i]._time + "_.jpeg";
         str += " class='capImg'/><div class='noFocused focused'><div class='round'></div></div><div class='notesCard '><div class='notesmsg'>";
         str += response.collects[i].title;
         str += "</div><div class='fromUser'><span class='fui-user'></span>";

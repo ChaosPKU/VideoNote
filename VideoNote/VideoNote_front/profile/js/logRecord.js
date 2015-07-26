@@ -28,7 +28,7 @@
 
  401: 真发布笔记(相关区域)
  */
-var serverIP = 'http://127.0.0.1:8880';
+var serverIP = 'http://182.92.224.53:8801';
 //110:切换视频时间
 function recordTimeChange(who, video, slot, video_time,fromTime){
     jQuery.ajax({

@@ -1,4 +1,4 @@
-ServerIP = "http://127.0.0.1:8880";
+ServerIP = "http://182.92.224.53:8801";
 
 var nickname="" ;
 var head="/attachments/head.jpg" ;
