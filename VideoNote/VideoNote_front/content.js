@@ -22,15 +22,14 @@
 //            console.log(response);
 //        });
 //})
-$(document).ready(function(){
-    while(true){
-        if($('video')[0]){
-            $('video')[0].addEventListener('contextmenu',function(){
-                chrome.runtime.sendMessage({operation:'setTrack',contents:$("video")[0]}, function(response) {
-                    console.log(response);
-                });
-            })
-            break;
-        }
-    };
-})
+
+//$(document).ready(function(){
+//        if ($('video')[0]) {
+//            $('video')[0].addEventListener('contextmenu', function () {
+//                chrome.runtime.sendMessage({operation: 'setTrack', contents: $("video")[0]}, function (response) {
+//                    console.log(response);
+//                });
+//            })
+//            break;
+//        }
+//})
