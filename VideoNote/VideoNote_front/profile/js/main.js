@@ -5,6 +5,7 @@ var CurrentResult = null;
 var slot_length = 10;    //10s为一个slot
 var noteSeq = 0;   //note index
 var noteSubmitTime;
+var test;
 //秒数转标准时间格式
 function formatTime(second) {
     return [parseInt(second / 60 / 60), parseInt(second / 60) % 60, parseInt(second % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
@@ -394,10 +395,22 @@ function updateReplysFrame(result,index){
     if(index == 1)
         addListenerForOperation();
 }
-function setVideo(src,slotIndex){
+function setVideo(src,slotIndex,message){
+    console.log(src,slotIndex,message);
     var str = '';
-        str += '<source src="' + src + '">';
-        localStorage.setItem('VideoSrc',src);
+    str += '<source src="' + src + '">';
+    localStorage.setItem('VideoSrc',src);
+    if(!message && message.contents.video.tracks.length){
+        var tracks = message.contents.video.tracks;
+        console.log("tracks:", tracks);
+        for(var i = 0;i < tracks.length; ++ i){
+            str += " <track src='>" + tracks[i].src;
+            str += "' srclang='" + tracks[i].srclang;
+            str += "' label='" + tracks[i].label;
+            str += "' kind='" + tracks[i].kind;
+            str += "'>";
+        }
+    }
     $("video").html(str);
     $('video')[0].addEventListener('loadedmetadata',function(){
         recordOpenVideo(localStorage.id,localStorage.video_url);
@@ -723,11 +736,12 @@ $(document).ready( function() {
     //监听是否有新的视频资源
     chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         console.log(message);
+        localStorage.setItem('message',message);
         if(message.operation == "setVideo")
         {
             isNewVideo = 1;
             localStorage.setItem('time',0);
-            setVideo(message.contents.info.srcUrl,0);
+            setVideo(message.contents.info.srcUrl,0,message);
             //else if(message.contents.site == 'edx')
             //{
             //    $("video").html(message.contents.source);

@@ -23,13 +23,22 @@
 //        });
 //})
 
-//$(document).ready(function(){
-//        if ($('video')[0]) {
-//            $('video')[0].addEventListener('contextmenu', function () {
-//                chrome.runtime.sendMessage({operation: 'setTrack', contents: $("video")[0]}, function (response) {
-//                    console.log(response);
-//                });
-//            })
-//            break;
-//        }
-//})
+$(document).ready(function(){
+        chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+            if(message == "getVideo"){
+                var result = {'src':'','poster':'','tracks':[]};
+                var node = $("video")[0];
+                result.src = $(node).attr('src');
+                result.poster = $(node).attr('poster');
+                $($(node)[0].children).each(function(){
+                    var track = {'kind':'','label':'','srclang':'','src':''};
+                    track.kind = $(this).attr('kind');
+                    track.label = $(this).attr('label');
+                    track.srclang = $(this).attr('srclang');
+                    track.src = $(this).attr('src');
+                    result.tracks.push(track);
+                })
+                sendResponse(result);
+            }
+        })
+})
