@@ -400,18 +400,22 @@ function setVideo(src,slotIndex,message){
     var str = '';
     str += '<source src="' + src + '">';
     localStorage.setItem('VideoSrc',src);
-    if(!message && message.contents.video.tracks.length){
+    if(message && message.contents.video.tracks.length){
         var tracks = message.contents.video.tracks;
         console.log("tracks:", tracks);
         for(var i = 0;i < tracks.length; ++ i){
-            str += " <track src='>" + tracks[i].src;
+            str += " <track src='" + "https://www.coursera.org" + tracks[i].src;
             str += "' srclang='" + tracks[i].srclang;
             str += "' label='" + tracks[i].label;
             str += "' kind='" + tracks[i].kind;
-            str += "'>";
+            if(tracks[i].srclang == 'zh-CN'){
+                str += "' default>";
+            }
+            else str += "'>";
         }
     }
     $("video").html(str);
+    //videojs('video').addChild('TextTrackDisplay');
     $('video')[0].addEventListener('loadedmetadata',function(){
         recordOpenVideo(localStorage.id,localStorage.video_url);
         $("#navbarInput-02").val($('video')[0].currentSrc);
