@@ -396,13 +396,16 @@ function updateReplysFrame(result,index){
         addListenerForOperation();
 }
 function setVideo(src,slotIndex,message){
-    console.log(src,slotIndex,message);
+    //console.log(src,slotIndex,message);
     var str = '';
     str += '<source src="' + src + '">';
     localStorage.setItem('VideoSrc',src);
+    if(message && message.contents.video.poster){
+        $($('video')[0]).attr("poster",message.contents.video.poster);
+    }
     if(message && message.contents.video.tracks.length){
         var tracks = message.contents.video.tracks;
-        console.log("tracks:", tracks);
+        //console.log("tracks:", tracks);
         for(var i = 0;i < tracks.length; ++ i){
             str += " <track src='" + "https://www.coursera.org" + tracks[i].src;
             str += "' srclang='" + tracks[i].srclang;
@@ -410,12 +413,33 @@ function setVideo(src,slotIndex,message){
             str += "' kind='" + tracks[i].kind;
             if(tracks[i].srclang == 'zh-CN'){
                 str += "' default>";
+                $('#tracks .dropdown-menu').append('<li trackid="' + i + '"><a><span class="fui-check"></span>&nbsp;&nbsp;' + tracks[i].label + '</a></li>');
             }
-            else str += "'>";
+            else {
+                str += "'>";
+                $('#tracks .dropdown-menu').append('<li trackid="' + i + '"><a><span class="fui-none"></span>&nbsp;&nbsp;' + tracks[i].label + '</a></li>');
+            }
         }
     }
+    if($('span.fui-check'))
+        $('#tracks .dropdown-menu').append('<li><a><span class="fui-none"></span>&nbsp;&nbsp;无字幕</a></li>');
+    else
+        $('#tracks .dropdown-menu').append('<li><a><span class="fui-check"></span>&nbsp;&nbsp;无字幕</a></li>');
+    $('#tracks .dropdown-menu>li').click(function(){
+        $('span.fui-check').each(function(){
+            $(this).attr('class','fui-none');
+        })
+        $(this).find('span').attr('class','fui-check');
+        var track_id = $(this).attr("trackid");
+        for(var i = 0;i < $("video")[0].textTracks.length; ++ i){
+            if(i != track_id)
+                $("video")[0].textTracks[i].mode = 'disabled';
+            else
+                $("video")[0].textTracks[i].mode = 'showing';
+        }
+    })
     $("video").html(str);
-    //videojs('video').addChild('TextTrackDisplay');
+    //$('video')[0].addChild('TextTrackDisplay');
     $('video')[0].addEventListener('loadedmetadata',function(){
         recordOpenVideo(localStorage.id,localStorage.video_url);
         $("#navbarInput-02").val($('video')[0].currentSrc);
@@ -732,7 +756,7 @@ $(document).ready( function() {
         setTimeout(function(){
             if(!isNewVideo)
             {
-                setVideo(localStorage.VideoSrc,0);
+                setVideo(localStorage.VideoSrc,0,JSON.parse(localStorage.message));
             }
             else isNewVideo = 0;
         }, 500);
@@ -740,7 +764,7 @@ $(document).ready( function() {
     //监听是否有新的视频资源
     chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         console.log(message);
-        localStorage.setItem('message',message);
+        localStorage.setItem('message',JSON.stringify(message));
         if(message.operation == "setVideo")
         {
             isNewVideo = 1;

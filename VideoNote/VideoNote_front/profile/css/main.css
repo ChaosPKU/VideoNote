@@ -458,3 +458,8 @@ a{
 .navbar-inverse .navbar-nav > .open > .dropdown-menu > .divider{
     background-color: #9acfea;
 }
+.fui-none{
+    width:14px;
+    height:14px;
+    float:left;
+}
