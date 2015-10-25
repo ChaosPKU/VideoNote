@@ -33,6 +33,8 @@ function updateProfileUI(response){
         str += response.messages.noteMessage[i].noteIndex;
         str += "' data-URL = '";
         str += response.messages.noteMessage[i].URL;
+        str += "' data-videoInfo = '";
+        str += response.messages.noteMessage[i].videoInfo;
         str += "' data-from = '";
         str += response.messages.noteMessage[i].from;
         str += "' data-videoTime = '";
@@ -54,6 +56,8 @@ function updateProfileUI(response){
         str += response.messages.concernMessage[i].slotIndex;
         str += "' data-noteIndex='";
         str += response.messages.concernMessage[i].noteIndex;
+        str += "' data-videoInfo = '";
+        str += response.messages.concernMessage[i].videoInfo;
         str += "' data-URL = '";
         str += response.messages.concernMessage[i].URL;
         str += "' data-from = '";
@@ -81,6 +85,8 @@ function updateProfileUI(response){
         str += response.notes[i].noteIndex;
         str += "' data-URL = '";
         str += response.notes[i].URL;
+        str += "' data-videoInfo = '";
+        str += response.notes[i].videoInfo;
         str += "' data-from = '";
         str += response.notes[i].from;
         str += "' data-videoTime = '";
@@ -104,6 +110,8 @@ function updateProfileUI(response){
         str += response.concerns[i].slotIndex;
         str += "' data-noteIndex='";
         str += response.concerns[i].noteIndex;
+        str += "' data-videoInfo = '";
+        str += response.concerns[i].videoInfo;
         str += "' data-URL = '";
         str += response.concerns[i].URL;
         str += "' data-from = '";
@@ -129,6 +137,8 @@ function updateProfileUI(response){
         str += response.collects[i].slotIndex;
         str += "' data-noteIndex='";
         str += response.collects[i].noteIndex;
+        str += "' data-videoInfo = '";
+        str += response.collects[i].videoInfo;
         str += "' data-URL = '";
         str += response.collects[i].URL;
         str += "' data-from = '";

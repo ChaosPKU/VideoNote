@@ -2,7 +2,7 @@ var serverIP = 'http://182.92.224.53:8801';
 var user = '';
 
 //提交笔记
-function submitNote(userID, URL, VideoName, TotalTime, VideoTime ,slotIndex, note , noteSubmitTime,callback){
+function submitNote(userID, URL, VideoName, TotalTime, VideoTime ,VideoInfo,slotIndex, note , noteSubmitTime,callback){
     jQuery.ajax({
         url:serverIP + '/submitNote',
         type:'post',
@@ -11,6 +11,7 @@ function submitNote(userID, URL, VideoName, TotalTime, VideoTime ,slotIndex, not
             URL: URL,
             VideoName: VideoName,
             TotalTime: TotalTime,
+            VideoInfo: VideoInfo,
             VideoTime: VideoTime,
             slotIndex: slotIndex,
             SubmitTime: noteSubmitTime,
@@ -31,14 +32,15 @@ function submitNote(userID, URL, VideoName, TotalTime, VideoTime ,slotIndex, not
 }
 
 //得到一个时间段的笔记
-function getNotesOnASlot(video_URL, video_slot, total_time,callback, userID){
+function getNotesOnASlot(video_URL, video_slot, total_time,video_info,callback, userID){
     jQuery.ajax({
         url:serverIP + '/getNotesOnASlot',
         type:'post',
         data:{
             video_url: video_URL,
             video_slot:video_slot,
-            total_time:total_time
+            total_time:total_time,
+            video_info:video_info
         },
         success:function(response){
             if(response.status == 'success'){

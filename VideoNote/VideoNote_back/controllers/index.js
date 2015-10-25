@@ -75,6 +75,7 @@ function arrayQuerySave(queryArray, welldone){
                 userModel.findOne({userID: targetNote.fromUserID},function (err,targetUser){
                     saveArray.push({
                         URL: item.VideoUrl,
+                        videoInfo:item.VideoInfo,
                         name: video.videoName,
                         slotIndex: item.slotIndex,
                         noteIndex: item.noteIndex,
@@ -182,6 +183,7 @@ exports.register = function(req,res){
             });
             return;
         }
+        //console.log(newUser,user,userModel);
         hash(newUser.password, function (err, salt, hash){
             if(err){
                 res.send({
@@ -205,6 +207,7 @@ exports.register = function(req,res){
                     myConcernsMessage:[]
                 }
             });
+            //console.log(userToSave);
             userToSave.save(function (err){
                 if(err){
                     res.send({
@@ -378,6 +381,14 @@ exports.submitNote = function(req,res){
         });
         return;
     }
+    NOTE.VideoInfo = req.body.VideoInfo;
+    if(!NOTE.VideoInfo){
+        res.send({
+            status:'error',
+            msg:'video info error! please check and submit the note again.'
+        });
+        return;
+    }
     NOTE.note = req.body.note;
     if(!NOTE.note){
         res.send({
@@ -414,6 +425,7 @@ exports.submitNote = function(req,res){
                                 URL: NOTE.URL,
                                 VideoName: NOTE.VideoName,
                                 TotalTime: NOTE.TotalTime,
+                                VideoInfo: NOTE.VideoInfo,
                                 slots: []
                             });
                         }
@@ -1944,6 +1956,7 @@ exports.getVideoBasicInfo = function(req,res){
                     replys:replys,
                     comments:comments,
                     totaltime:video.TotalTime,
+                    videoinfo:video.VideoInfo,
                     maxnotesnum:maxNotesNum
                 });
             }
@@ -2100,6 +2113,7 @@ exports.getNotesOnASlot = function(req,res){
     var video_url = decodeURI(req.body.video_url);
     var video_slot = parseInt(req.body.video_slot) ;
     var totalTime = parseInt(req.body.total_time) ;
+    var videoinfo = req.body.video_info;
     videoModel.findOne({URL: video_url}, function (err, video){
         //console.log(video);
         if(err){
@@ -2115,6 +2129,7 @@ exports.getNotesOnASlot = function(req,res){
                     URL:video_url,
                     VideoName:video_name,
                     TotalTime: totalTime,
+                    VideoInfo: videoinfo,
                     slots: []
                 });
                 video.save(function(err){

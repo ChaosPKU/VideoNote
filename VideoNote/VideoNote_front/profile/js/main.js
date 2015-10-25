@@ -271,7 +271,7 @@ function displayNotesFunc(result){
 //更新笔记栏
 function updateNotesFrame(video_url, slot_index,user_id){
     var video_total_time = localStorage.video_total_time;
-    getNotesOnASlot(video_url,slot_index,video_total_time,displayNotesFunc,user_id);
+    getNotesOnASlot(video_url,slot_index,video_total_time,localStorage.message,displayNotesFunc,user_id);
 }
 //更新笔记回复区域
 function updateReplysFrame(result,index){
@@ -833,7 +833,7 @@ $(document).ready( function() {
         var video_time = localStorage.time;
         var video_total_time = localStorage.video_total_time;
         var slot_index = parseInt(parseInt(video_time)/slot_length);   //设定10s为一个时间段
-        submitNote(user_id,video_url,video_name,video_total_time,video_time,slot_index,note,noteSubmitTime,updateNotesFrame);
+        submitNote(user_id,video_url,video_name,video_total_time,video_time,localStorage.message ,slot_index,note,noteSubmitTime,updateNotesFrame);
         recordRealNote(localStorage.id,localStorage.video_url,parseInt(parseInt(localStorage.time) / slot_length),localStorage.time,note);
     })
     $("#replySubmit").click(function(){
